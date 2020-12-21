@@ -13,6 +13,11 @@
     "react-scripts": "4.0.1",
     "web-vitals": "^0.2.4"
   },
+  "devDependencies": {
+    "husky": "^4.3.6",
+    "lint-staged": "^10.5.3",
+    "prettier": "^2.2.1"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -20,11 +25,31 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss}": [
+      "prettier --write"
+    ]
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
     ]
+  },
+  "prettier": {
+    "printWidth": 100,
+    "useTabs": false,
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true,
+    "quoteProps": "as-needed",
+    "bracketSpacing": true,
+    "arrowParens": "always"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "browserslist": {
     "production": [
