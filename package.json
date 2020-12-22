@@ -21,7 +21,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:openssl": "cd ./openssl && ./build.sh",
+    "build:openssl": "cd openssl && ./build.sh && npm run format:openssl",
+    "format:openssl": "prettier --write src/openssl.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
