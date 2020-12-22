@@ -2,7 +2,7 @@
 
 OPENSSL_VERSION="openssl-3.0.0-alpha9"
 OPENSSL_DIR=${OPENSSL_VERSION}
-OPENSSL_JS_PATH="../src/openssl.js"
+OPENSSL_JS_PATH="../src/core/openssl.js"
 OPENSSL_WASM_PATH="../public/openssl.wasm"
 
 if [ -d ${OPENSSL_DIR} ]; then
@@ -13,8 +13,8 @@ if [ -f ${OPENSSL_JS_PATH} ]; then
   rm -rf ${OPENSSL_JS_PATH}
 fi
 
-if [ -f ${OPENSSL_WASM} ]; then
-  rm -rf ${OPENSSL_WASM}
+if [ -f ${OPENSSL_WASM_PATH} ]; then
+  rm -rf ${OPENSSL_WASM_PATH}
 fi
 
 if [ ! -f ${OPENSSL_VERSION}.tar.gz ]; then
@@ -49,5 +49,5 @@ mv apps/openssl apps/openssl.js
 sed -i.old '1s;^;\/* eslint-disable *\/;' apps/openssl.js
 sed -i.old "s|openssl.wasm|/openssl.wasm|" apps/openssl.js
 sed -i.old "s|wasmBinaryFile=locateFile(wasmBinaryFile)||" apps/openssl.js
-cp apps/openssl.js ../../src/
+cp apps/openssl.js ../../src/core/
 cp apps/openssl.wasm ../../public/
