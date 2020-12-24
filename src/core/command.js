@@ -6,16 +6,22 @@ class Command {
     this.resultSubject = new Subject();
   }
 
-  get result() {
-    return this.resultSubject;
+  get resultAsObservable() {
+    return this.resultSubject.asObservable();
   }
 
-  run(args, text = '') {
+  async run(args, text = null, file = null) {
     let output = {
       stdout: '',
       stderr: '',
-      content: '',
+      resultText: null,
+      resultFile: null,
     };
+
+    let writeFileBuffer;
+    if (file) {
+      writeFileBuffer = await file.arrayBuffer();
+    }
 
     const moduleObj = {
       print: function (text) {
@@ -29,11 +35,19 @@ class Command {
     OpenSSL(moduleObj).then((module) => {
       if (text) {
         module['FS'].writeFile('file', text);
+      } else if (file) {
+        module['FS'].writeFile('file', new Uint8Array(writeFileBuffer));
       }
+
       module.callMain(this.convertArgsToArray(args));
+
       if (text) {
-        output.content = module['FS'].readFile('enc', { encoding: 'utf8' });
+        output.resultText = module['FS'].readFile('enc', { encoding: 'utf8' });
+      } else if (file) {
+        const readFileBuffer = module['FS'].readFile('output', { encoding: 'binary' });
+        output.resultFile = new Blob([readFileBuffer], { type: 'application/octet-stream' });
       }
+
       this.resultSubject.next(output);
     });
   }
