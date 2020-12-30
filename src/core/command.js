@@ -91,7 +91,7 @@ class Command {
   }
 
   getFileInParameter(argsArray) {
-    if (!argsArray.indexOf('-in')) {
+    if (!argsArray[argsArray.indexOf('-in')]) {
       return;
     } else {
       return argsArray[argsArray.indexOf('-in') + 1];
@@ -99,7 +99,7 @@ class Command {
   }
 
   getFileOutParameter(argsArray) {
-    if (!argsArray.indexOf('-out')) {
+    if (!argsArray[argsArray.indexOf('-out')]) {
       return;
     } else {
       return argsArray[argsArray.indexOf('-out') + 1];
