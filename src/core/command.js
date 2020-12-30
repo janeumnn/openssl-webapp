@@ -73,7 +73,7 @@ class Command {
         output.text = module['FS'].readFile(this.getFileOutParameter(argsArray), {
           encoding: 'utf8',
         });
-      } else if (inputFile) {
+      } else if (inputFile || this.getFileOutParameter(argsArray)) {
         const readFileBuffer = module['FS'].readFile(this.getFileOutParameter(argsArray), {
           encoding: 'binary',
         });
@@ -91,11 +91,19 @@ class Command {
   }
 
   getFileInParameter(argsArray) {
-    return argsArray[argsArray.indexOf('-in') + 1];
+    if (!argsArray.indexOf('-in')) {
+      return;
+    } else {
+      return argsArray[argsArray.indexOf('-in') + 1];
+    }
   }
 
   getFileOutParameter(argsArray) {
-    return argsArray[argsArray.indexOf('-out') + 1];
+    if (!argsArray.indexOf('-out')) {
+      return;
+    } else {
+      return argsArray[argsArray.indexOf('-out') + 1];
+    }
   }
 }
 
