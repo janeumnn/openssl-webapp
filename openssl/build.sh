@@ -32,12 +32,25 @@ export LDFLAGS="\
   -s FILESYSTEM=1\
   -s MODULARIZE=1\
   -s EXPORT_NAME=OpenSSL\
-  -s EXTRA_EXPORTED_RUNTIME_METHODS=\"['run', 'callMain', 'FS']\"\
+  -s EXTRA_EXPORTED_RUNTIME_METHODS=\"['callMain', 'FS']\"\
   -s INVOKE_RUN=0\
+  -s EXIT_RUNTIME=1\
   -s EXPORT_ES6=1\
-  -s USE_ES6_IMPORT_META=0"
+  -s USE_ES6_IMPORT_META=0\
+  -s WASM_BIGINT=1\
+  -s ALLOW_MEMORY_GROWTH=1\
+  -s ASSERTIONS=1" # For logging purposes. Can be removed!
 
-emconfigure ./Configure no-hw no-shared no-asm no-threads -static
+emconfigure ./Configure \
+  no-hw \
+  no-shared \
+  no-asm \
+  no-threads \
+  no-ssl3 \
+  no-dtls \
+  no-engine \
+  no-dso \
+  -static\
 
 make apps/progs.h
 
