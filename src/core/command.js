@@ -26,10 +26,29 @@ class Command {
     });
   }
 
+  /**
+   * @param {string} args OpenSSL Command
+   * @param {(string|File[])} data Command data to process
+   */
   run(args, data) {
-    let inputText;
-    let inputFile;
-    let writeFileBuffer;
+    let inputText = false;
+    let inputFiles = false;
+    let writeFiles = [];
+
+    if (args && !(Object.prototype.toString.call(args) === '[object String]')) {
+      return;
+    }
+    if (data && Object.prototype.toString.call(data) === '[object String]') {
+      inputText = true;
+    }
+    if (data && Object.prototype.toString.call(data) === '[object Array]') {
+      inputFiles = true;
+      data.forEach((file) => {
+        this.getByteArray(file).then((byteArray) => {
+          writeFiles.push({ name: file.name, buffer: byteArray });
+        });
+      });
+    }
 
     let output = {
       stdout: '',
@@ -49,22 +68,13 @@ class Command {
 
     const argsArray = this.convertArgsToArray(args);
 
-    if (args && !(Object.prototype.toString.call(args) === '[object String]')) {
-      return;
-    } else if (data && Object.prototype.toString.call(data) === '[object String]') {
-      inputText = data;
-    } else if (data && Object.prototype.toString.call(data) === '[object File]') {
-      inputFile = data;
-      this.getByteArray(inputFile).then((byteArray) => {
-        writeFileBuffer = byteArray;
-      });
-    }
-
     OpenSSL(moduleObj).then((module) => {
       if (inputText) {
-        module['FS'].writeFile(this.getFileInParameter(argsArray), inputText);
-      } else if (inputFile) {
-        module['FS'].writeFile(this.getFileInParameter(argsArray), writeFileBuffer);
+        module['FS'].writeFile(this.getFileInParameter(argsArray), data);
+      } else if (inputFiles) {
+        writeFiles.forEach((file) => {
+          module['FS'].writeFile(file.name, file.buffer);
+        });
       }
 
       module.callMain(argsArray);
@@ -73,7 +83,7 @@ class Command {
         output.text = module['FS'].readFile(this.getFileOutParameter(argsArray), {
           encoding: 'utf8',
         });
-      } else if (inputFile || this.getFileOutParameter(argsArray)) {
+      } else if (this.getFileOutParameter(argsArray)) {
         const readFileBuffer = module['FS'].readFile(this.getFileOutParameter(argsArray), {
           encoding: 'binary',
         });
@@ -91,18 +101,14 @@ class Command {
   }
 
   getFileInParameter(argsArray) {
-    if (!argsArray[argsArray.indexOf('-in')]) {
-      return;
-    } else {
-      return argsArray[argsArray.indexOf('-in') + 1];
-    }
+    return argsArray[argsArray.indexOf('-in') + 1];
   }
 
   getFileOutParameter(argsArray) {
-    if (!argsArray[argsArray.indexOf('-out')]) {
-      return;
-    } else {
+    if (argsArray[argsArray.indexOf('-out')]) {
       return argsArray[argsArray.indexOf('-out') + 1];
+    } else {
+      return null;
     }
   }
 }
