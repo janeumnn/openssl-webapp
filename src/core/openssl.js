@@ -32,6 +32,60 @@ var OpenSSL = (function () {
         },
       });
     }
+    if (!Object.getOwnPropertyDescriptor(Module['ready'], '_emscripten_stack_get_end')) {
+      Object.defineProperty(Module['ready'], '_emscripten_stack_get_end', {
+        configurable: true,
+        get: function () {
+          abort(
+            'You are getting _emscripten_stack_get_end on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
+          );
+        },
+      });
+      Object.defineProperty(Module['ready'], '_emscripten_stack_get_end', {
+        configurable: true,
+        set: function () {
+          abort(
+            'You are setting _emscripten_stack_get_end on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
+          );
+        },
+      });
+    }
+    if (!Object.getOwnPropertyDescriptor(Module['ready'], '_emscripten_stack_get_free')) {
+      Object.defineProperty(Module['ready'], '_emscripten_stack_get_free', {
+        configurable: true,
+        get: function () {
+          abort(
+            'You are getting _emscripten_stack_get_free on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
+          );
+        },
+      });
+      Object.defineProperty(Module['ready'], '_emscripten_stack_get_free', {
+        configurable: true,
+        set: function () {
+          abort(
+            'You are setting _emscripten_stack_get_free on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
+          );
+        },
+      });
+    }
+    if (!Object.getOwnPropertyDescriptor(Module['ready'], '_emscripten_stack_init')) {
+      Object.defineProperty(Module['ready'], '_emscripten_stack_init', {
+        configurable: true,
+        get: function () {
+          abort(
+            'You are getting _emscripten_stack_init on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
+          );
+        },
+      });
+      Object.defineProperty(Module['ready'], '_emscripten_stack_init', {
+        configurable: true,
+        set: function () {
+          abort(
+            'You are setting _emscripten_stack_init on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
+          );
+        },
+      });
+    }
     if (!Object.getOwnPropertyDescriptor(Module['ready'], '_stackSave')) {
       Object.defineProperty(Module['ready'], '_stackSave', {
         configurable: true,
@@ -82,24 +136,6 @@ var OpenSSL = (function () {
         set: function () {
           abort(
             'You are setting _stackAlloc on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
-          );
-        },
-      });
-    }
-    if (!Object.getOwnPropertyDescriptor(Module['ready'], '___data_end')) {
-      Object.defineProperty(Module['ready'], '___data_end', {
-        configurable: true,
-        get: function () {
-          abort(
-            'You are getting ___data_end on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
-          );
-        },
-      });
-      Object.defineProperty(Module['ready'], '___data_end', {
-        configurable: true,
-        set: function () {
-          abort(
-            'You are setting ___data_end on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
           );
         },
       });
@@ -176,6 +212,42 @@ var OpenSSL = (function () {
         },
       });
     }
+    if (!Object.getOwnPropertyDescriptor(Module['ready'], '_htons')) {
+      Object.defineProperty(Module['ready'], '_htons', {
+        configurable: true,
+        get: function () {
+          abort(
+            'You are getting _htons on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
+          );
+        },
+      });
+      Object.defineProperty(Module['ready'], '_htons', {
+        configurable: true,
+        set: function () {
+          abort(
+            'You are setting _htons on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
+          );
+        },
+      });
+    }
+    if (!Object.getOwnPropertyDescriptor(Module['ready'], '_ntohs')) {
+      Object.defineProperty(Module['ready'], '_ntohs', {
+        configurable: true,
+        get: function () {
+          abort(
+            'You are getting _ntohs on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
+          );
+        },
+      });
+      Object.defineProperty(Module['ready'], '_ntohs', {
+        configurable: true,
+        set: function () {
+          abort(
+            'You are setting _ntohs on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
+          );
+        },
+      });
+    }
     if (!Object.getOwnPropertyDescriptor(Module['ready'], '_free')) {
       Object.defineProperty(Module['ready'], '_free', {
         configurable: true,
@@ -230,56 +302,20 @@ var OpenSSL = (function () {
         },
       });
     }
-    if (!Object.getOwnPropertyDescriptor(Module['ready'], '_memalign')) {
-      Object.defineProperty(Module['ready'], '_memalign', {
+    if (!Object.getOwnPropertyDescriptor(Module['ready'], '_htonl')) {
+      Object.defineProperty(Module['ready'], '_htonl', {
         configurable: true,
         get: function () {
           abort(
-            'You are getting _memalign on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
+            'You are getting _htonl on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
           );
         },
       });
-      Object.defineProperty(Module['ready'], '_memalign', {
+      Object.defineProperty(Module['ready'], '_htonl', {
         configurable: true,
         set: function () {
           abort(
-            'You are setting _memalign on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
-          );
-        },
-      });
-    }
-    if (!Object.getOwnPropertyDescriptor(Module['ready'], '_htons')) {
-      Object.defineProperty(Module['ready'], '_htons', {
-        configurable: true,
-        get: function () {
-          abort(
-            'You are getting _htons on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
-          );
-        },
-      });
-      Object.defineProperty(Module['ready'], '_htons', {
-        configurable: true,
-        set: function () {
-          abort(
-            'You are setting _htons on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
-          );
-        },
-      });
-    }
-    if (!Object.getOwnPropertyDescriptor(Module['ready'], '_ntohs')) {
-      Object.defineProperty(Module['ready'], '_ntohs', {
-        configurable: true,
-        get: function () {
-          abort(
-            'You are getting _ntohs on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
-          );
-        },
-      });
-      Object.defineProperty(Module['ready'], '_ntohs', {
-        configurable: true,
-        set: function () {
-          abort(
-            'You are setting _ntohs on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
+            'You are setting _htonl on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
           );
         },
       });
@@ -302,20 +338,20 @@ var OpenSSL = (function () {
         },
       });
     }
-    if (!Object.getOwnPropertyDescriptor(Module['ready'], '_htonl')) {
-      Object.defineProperty(Module['ready'], '_htonl', {
+    if (!Object.getOwnPropertyDescriptor(Module['ready'], '_memalign')) {
+      Object.defineProperty(Module['ready'], '_memalign', {
         configurable: true,
         get: function () {
           abort(
-            'You are getting _htonl on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
+            'You are getting _memalign on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
           );
         },
       });
-      Object.defineProperty(Module['ready'], '_htonl', {
+      Object.defineProperty(Module['ready'], '_memalign', {
         configurable: true,
         set: function () {
           abort(
-            'You are setting _htonl on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
+            'You are setting _memalign on the Promise object, instead of the instance. Use .then() to get called back with the instance, see the MODULARIZE docs in src/settings.js'
           );
         },
       });
@@ -385,14 +421,14 @@ var OpenSSL = (function () {
           'not compiled for this environment (did you build to HTML and try to run it not on the web, or set ENVIRONMENT to something - like node - and run it someplace else - like on the web?)'
         );
       {
-        read_ = function shell_read(url) {
+        read_ = function (url) {
           var xhr = new XMLHttpRequest();
           xhr.open('GET', url, false);
           xhr.send(null);
           return xhr.responseText;
         };
         if (ENVIRONMENT_IS_WORKER) {
-          readBinary = function readBinary(url) {
+          readBinary = function (url) {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', url, false);
             xhr.responseType = 'arraybuffer';
@@ -400,11 +436,11 @@ var OpenSSL = (function () {
             return new Uint8Array(xhr.response);
           };
         }
-        readAsync = function readAsync(url, onload, onerror) {
+        readAsync = function (url, onload, onerror) {
           var xhr = new XMLHttpRequest();
           xhr.open('GET', url, true);
           xhr.responseType = 'arraybuffer';
-          xhr.onload = function xhr_onload() {
+          xhr.onload = function () {
             if (xhr.status == 200 || (xhr.status == 0 && xhr.response)) {
               onload(xhr.response);
               return;
@@ -662,7 +698,7 @@ var OpenSSL = (function () {
     }
     var wasmMemory;
     var ABORT = false;
-    var EXITSTATUS = 0;
+    var EXITSTATUS;
     function assert(condition, text) {
       if (!condition) {
         abort('Assertion failed: ' + text);
@@ -847,7 +883,6 @@ var OpenSSL = (function () {
       }
       if (!dontAddNull) HEAP8[buffer >> 0] = 0;
     }
-    var WASM_PAGE_SIZE = 65536;
     function alignUp(x, multiple) {
       if (x % multiple > 0) {
         x += multiple - (x % multiple);
@@ -855,6 +890,7 @@ var OpenSSL = (function () {
       return x;
     }
     var buffer, HEAP8, HEAPU8, HEAP16, HEAPU16, HEAP32, HEAPU32, HEAPF32, HEAPF64;
+    var HEAP64;
     function updateGlobalBufferAndViews(buf) {
       buffer = buf;
       Module['HEAP8'] = HEAP8 = new Int8Array(buf);
@@ -865,30 +901,28 @@ var OpenSSL = (function () {
       Module['HEAPU32'] = HEAPU32 = new Uint32Array(buf);
       Module['HEAPF32'] = HEAPF32 = new Float32Array(buf);
       Module['HEAPF64'] = HEAPF64 = new Float64Array(buf);
+      Module['HEAP64'] = HEAP64 = new BigInt64Array(buf);
     }
-    var STACK_BASE = 6073168,
-      STACK_MAX = 830288;
-    assert(STACK_BASE % 16 === 0, 'stack must start aligned');
     var TOTAL_STACK = 5242880;
     if (Module['TOTAL_STACK'])
       assert(
         TOTAL_STACK === Module['TOTAL_STACK'],
         'the stack size can no longer be determined at runtime'
       );
-    var INITIAL_INITIAL_MEMORY = Module['INITIAL_MEMORY'] || 16777216;
+    var INITIAL_MEMORY = Module['INITIAL_MEMORY'] || 16777216;
     if (!Object.getOwnPropertyDescriptor(Module, 'INITIAL_MEMORY'))
       Object.defineProperty(Module, 'INITIAL_MEMORY', {
         configurable: true,
         get: function () {
           abort(
-            'Module.INITIAL_MEMORY has been replaced with plain INITIAL_INITIAL_MEMORY (the initial value can be provided on Module, but after startup the value is only looked for on a local variable of that name)'
+            'Module.INITIAL_MEMORY has been replaced with plain INITIAL_MEMORY (the initial value can be provided on Module, but after startup the value is only looked for on a local variable of that name)'
           );
         },
       });
     assert(
-      INITIAL_INITIAL_MEMORY >= TOTAL_STACK,
+      INITIAL_MEMORY >= TOTAL_STACK,
       'INITIAL_MEMORY should be larger than TOTAL_STACK, was ' +
-        INITIAL_INITIAL_MEMORY +
+        INITIAL_MEMORY +
         '! (TOTAL_STACK=' +
         TOTAL_STACK +
         ')'
@@ -900,32 +934,27 @@ var OpenSSL = (function () {
         Int32Array.prototype.set !== undefined,
       'JS engine does not provide full typed array support'
     );
-    if (Module['wasmMemory']) {
-      wasmMemory = Module['wasmMemory'];
-    } else {
-      wasmMemory = new WebAssembly.Memory({
-        initial: INITIAL_INITIAL_MEMORY / WASM_PAGE_SIZE,
-        maximum: 2147483648 / WASM_PAGE_SIZE,
-      });
-    }
-    if (wasmMemory) {
-      buffer = wasmMemory.buffer;
-    }
-    INITIAL_INITIAL_MEMORY = buffer.byteLength;
-    assert(INITIAL_INITIAL_MEMORY % WASM_PAGE_SIZE === 0);
-    assert(65536 % WASM_PAGE_SIZE === 0);
-    updateGlobalBufferAndViews(buffer);
+    assert(
+      !Module['wasmMemory'],
+      'Use of `wasmMemory` detected.  Use -s IMPORTED_MEMORY to define wasmMemory externally'
+    );
+    assert(
+      INITIAL_MEMORY == 16777216,
+      'Detected runtime INITIAL_MEMORY setting.  Use -s IMPORTED_MEMORY to define wasmMemory dynamically'
+    );
     var wasmTable;
     function writeStackCookie() {
-      assert((STACK_MAX & 3) == 0);
-      HEAPU32[(STACK_MAX >> 2) + 1] = 34821223;
-      HEAPU32[(STACK_MAX >> 2) + 2] = 2310721022;
+      var max = _emscripten_stack_get_end();
+      assert((max & 3) == 0);
+      HEAPU32[(max >> 2) + 1] = 34821223;
+      HEAPU32[(max >> 2) + 2] = 2310721022;
       HEAP32[0] = 1668509029;
     }
     function checkStackCookie() {
       if (ABORT) return;
-      var cookie1 = HEAPU32[(STACK_MAX >> 2) + 1];
-      var cookie2 = HEAPU32[(STACK_MAX >> 2) + 2];
+      var max = _emscripten_stack_get_end();
+      var cookie1 = HEAPU32[(max >> 2) + 1];
+      var cookie2 = HEAPU32[(max >> 2) + 2];
       if (cookie1 != 34821223 || cookie2 != 2310721022) {
         abort(
           'Stack overflow! Stack cookie has been overwritten, expected hex dwords 0x89BACDFE and 0x2135467, but received 0x' +
@@ -951,6 +980,11 @@ var OpenSSL = (function () {
     var __ATPOSTRUN__ = [];
     var runtimeInitialized = false;
     var runtimeExited = false;
+    __ATINIT__.push({
+      func: function () {
+        ___wasm_call_ctors();
+      },
+    });
     function preRun() {
       if (Module['preRun']) {
         if (typeof Module['preRun'] == 'function') Module['preRun'] = [Module['preRun']];
@@ -1130,13 +1164,13 @@ var OpenSSL = (function () {
     var wasmBinaryFile = '/openssl.wasm';
     if (!isDataURI(wasmBinaryFile)) {
     }
-    function getBinary() {
+    function getBinary(file) {
       try {
-        if (wasmBinary) {
+        if (file == wasmBinaryFile && wasmBinary) {
           return new Uint8Array(wasmBinary);
         }
         if (readBinary) {
-          return readBinary(wasmBinaryFile);
+          return readBinary(file);
         } else {
           throw 'both async and sync fetching of the wasm failed';
         }
@@ -1145,29 +1179,32 @@ var OpenSSL = (function () {
       }
     }
     function getBinaryPromise() {
-      if (
-        !wasmBinary &&
-        (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) &&
-        typeof fetch === 'function'
-      ) {
-        return fetch(wasmBinaryFile, { credentials: 'same-origin' })
-          .then(function (response) {
-            if (!response['ok']) {
-              throw "failed to load wasm binary file at '" + wasmBinaryFile + "'";
-            }
-            return response['arrayBuffer']();
-          })
-          .catch(function () {
-            return getBinary();
-          });
+      if (!wasmBinary && (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER)) {
+        if (typeof fetch === 'function') {
+          return fetch(wasmBinaryFile, { credentials: 'same-origin' })
+            .then(function (response) {
+              if (!response['ok']) {
+                throw "failed to load wasm binary file at '" + wasmBinaryFile + "'";
+              }
+              return response['arrayBuffer']();
+            })
+            .catch(function () {
+              return getBinary(wasmBinaryFile);
+            });
+        }
       }
-      return Promise.resolve().then(getBinary);
+      return Promise.resolve().then(function () {
+        return getBinary(wasmBinaryFile);
+      });
     }
     function createWasm() {
       var info = { env: asmLibraryArg, wasi_snapshot_preview1: asmLibraryArg };
       function receiveInstance(instance, module) {
         var exports = instance.exports;
         Module['asm'] = exports;
+        wasmMemory = Module['asm']['memory'];
+        assert(wasmMemory, 'memory not found in wasm exports');
+        updateGlobalBufferAndViews(wasmMemory.buffer);
         wasmTable = Module['asm']['__indirect_function_table'];
         assert(wasmTable, 'table not found in wasm exports');
         removeRunDependency('wasm-instantiate');
@@ -1369,10 +1406,6 @@ var OpenSSL = (function () {
         return PATH.normalize(l + '/' + r);
       },
     };
-    function setErrNo(value) {
-      HEAP32[___errno_location() >> 2] = value;
-      return value;
-    }
     function getRandomDevice() {
       if (typeof crypto === 'object' && typeof crypto['getRandomValues'] === 'function') {
         var randomBuffer = new Uint8Array(1);
@@ -1636,6 +1669,7 @@ var OpenSSL = (function () {
         node.timestamp = Date.now();
         if (parent) {
           parent.contents[name] = node;
+          parent.timestamp = node.timestamp;
         }
         return node;
       },
@@ -1743,12 +1777,15 @@ var OpenSSL = (function () {
             }
           }
           delete old_node.parent.contents[old_node.name];
+          old_node.parent.timestamp = Date.now();
           old_node.name = new_name;
           new_dir.contents[new_name] = old_node;
+          new_dir.timestamp = old_node.parent.timestamp;
           old_node.parent = new_dir;
         },
         unlink: function (parent, name) {
           delete parent.contents[name];
+          parent.timestamp = Date.now();
         },
         rmdir: function (parent, name) {
           var node = FS.lookupNode(parent, name);
@@ -1756,6 +1793,7 @@ var OpenSSL = (function () {
             throw new FS.ErrnoError(55);
           }
           delete parent.contents[name];
+          parent.timestamp = Date.now();
         },
         readdir: function (node) {
           var entries = ['.', '..'];
@@ -1845,7 +1883,9 @@ var OpenSSL = (function () {
           stream.node.usedBytes = Math.max(stream.node.usedBytes, offset + length);
         },
         mmap: function (stream, address, length, position, prot, flags) {
-          assert(address === 0);
+          if (address !== 0) {
+            throw new FS.ErrnoError(28);
+          }
           if (!FS.isFile(stream.node.mode)) {
             throw new FS.ErrnoError(43);
           }
@@ -2144,10 +2184,6 @@ var OpenSSL = (function () {
       genericErrors: {},
       filesystems: null,
       syncFSRequests: 0,
-      handleFSError: function (e) {
-        if (!(e instanceof FS.ErrnoError)) throw e + ' : ' + stackTrace();
-        return setErrNo(e.errno);
-      },
       lookupPath: function (path, opts) {
         path = PATH_FS.resolve(FS.cwd(), path);
         opts = opts || {};
@@ -2250,6 +2286,7 @@ var OpenSSL = (function () {
         return FS.lookup(parent, name);
       },
       createNode: function (parent, name, mode, rdev) {
+        assert(typeof parent === 'object');
         var node = new FS.FSNode(parent, name, mode, rdev);
         FS.hashAddNode(node);
         return node;
@@ -2284,23 +2321,7 @@ var OpenSSL = (function () {
       isSocket: function (mode) {
         return (mode & 49152) === 49152;
       },
-      flagModes: {
-        r: 0,
-        rs: 1052672,
-        'r+': 2,
-        w: 577,
-        wx: 705,
-        xw: 705,
-        'w+': 578,
-        'wx+': 706,
-        'xw+': 706,
-        a: 1089,
-        ax: 1217,
-        xa: 1217,
-        'a+': 1090,
-        'ax+': 1218,
-        'xa+': 1218,
-      },
+      flagModes: { r: 0, 'r+': 2, w: 577, 'w+': 578, a: 1089, 'a+': 1090 },
       modeStringToFlags: function (str) {
         var flags = FS.flagModes[str];
         if (typeof flags === 'undefined') {
@@ -3168,7 +3189,7 @@ var OpenSSL = (function () {
       },
       readFile: function (path, opts) {
         opts = opts || {};
-        opts.flags = opts.flags || 'r';
+        opts.flags = opts.flags || 0;
         opts.encoding = opts.encoding || 'binary';
         if (opts.encoding !== 'utf8' && opts.encoding !== 'binary') {
           throw new Error('Invalid encoding type "' + opts.encoding + '"');
@@ -3189,7 +3210,7 @@ var OpenSSL = (function () {
       },
       writeFile: function (path, data, opts) {
         opts = opts || {};
-        opts.flags = opts.flags || 'w';
+        opts.flags = opts.flags || 577;
         var stream = FS.open(path, opts.flags, opts.mode);
         if (typeof data === 'string') {
           var buf = new Uint8Array(lengthBytesUTF8(data) + 1);
@@ -3247,12 +3268,12 @@ var OpenSSL = (function () {
       },
       createSpecialDirectories: function () {
         FS.mkdir('/proc');
-        FS.mkdir('/proc/self');
+        var proc_self = FS.mkdir('/proc/self');
         FS.mkdir('/proc/self/fd');
         FS.mount(
           {
             mount: function () {
-              var node = FS.createNode('/proc/self', 'fd', 16384 | 511, 73);
+              var node = FS.createNode(proc_self, 'fd', 16384 | 511, 73);
               node.node_ops = {
                 lookup: function (parent, name) {
                   var fd = +name;
@@ -3294,9 +3315,9 @@ var OpenSSL = (function () {
         } else {
           FS.symlink('/dev/tty1', '/dev/stderr');
         }
-        var stdin = FS.open('/dev/stdin', 'r');
-        var stdout = FS.open('/dev/stdout', 'w');
-        var stderr = FS.open('/dev/stderr', 'w');
+        var stdin = FS.open('/dev/stdin', 0);
+        var stdout = FS.open('/dev/stdout', 1);
+        var stderr = FS.open('/dev/stderr', 1);
         assert(stdin.fd === 0, 'invalid handle for stdin (' + stdin.fd + ')');
         assert(stdout.fd === 1, 'invalid handle for stdout (' + stdout.fd + ')');
         assert(stderr.fd === 2, 'invalid handle for stderr (' + stderr.fd + ')');
@@ -3372,7 +3393,6 @@ var OpenSSL = (function () {
         if (ret.exists) {
           return ret.object;
         } else {
-          setErrNo(ret.error);
           return null;
         }
       },
@@ -3441,7 +3461,7 @@ var OpenSSL = (function () {
             data = arr;
           }
           FS.chmod(node, mode | 146);
-          var stream = FS.open(node, 'w');
+          var stream = FS.open(node, 577);
           FS.write(stream, data, 0, data.length, 0, canOwn);
           FS.close(stream);
           FS.chmod(node, mode);
@@ -3501,7 +3521,6 @@ var OpenSSL = (function () {
       },
       forceLoadFile: function (obj) {
         if (obj.isDevice || obj.isFolder || obj.link || obj.contents) return true;
-        var success = true;
         if (typeof XMLHttpRequest !== 'undefined') {
           throw new Error(
             'Lazy loading should have been performed (contents set) in createLazyFile, but it was not. Lazy loading only works in web workers. Use --embed-file or --preload-file in emcc on the main thread.'
@@ -3511,13 +3530,11 @@ var OpenSSL = (function () {
             obj.contents = intArrayFromString(read_(obj.url), true);
             obj.usedBytes = obj.contents.length;
           } catch (e) {
-            success = false;
+            throw new FS.ErrnoError(29);
           }
         } else {
           throw new Error('Cannot load without read() or XMLHttpRequest.');
         }
-        if (!success) setErrNo(29);
-        return success;
       },
       createLazyFile: function (parent, name, url, canRead, canWrite) {
         function LazyUint8Array() {
@@ -3635,16 +3652,12 @@ var OpenSSL = (function () {
         keys.forEach(function (key) {
           var fn = node.stream_ops[key];
           stream_ops[key] = function forceLoadLazyFile() {
-            if (!FS.forceLoadFile(node)) {
-              throw new FS.ErrnoError(29);
-            }
+            FS.forceLoadFile(node);
             return fn.apply(null, arguments);
           };
         });
         stream_ops.read = function stream_ops_read(stream, buffer, offset, length, position) {
-          if (!FS.forceLoadFile(node)) {
-            throw new FS.ErrnoError(29);
-          }
+          FS.forceLoadFile(node);
           var contents = stream.node.contents;
           if (position >= contents.length) return 0;
           var size = Math.min(contents.length - position, length);
@@ -4102,6 +4115,10 @@ var OpenSSL = (function () {
         return -e.errno;
       }
     }
+    function setErrNo(value) {
+      HEAP32[___errno_location() >> 2] = value;
+      return value;
+    }
     function ___sys_fcntl64(fd, cmd, varargs) {
       SYSCALLS.varargs = varargs;
       try {
@@ -4303,10 +4320,12 @@ var OpenSSL = (function () {
       if (!info) return 0;
       if (len === info.len) {
         var stream = FS.getStream(info.fd);
-        if (info.prot & 2) {
-          SYSCALLS.doMsync(addr, stream, len, info.flags, info.offset);
+        if (stream) {
+          if (info.prot & 2) {
+            SYSCALLS.doMsync(addr, stream, len, info.flags, info.offset);
+          }
+          FS.munmap(stream);
         }
-        FS.munmap(stream);
         SYSCALLS.mappings[addr] = null;
         if (info.allocated) {
           _free(info.malloc);
@@ -4326,7 +4345,7 @@ var OpenSSL = (function () {
       SYSCALLS.varargs = varargs;
       try {
         var pathname = SYSCALLS.getStr(path);
-        var mode = SYSCALLS.get();
+        var mode = varargs ? SYSCALLS.get() : 0;
         var stream = FS.open(pathname, flags, mode);
         return stream.fd;
       } catch (e) {
@@ -4355,7 +4374,7 @@ var OpenSSL = (function () {
         var readableStream = FS.createStream({
           path: rName,
           node: rNode,
-          flags: FS.modeStringToFlags('r'),
+          flags: 0,
           seekable: false,
           stream_ops: PIPEFS.stream_ops,
         });
@@ -4363,7 +4382,7 @@ var OpenSSL = (function () {
         var writableStream = FS.createStream({
           path: wName,
           node: wNode,
-          flags: FS.modeStringToFlags('w'),
+          flags: 1,
           seekable: false,
           stream_ops: PIPEFS.stream_ops,
         });
@@ -4519,15 +4538,6 @@ var OpenSSL = (function () {
         return -e.errno;
       }
     }
-    function ___sys_read(fd, buf, count) {
-      try {
-        var stream = SYSCALLS.getStreamFromFD(fd);
-        return FS.read(stream, HEAP8, buf, count);
-      } catch (e) {
-        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-        return -e.errno;
-      }
-    }
     function ___sys_readlink(path, buf, bufsize) {
       try {
         path = SYSCALLS.getStr(path);
@@ -4594,7 +4604,7 @@ var OpenSSL = (function () {
         var stream = FS.createStream({
           path: name,
           node: node,
-          flags: FS.modeStringToFlags('r+'),
+          flags: 2,
           seekable: false,
           stream_ops: SOCKFS.stream_ops,
         });
@@ -5230,16 +5240,22 @@ var OpenSSL = (function () {
       }
       return { family: family, addr: addr, port: port };
     }
-    function __write_sockaddr(sa, family, addr, port) {
+    function __write_sockaddr(sa, family, addr, port, addrlen) {
       switch (family) {
         case 2:
           addr = __inet_pton4_raw(addr);
+          if (addrlen) {
+            HEAP32[addrlen >> 2] = 16;
+          }
           HEAP16[sa >> 1] = family;
           HEAP32[(sa + 4) >> 2] = addr;
           HEAP16[(sa + 2) >> 1] = _htons(port);
           break;
         case 10:
           addr = __inet_pton6_raw(addr);
+          if (addrlen) {
+            HEAP32[addrlen >> 2] = 28;
+          }
           HEAP32[sa >> 2] = family;
           HEAP32[(sa + 8) >> 2] = addr[0];
           HEAP32[(sa + 12) >> 2] = addr[1];
@@ -5250,9 +5266,9 @@ var OpenSSL = (function () {
           HEAP32[(sa + 24) >> 2] = 0;
           break;
         default:
-          return { errno: 5 };
+          return 5;
       }
-      return {};
+      return 0;
     }
     function ___sys_socketcall(call, socketvararg) {
       try {
@@ -5304,13 +5320,14 @@ var OpenSSL = (function () {
               addrlen = SYSCALLS.get();
             var newsock = sock.sock_ops.accept(sock);
             if (addr) {
-              var res = __write_sockaddr(
+              var errno = __write_sockaddr(
                 addr,
                 newsock.family,
                 DNS.lookup_name(newsock.daddr),
-                newsock.dport
+                newsock.dport,
+                addrlen
               );
-              assert(!res.errno);
+              assert(!errno);
             }
             return newsock.stream.fd;
           }
@@ -5318,13 +5335,14 @@ var OpenSSL = (function () {
             var sock = getSocketFromFD(),
               addr = SYSCALLS.get(),
               addrlen = SYSCALLS.get();
-            var res = __write_sockaddr(
+            var errno = __write_sockaddr(
               addr,
               sock.family,
               DNS.lookup_name(sock.saddr || '0.0.0.0'),
-              sock.sport
+              sock.sport,
+              addrlen
             );
-            assert(!res.errno);
+            assert(!errno);
             return 0;
           }
           case 7: {
@@ -5334,8 +5352,14 @@ var OpenSSL = (function () {
             if (!sock.daddr) {
               return -53;
             }
-            var res = __write_sockaddr(addr, sock.family, DNS.lookup_name(sock.daddr), sock.dport);
-            assert(!res.errno);
+            var errno = __write_sockaddr(
+              addr,
+              sock.family,
+              DNS.lookup_name(sock.daddr),
+              sock.dport,
+              addrlen
+            );
+            assert(!errno);
             return 0;
           }
           case 11: {
@@ -5360,8 +5384,14 @@ var OpenSSL = (function () {
             var msg = sock.sock_ops.recvmsg(sock, len);
             if (!msg) return 0;
             if (addr) {
-              var res = __write_sockaddr(addr, sock.family, DNS.lookup_name(msg.addr), msg.port);
-              assert(!res.errno);
+              var errno = __write_sockaddr(
+                addr,
+                sock.family,
+                DNS.lookup_name(msg.addr),
+                msg.port,
+                addrlen
+              );
+              assert(!errno);
             }
             HEAPU8.set(msg.buffer, buf);
             return msg.buffer.byteLength;
@@ -5429,8 +5459,8 @@ var OpenSSL = (function () {
             if (!msg) return 0;
             var name = HEAP32[message >> 2];
             if (name) {
-              var res = __write_sockaddr(name, sock.family, DNS.lookup_name(msg.addr), msg.port);
-              assert(!res.errno);
+              var errno = __write_sockaddr(name, sock.family, DNS.lookup_name(msg.addr), msg.port);
+              assert(!errno);
             }
             var bytesRead = 0;
             var bytesRemaining = msg.buffer.byteLength;
@@ -5591,6 +5621,10 @@ var OpenSSL = (function () {
       );
       return false;
     }
+    function _emscripten_thread_sleep(msecs) {
+      var start = _emscripten_get_now();
+      while (_emscripten_get_now() - start < msecs) {}
+    }
     var ENV = {};
     function getExecutableName() {
       return thisProgram || './this.program';
@@ -5623,24 +5657,34 @@ var OpenSSL = (function () {
       return getEnvStrings.strings;
     }
     function _environ_get(__environ, environ_buf) {
-      var bufSize = 0;
-      getEnvStrings().forEach(function (string, i) {
-        var ptr = environ_buf + bufSize;
-        HEAP32[(__environ + i * 4) >> 2] = ptr;
-        writeAsciiToMemory(string, ptr);
-        bufSize += string.length + 1;
-      });
-      return 0;
+      try {
+        var bufSize = 0;
+        getEnvStrings().forEach(function (string, i) {
+          var ptr = environ_buf + bufSize;
+          HEAP32[(__environ + i * 4) >> 2] = ptr;
+          writeAsciiToMemory(string, ptr);
+          bufSize += string.length + 1;
+        });
+        return 0;
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return e.errno;
+      }
     }
     function _environ_sizes_get(penviron_count, penviron_buf_size) {
-      var strings = getEnvStrings();
-      HEAP32[penviron_count >> 2] = strings.length;
-      var bufSize = 0;
-      strings.forEach(function (string) {
-        bufSize += string.length + 1;
-      });
-      HEAP32[penviron_buf_size >> 2] = bufSize;
-      return 0;
+      try {
+        var strings = getEnvStrings();
+        HEAP32[penviron_count >> 2] = strings.length;
+        var bufSize = 0;
+        strings.forEach(function (string) {
+          bufSize += string.length + 1;
+        });
+        HEAP32[penviron_buf_size >> 2] = bufSize;
+        return 0;
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return e.errno;
+      }
     }
     function _fd_close(fd) {
       try {
@@ -5757,12 +5801,12 @@ var OpenSSL = (function () {
       var ai;
       function allocaddrinfo(family, type, proto, canon, addr, port) {
         var sa, salen, ai;
-        var res;
+        var errno;
         salen = family === 10 ? 28 : 16;
         addr = family === 10 ? __inet_ntop6_raw(addr) : __inet_ntop4_raw(addr);
         sa = _malloc(salen);
-        res = __write_sockaddr(sa, family, addr, port);
-        assert(!res.errno);
+        errno = __write_sockaddr(sa, family, addr, port);
+        assert(!errno);
         ai = _malloc(32);
         HEAP32[(ai + 4) >> 2] = family;
         HEAP32[(ai + 8) >> 2] = type;
@@ -5922,31 +5966,6 @@ var OpenSSL = (function () {
       err('Calling stub instead of kill()');
       setErrNo(ERRNO_CODES.EPERM);
       return -1;
-    }
-    function _usleep(useconds) {
-      var start = _emscripten_get_now();
-      while (_emscripten_get_now() - start < useconds / 1e3) {}
-    }
-    Module['_usleep'] = _usleep;
-    function _nanosleep(rqtp, rmtp) {
-      if (rqtp === 0) {
-        setErrNo(28);
-        return -1;
-      }
-      var seconds = HEAP32[rqtp >> 2];
-      var nanoseconds = HEAP32[(rqtp + 4) >> 2];
-      if (nanoseconds < 0 || nanoseconds > 999999999 || seconds < 0) {
-        setErrNo(28);
-        return -1;
-      }
-      if (rmtp !== 0) {
-        HEAP32[rmtp >> 2] = 0;
-        HEAP32[(rmtp + 4) >> 2] = 0;
-      }
-      return _usleep(seconds * 1e6 + nanoseconds / 1e3);
-    }
-    function _pthread_setcancelstate() {
-      return 0;
     }
     function _sigaction(signum, act, oldact) {
       err('Calling stub instead of sigaction()');
@@ -6309,8 +6328,6 @@ var OpenSSL = (function () {
         case 77:
         case 78:
         case 139:
-        case 80:
-        case 81:
         case 82:
         case 68:
         case 67:
@@ -6323,7 +6340,6 @@ var OpenSSL = (function () {
         case 52:
         case 51:
         case 46:
-        case 79:
           return 200809;
         case 27:
         case 246:
@@ -6357,6 +6373,9 @@ var OpenSSL = (function () {
         case 32:
         case 173:
         case 35:
+        case 80:
+        case 81:
+        case 79:
           return -1;
         case 176:
         case 177:
@@ -6502,11 +6521,6 @@ var OpenSSL = (function () {
       if (dontAddNull) u8array.length = numBytesWritten;
       return u8array;
     }
-    __ATINIT__.push({
-      func: function () {
-        ___wasm_call_ctors();
-      },
-    });
     var asmLibraryArg = {
       __gmtime_r: ___gmtime_r,
       __sys__newselect: ___sys__newselect,
@@ -6526,7 +6540,6 @@ var OpenSSL = (function () {
       __sys_munmap: ___sys_munmap,
       __sys_open: ___sys_open,
       __sys_pipe: ___sys_pipe,
-      __sys_read: ___sys_read,
       __sys_readlink: ___sys_readlink,
       __sys_rename: ___sys_rename,
       __sys_setpgid: ___sys_setpgid,
@@ -6542,6 +6555,7 @@ var OpenSSL = (function () {
       clock_gettime: _clock_gettime,
       emscripten_memcpy_big: _emscripten_memcpy_big,
       emscripten_resize_heap: _emscripten_resize_heap,
+      emscripten_thread_sleep: _emscripten_thread_sleep,
       environ_get: _environ_get,
       environ_sizes_get: _environ_sizes_get,
       exit: _exit,
@@ -6557,16 +6571,12 @@ var OpenSSL = (function () {
       gettimeofday: _gettimeofday,
       gmtime_r: _gmtime_r,
       kill: _kill,
-      memory: wasmMemory,
-      nanosleep: _nanosleep,
-      pthread_setcancelstate: _pthread_setcancelstate,
       sigaction: _sigaction,
       signal: _signal,
       strftime: _strftime,
       sysconf: _sysconf,
       time: _time,
       times: _times,
-      usleep: _usleep,
     };
     var asm = createWasm();
     var ___wasm_call_ctors = (Module['___wasm_call_ctors'] = createExportWrapper(
@@ -6578,13 +6588,26 @@ var OpenSSL = (function () {
     var ___errno_location = (Module['___errno_location'] = createExportWrapper('__errno_location'));
     var _fflush = (Module['_fflush'] = createExportWrapper('fflush'));
     var _ntohs = (Module['_ntohs'] = createExportWrapper('ntohs'));
+    var _usleep = (Module['_usleep'] = createExportWrapper('usleep'));
     var _malloc = (Module['_malloc'] = createExportWrapper('malloc'));
     var _free = (Module['_free'] = createExportWrapper('free'));
     var _htons = (Module['_htons'] = createExportWrapper('htons'));
     var _htonl = (Module['_htonl'] = createExportWrapper('htonl'));
+    var _emscripten_stack_get_end = (Module['_emscripten_stack_get_end'] = function () {
+      return (_emscripten_stack_get_end = Module['_emscripten_stack_get_end'] =
+        Module['asm']['emscripten_stack_get_end']).apply(null, arguments);
+    });
     var stackSave = (Module['stackSave'] = createExportWrapper('stackSave'));
     var stackRestore = (Module['stackRestore'] = createExportWrapper('stackRestore'));
     var stackAlloc = (Module['stackAlloc'] = createExportWrapper('stackAlloc'));
+    var _emscripten_stack_init = (Module['_emscripten_stack_init'] = function () {
+      return (_emscripten_stack_init = Module['_emscripten_stack_init'] =
+        Module['asm']['emscripten_stack_init']).apply(null, arguments);
+    });
+    var _emscripten_stack_get_free = (Module['_emscripten_stack_get_free'] = function () {
+      return (_emscripten_stack_get_free = Module['_emscripten_stack_get_free'] =
+        Module['asm']['emscripten_stack_get_free']).apply(null, arguments);
+    });
     var _memalign = (Module['_memalign'] = createExportWrapper('memalign'));
     if (!Object.getOwnPropertyDescriptor(Module, 'intArrayFromString'))
       Module['intArrayFromString'] = function () {
@@ -6863,6 +6886,12 @@ var OpenSSL = (function () {
           "'stringToNewUTF8' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
         );
       };
+    if (!Object.getOwnPropertyDescriptor(Module, 'setFileTime'))
+      Module['setFileTime'] = function () {
+        abort(
+          "'setFileTime' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
     if (!Object.getOwnPropertyDescriptor(Module, 'emscripten_realloc_buffer'))
       Module['emscripten_realloc_buffer'] = function () {
         abort(
@@ -7053,6 +7082,12 @@ var OpenSSL = (function () {
           "'JSEvents' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
         );
       };
+    if (!Object.getOwnPropertyDescriptor(Module, 'registerKeyEventCallback'))
+      Module['registerKeyEventCallback'] = function () {
+        abort(
+          "'registerKeyEventCallback' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
     if (!Object.getOwnPropertyDescriptor(Module, 'specialHTMLTargets'))
       Module['specialHTMLTargets'] = function () {
         abort(
@@ -7075,6 +7110,232 @@ var OpenSSL = (function () {
       Module['findCanvasEventTarget'] = function () {
         abort(
           "'findCanvasEventTarget' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'getBoundingClientRect'))
+      Module['getBoundingClientRect'] = function () {
+        abort(
+          "'getBoundingClientRect' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'fillMouseEventData'))
+      Module['fillMouseEventData'] = function () {
+        abort(
+          "'fillMouseEventData' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'registerMouseEventCallback'))
+      Module['registerMouseEventCallback'] = function () {
+        abort(
+          "'registerMouseEventCallback' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'registerWheelEventCallback'))
+      Module['registerWheelEventCallback'] = function () {
+        abort(
+          "'registerWheelEventCallback' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'registerUiEventCallback'))
+      Module['registerUiEventCallback'] = function () {
+        abort(
+          "'registerUiEventCallback' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'registerFocusEventCallback'))
+      Module['registerFocusEventCallback'] = function () {
+        abort(
+          "'registerFocusEventCallback' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'fillDeviceOrientationEventData'))
+      Module['fillDeviceOrientationEventData'] = function () {
+        abort(
+          "'fillDeviceOrientationEventData' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'registerDeviceOrientationEventCallback'))
+      Module['registerDeviceOrientationEventCallback'] = function () {
+        abort(
+          "'registerDeviceOrientationEventCallback' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'fillDeviceMotionEventData'))
+      Module['fillDeviceMotionEventData'] = function () {
+        abort(
+          "'fillDeviceMotionEventData' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'registerDeviceMotionEventCallback'))
+      Module['registerDeviceMotionEventCallback'] = function () {
+        abort(
+          "'registerDeviceMotionEventCallback' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'screenOrientation'))
+      Module['screenOrientation'] = function () {
+        abort(
+          "'screenOrientation' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'fillOrientationChangeEventData'))
+      Module['fillOrientationChangeEventData'] = function () {
+        abort(
+          "'fillOrientationChangeEventData' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'registerOrientationChangeEventCallback'))
+      Module['registerOrientationChangeEventCallback'] = function () {
+        abort(
+          "'registerOrientationChangeEventCallback' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'fillFullscreenChangeEventData'))
+      Module['fillFullscreenChangeEventData'] = function () {
+        abort(
+          "'fillFullscreenChangeEventData' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'registerFullscreenChangeEventCallback'))
+      Module['registerFullscreenChangeEventCallback'] = function () {
+        abort(
+          "'registerFullscreenChangeEventCallback' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'registerRestoreOldStyle'))
+      Module['registerRestoreOldStyle'] = function () {
+        abort(
+          "'registerRestoreOldStyle' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'hideEverythingExceptGivenElement'))
+      Module['hideEverythingExceptGivenElement'] = function () {
+        abort(
+          "'hideEverythingExceptGivenElement' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'restoreHiddenElements'))
+      Module['restoreHiddenElements'] = function () {
+        abort(
+          "'restoreHiddenElements' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'setLetterbox'))
+      Module['setLetterbox'] = function () {
+        abort(
+          "'setLetterbox' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'currentFullscreenStrategy'))
+      Module['currentFullscreenStrategy'] = function () {
+        abort(
+          "'currentFullscreenStrategy' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'restoreOldWindowedStyle'))
+      Module['restoreOldWindowedStyle'] = function () {
+        abort(
+          "'restoreOldWindowedStyle' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'softFullscreenResizeWebGLRenderTarget'))
+      Module['softFullscreenResizeWebGLRenderTarget'] = function () {
+        abort(
+          "'softFullscreenResizeWebGLRenderTarget' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'doRequestFullscreen'))
+      Module['doRequestFullscreen'] = function () {
+        abort(
+          "'doRequestFullscreen' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'fillPointerlockChangeEventData'))
+      Module['fillPointerlockChangeEventData'] = function () {
+        abort(
+          "'fillPointerlockChangeEventData' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'registerPointerlockChangeEventCallback'))
+      Module['registerPointerlockChangeEventCallback'] = function () {
+        abort(
+          "'registerPointerlockChangeEventCallback' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'registerPointerlockErrorEventCallback'))
+      Module['registerPointerlockErrorEventCallback'] = function () {
+        abort(
+          "'registerPointerlockErrorEventCallback' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'requestPointerLock'))
+      Module['requestPointerLock'] = function () {
+        abort(
+          "'requestPointerLock' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'fillVisibilityChangeEventData'))
+      Module['fillVisibilityChangeEventData'] = function () {
+        abort(
+          "'fillVisibilityChangeEventData' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'registerVisibilityChangeEventCallback'))
+      Module['registerVisibilityChangeEventCallback'] = function () {
+        abort(
+          "'registerVisibilityChangeEventCallback' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'registerTouchEventCallback'))
+      Module['registerTouchEventCallback'] = function () {
+        abort(
+          "'registerTouchEventCallback' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'fillGamepadEventData'))
+      Module['fillGamepadEventData'] = function () {
+        abort(
+          "'fillGamepadEventData' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'registerGamepadEventCallback'))
+      Module['registerGamepadEventCallback'] = function () {
+        abort(
+          "'registerGamepadEventCallback' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'registerBeforeUnloadEventCallback'))
+      Module['registerBeforeUnloadEventCallback'] = function () {
+        abort(
+          "'registerBeforeUnloadEventCallback' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'fillBatteryEventData'))
+      Module['fillBatteryEventData'] = function () {
+        abort(
+          "'fillBatteryEventData' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'battery'))
+      Module['battery'] = function () {
+        abort("'battery' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)");
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'registerBatteryEventCallback'))
+      Module['registerBatteryEventCallback'] = function () {
+        abort(
+          "'registerBatteryEventCallback' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'setCanvasElementSize'))
+      Module['setCanvasElementSize'] = function () {
+        abort(
+          "'setCanvasElementSize' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'getCanvasElementSize'))
+      Module['getCanvasElementSize'] = function () {
+        abort(
+          "'getCanvasElementSize' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
         );
       };
     if (!Object.getOwnPropertyDescriptor(Module, 'polyfillSetImmediate'))
@@ -7171,6 +7432,12 @@ var OpenSSL = (function () {
       Module['convertU32PairToI53'] = function () {
         abort(
           "'convertU32PairToI53' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'uncaughtExceptionCount'))
+      Module['uncaughtExceptionCount'] = function () {
+        abort(
+          "'uncaughtExceptionCount' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
         );
       };
     if (!Object.getOwnPropertyDescriptor(Module, 'exceptionLast'))
@@ -7547,6 +7814,7 @@ var OpenSSL = (function () {
       if (runDependencies > 0) {
         return;
       }
+      _emscripten_stack_init();
       writeStackCookie();
       preRun();
       if (runDependencies > 0) return;
