@@ -671,6 +671,9 @@ var OpenSSL = (function () {
       return ret;
     }
     var tempRet0 = 0;
+    var setTempRet0 = function (value) {
+      tempRet0 = value;
+    };
     var wasmBinary;
     if (Module['wasmBinary']) wasmBinary = Module['wasmBinary'];
     if (!Object.getOwnPropertyDescriptor(Module, 'wasmBinary'))
@@ -890,7 +893,6 @@ var OpenSSL = (function () {
       return x;
     }
     var buffer, HEAP8, HEAPU8, HEAP16, HEAPU16, HEAP32, HEAPU32, HEAPF32, HEAPF64;
-    var HEAP64;
     function updateGlobalBufferAndViews(buf) {
       buffer = buf;
       Module['HEAP8'] = HEAP8 = new Int8Array(buf);
@@ -901,7 +903,6 @@ var OpenSSL = (function () {
       Module['HEAPU32'] = HEAPU32 = new Uint32Array(buf);
       Module['HEAPF32'] = HEAPF32 = new Float32Array(buf);
       Module['HEAPF64'] = HEAPF64 = new Float64Array(buf);
-      Module['HEAP64'] = HEAP64 = new BigInt64Array(buf);
     }
     var TOTAL_STACK = 5242880;
     if (Module['TOTAL_STACK'])
@@ -5718,10 +5719,8 @@ var OpenSSL = (function () {
         return e.errno;
       }
     }
-    function _fd_seek(fd, offset_bigint, whence, newOffset) {
+    function _fd_seek(fd, offset_low, offset_high, whence, newOffset) {
       try {
-        var offset_low = Number(offset_bigint & BigInt(4294967295)) | 0,
-          offset_high = Number(offset_bigint >> BigInt(32)) | 0;
         var stream = SYSCALLS.getStreamFromFD(fd);
         var HIGH_OFFSET = 4294967296;
         var offset = offset_high * HIGH_OFFSET + (offset_low >>> 0);
@@ -5966,6 +5965,9 @@ var OpenSSL = (function () {
       err('Calling stub instead of kill()');
       setErrNo(ERRNO_CODES.EPERM);
       return -1;
+    }
+    function _setTempRet0($i) {
+      setTempRet0($i | 0);
     }
     function _sigaction(signum, act, oldact) {
       err('Calling stub instead of sigaction()');
@@ -6571,6 +6573,7 @@ var OpenSSL = (function () {
       gettimeofday: _gettimeofday,
       gmtime_r: _gmtime_r,
       kill: _kill,
+      setTempRet0: _setTempRet0,
       sigaction: _sigaction,
       signal: _signal,
       strftime: _strftime,
@@ -6609,6 +6612,10 @@ var OpenSSL = (function () {
         Module['asm']['emscripten_stack_get_free']).apply(null, arguments);
     });
     var _memalign = (Module['_memalign'] = createExportWrapper('memalign'));
+    var dynCall_jiiii = (Module['dynCall_jiiii'] = createExportWrapper('dynCall_jiiii'));
+    var dynCall_vji = (Module['dynCall_vji'] = createExportWrapper('dynCall_vji'));
+    var dynCall_vjii = (Module['dynCall_vjii'] = createExportWrapper('dynCall_vjii'));
+    var dynCall_jiji = (Module['dynCall_jiji'] = createExportWrapper('dynCall_jiji'));
     if (!Object.getOwnPropertyDescriptor(Module, 'intArrayFromString'))
       Module['intArrayFromString'] = function () {
         abort(
@@ -7012,6 +7019,18 @@ var OpenSSL = (function () {
       Module['autoResumeAudioContext'] = function () {
         abort(
           "'autoResumeAudioContext' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'dynCallLegacy'))
+      Module['dynCallLegacy'] = function () {
+        abort(
+          "'dynCallLegacy' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'getDynCaller'))
+      Module['getDynCaller'] = function () {
+        abort(
+          "'getDynCaller' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
         );
       };
     if (!Object.getOwnPropertyDescriptor(Module, 'dynCall'))

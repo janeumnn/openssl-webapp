@@ -37,9 +37,9 @@ export LDFLAGS="\
   -s EXIT_RUNTIME=1\
   -s EXPORT_ES6=1\
   -s USE_ES6_IMPORT_META=0\
-  -s WASM_BIGINT=1\
   -s ALLOW_MEMORY_GROWTH=1\
   -s ASSERTIONS=1" # For logging purposes. Can be removed!
+  # -s WASM_BIGINT=1\ -- Disabled due to tests
 
 emconfigure ./Configure \
   no-hw \
