@@ -199,6 +199,35 @@ describe('symmetric encryption methods with an input text in a base64 format', (
   });
 });
 
+describe('cryptographic hashes', () => {
+  test('md5 hash', (done) => {
+    const command = new Command();
+    command.run(`dgst -md5 ${inputFile.name}`, Array.of(inputFile));
+    command.resultAsObservable.pipe(take(1)).subscribe((value) => {
+      expect(value.stdout).toBeTruthy();
+      done();
+    });
+  });
+
+  test('sha512 hash', (done) => {
+    const command = new Command();
+    command.run(`dgst -sha512 ${inputFile.name}`, Array.of(inputFile));
+    command.resultAsObservable.pipe(take(1)).subscribe((value) => {
+      expect(value.stdout).toBeTruthy();
+      done();
+    });
+  });
+
+  test('sha256 hash', (done) => {
+    const command = new Command();
+    command.run(`dgst -sha256 ${inputFile.name}`, Array.of(inputFile));
+    command.resultAsObservable.pipe(take(1)).subscribe((value) => {
+      expect(value.stdout).toBeTruthy();
+      done();
+    });
+  });
+});
+
 describe('asymmetric rsa encryption', () => {
   test('rsa 2048 bit computation', (done) => {
     const command = new Command();
