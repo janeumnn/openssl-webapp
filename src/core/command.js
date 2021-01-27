@@ -69,30 +69,34 @@ class Command {
     const argsArray = this.convertArgsToArray(args);
 
     OpenSSL(moduleObj).then((module) => {
-      if (inputText) {
-        module['FS'].writeFile(this.getFileInParameter(argsArray), data);
-      } else if (inputFiles) {
-        writeFiles.forEach((file) => {
-          module['FS'].writeFile(file.name, file.buffer);
-        });
+      try {
+        if (inputText) {
+          module['FS'].writeFile(this.getFileInParameter(argsArray), data);
+        } else if (inputFiles) {
+          writeFiles.forEach((file) => {
+            module['FS'].writeFile(file.name, file.buffer);
+          });
+        }
+
+        module.callMain(argsArray);
+
+        if (inputText) {
+          output.text = module['FS'].readFile(this.getFileOutParameter(argsArray), {
+            encoding: 'utf8',
+          });
+        } else if (this.getFileOutParameter(argsArray)) {
+          const readFileBuffer = module['FS'].readFile(this.getFileOutParameter(argsArray), {
+            encoding: 'binary',
+          });
+          output.file = new File([readFileBuffer], this.getFileOutParameter(argsArray), {
+            type: 'application/octet-stream',
+          });
+        }
+      } catch (e) {
+        output.stderr = `${e.name}: ${e.message}`;
+      } finally {
+        this.resultSubject.next(output);
       }
-
-      module.callMain(argsArray);
-
-      if (inputText) {
-        output.text = module['FS'].readFile(this.getFileOutParameter(argsArray), {
-          encoding: 'utf8',
-        });
-      } else if (this.getFileOutParameter(argsArray)) {
-        const readFileBuffer = module['FS'].readFile(this.getFileOutParameter(argsArray), {
-          encoding: 'binary',
-        });
-        output.file = new File([readFileBuffer], this.getFileOutParameter(argsArray), {
-          type: 'application/octet-stream',
-        });
-      }
-
-      this.resultSubject.next(output);
     });
   }
 
