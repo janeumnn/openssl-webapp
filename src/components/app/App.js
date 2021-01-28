@@ -1,8 +1,9 @@
-import './App.css';
-
 import React, { useState, useEffect, useRef } from 'react';
+import CommandLine from '../../components/command-line/CommandLine';
 import Command from '../../core/command';
 import { downloadFile } from '../../utils/downloadFile';
+
+import './App.css';
 
 function App() {
   const command = useRef(new Command());
@@ -12,18 +13,28 @@ function App() {
   const [text, setText] = useState();
   const [file, setFile] = useState();
 
+  const runCommand = (args) => {
+    command.current.run(args);
+  };
+
   useEffect(() => {
     const result = command.current.resultAsObservable.subscribe((value) => {
       if (value.stdout) {
         setStdout(value.stdout);
+      } else {
+        setStdout(null);
       }
 
       if (value.stderr) {
         setStderr(value.stderr);
+      } else {
+        setStderr(null);
       }
 
       if (value.text) {
         setText(value.text);
+      } else {
+        setText(null);
       }
 
       if (value.file) {
@@ -39,11 +50,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          <code>OpenSSL WebApp</code>
-        </p>
-      </header>
+      <CommandLine commandArgs={runCommand} result={stdout ?? stderr}></CommandLine>
     </div>
   );
 }
