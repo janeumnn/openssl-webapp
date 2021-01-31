@@ -13,12 +13,19 @@ function App() {
   const [text, setText] = useState();
   const [file, setFile] = useState();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const runCommand = (args) => {
+    setIsLoading(true);
     command.current.run(args);
   };
 
   useEffect(() => {
     const result = command.current.resultAsObservable.subscribe((value) => {
+      if (value) {
+        setIsLoading(false);
+      }
+
       if (value.stdout) {
         setStdout(value.stdout);
       } else {
@@ -50,7 +57,11 @@ function App() {
 
   return (
     <div className="App">
-      <CommandLine commandArgs={runCommand} result={stdout ?? stderr}></CommandLine>
+      <CommandLine
+        commandArgs={runCommand}
+        result={stdout ?? stderr}
+        isLoading={isLoading}
+      ></CommandLine>
     </div>
   );
 }
