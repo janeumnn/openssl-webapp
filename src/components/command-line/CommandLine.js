@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 
 import './CommandLine.css';
 
-function CommandLine({ commandArgs, result }) {
+function CommandLine({ commandArgs, result, isLoading }) {
   const input = useRef();
   const [command, setCommand] = useState();
 
@@ -17,7 +17,13 @@ function CommandLine({ commandArgs, result }) {
     <div className="CommandLine">
       <div className="CommandLine-output">
         <p className="CommandLine-command">{command}</p>
-        <p>{result}</p>
+        {isLoading ? (
+          <div className="CommandLine-loader">
+            <div className="spinner-border text-light" role="status"></div>
+          </div>
+        ) : (
+          <p>{result}</p>
+        )}
       </div>
       <form onSubmit={handleSubmit}>
         <div className="CommandLine-input">
