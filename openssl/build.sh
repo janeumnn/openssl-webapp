@@ -60,7 +60,5 @@ emmake make -j 16 build_generated libssl.a libcrypto.a apps/openssl
 
 mv apps/openssl apps/openssl.js
 sed -i.old '1s;^;\/* eslint-disable *\/;' apps/openssl.js
-sed -i.old "s|openssl.wasm|/openssl.wasm|" apps/openssl.js
-sed -i.old "s|wasmBinaryFile=locateFile(wasmBinaryFile)||" apps/openssl.js
 cp apps/openssl.js ../../src/core/
 cp apps/openssl.wasm ../../public/
