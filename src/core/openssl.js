@@ -466,7 +466,7 @@ var OpenSSL = (function () {
     }
     moduleOverrides = null;
     if (Module['arguments']) arguments_ = Module['arguments'];
-    if (!Object.getOwnPropertyDescriptor(Module, 'arguments'))
+    if (!Object.getOwnPropertyDescriptor(Module, 'arguments')) {
       Object.defineProperty(Module, 'arguments', {
         configurable: true,
         get: function () {
@@ -475,8 +475,9 @@ var OpenSSL = (function () {
           );
         },
       });
+    }
     if (Module['thisProgram']) thisProgram = Module['thisProgram'];
-    if (!Object.getOwnPropertyDescriptor(Module, 'thisProgram'))
+    if (!Object.getOwnPropertyDescriptor(Module, 'thisProgram')) {
       Object.defineProperty(Module, 'thisProgram', {
         configurable: true,
         get: function () {
@@ -485,8 +486,9 @@ var OpenSSL = (function () {
           );
         },
       });
+    }
     if (Module['quit']) quit_ = Module['quit'];
-    if (!Object.getOwnPropertyDescriptor(Module, 'quit'))
+    if (!Object.getOwnPropertyDescriptor(Module, 'quit')) {
       Object.defineProperty(Module, 'quit', {
         configurable: true,
         get: function () {
@@ -495,6 +497,7 @@ var OpenSSL = (function () {
           );
         },
       });
+    }
     assert(
       typeof Module['memoryInitializerPrefixURL'] === 'undefined',
       'Module.memoryInitializerPrefixURL option was removed, use Module.locateFile instead'
@@ -531,7 +534,7 @@ var OpenSSL = (function () {
       typeof Module['TOTAL_MEMORY'] === 'undefined',
       'Module.TOTAL_MEMORY has been renamed Module.INITIAL_MEMORY'
     );
-    if (!Object.getOwnPropertyDescriptor(Module, 'read'))
+    if (!Object.getOwnPropertyDescriptor(Module, 'read')) {
       Object.defineProperty(Module, 'read', {
         configurable: true,
         get: function () {
@@ -540,7 +543,8 @@ var OpenSSL = (function () {
           );
         },
       });
-    if (!Object.getOwnPropertyDescriptor(Module, 'readAsync'))
+    }
+    if (!Object.getOwnPropertyDescriptor(Module, 'readAsync')) {
       Object.defineProperty(Module, 'readAsync', {
         configurable: true,
         get: function () {
@@ -549,7 +553,8 @@ var OpenSSL = (function () {
           );
         },
       });
-    if (!Object.getOwnPropertyDescriptor(Module, 'readBinary'))
+    }
+    if (!Object.getOwnPropertyDescriptor(Module, 'readBinary')) {
       Object.defineProperty(Module, 'readBinary', {
         configurable: true,
         get: function () {
@@ -558,7 +563,8 @@ var OpenSSL = (function () {
           );
         },
       });
-    if (!Object.getOwnPropertyDescriptor(Module, 'setWindowTitle'))
+    }
+    if (!Object.getOwnPropertyDescriptor(Module, 'setWindowTitle')) {
       Object.defineProperty(Module, 'setWindowTitle', {
         configurable: true,
         get: function () {
@@ -567,6 +573,7 @@ var OpenSSL = (function () {
           );
         },
       });
+    }
     var STACK_ALIGN = 16;
     function alignMemory(size, factor) {
       if (!factor) factor = STACK_ALIGN;
@@ -676,7 +683,7 @@ var OpenSSL = (function () {
     };
     var wasmBinary;
     if (Module['wasmBinary']) wasmBinary = Module['wasmBinary'];
-    if (!Object.getOwnPropertyDescriptor(Module, 'wasmBinary'))
+    if (!Object.getOwnPropertyDescriptor(Module, 'wasmBinary')) {
       Object.defineProperty(Module, 'wasmBinary', {
         configurable: true,
         get: function () {
@@ -685,9 +692,9 @@ var OpenSSL = (function () {
           );
         },
       });
-    var noExitRuntime;
-    if (Module['noExitRuntime']) noExitRuntime = Module['noExitRuntime'];
-    if (!Object.getOwnPropertyDescriptor(Module, 'noExitRuntime'))
+    }
+    var noExitRuntime = Module['noExitRuntime'] || false;
+    if (!Object.getOwnPropertyDescriptor(Module, 'noExitRuntime')) {
       Object.defineProperty(Module, 'noExitRuntime', {
         configurable: true,
         get: function () {
@@ -696,6 +703,7 @@ var OpenSSL = (function () {
           );
         },
       });
+    }
     if (typeof WebAssembly !== 'object') {
       abort('no native wasm support detected');
     }
@@ -911,7 +919,7 @@ var OpenSSL = (function () {
         'the stack size can no longer be determined at runtime'
       );
     var INITIAL_MEMORY = Module['INITIAL_MEMORY'] || 16777216;
-    if (!Object.getOwnPropertyDescriptor(Module, 'INITIAL_MEMORY'))
+    if (!Object.getOwnPropertyDescriptor(Module, 'INITIAL_MEMORY')) {
       Object.defineProperty(Module, 'INITIAL_MEMORY', {
         configurable: true,
         get: function () {
@@ -920,6 +928,7 @@ var OpenSSL = (function () {
           );
         },
       });
+    }
     assert(
       INITIAL_MEMORY >= TOTAL_STACK,
       'INITIAL_MEMORY should be larger than TOTAL_STACK, was ' +
@@ -1001,8 +1010,8 @@ var OpenSSL = (function () {
       runtimeInitialized = true;
       if (!Module['noFSInit'] && !FS.init.initialized) FS.init();
       TTY.init();
-      PIPEFS.root = FS.mount(PIPEFS, {}, null);
       SOCKFS.root = FS.mount(SOCKFS, {}, null);
+      PIPEFS.root = FS.mount(PIPEFS, {}, null);
       callRuntimeCallbacks(__ATINIT__);
     }
     function preMain() {
@@ -1139,6 +1148,9 @@ var OpenSSL = (function () {
       return hasPrefix(filename, dataURIPrefix);
     }
     var fileURIPrefix = 'file://';
+    function isFileURI(filename) {
+      return hasPrefix(filename, fileURIPrefix);
+    }
     function createExportWrapper(name, fixedasm) {
       return function () {
         var displayName = name;
@@ -1162,8 +1174,9 @@ var OpenSSL = (function () {
         return asm[name].apply(null, arguments);
       };
     }
-    var wasmBinaryFile = '/openssl.wasm';
+    var wasmBinaryFile = 'openssl.wasm';
     if (!isDataURI(wasmBinaryFile)) {
+      wasmBinaryFile = locateFile(wasmBinaryFile);
     }
     function getBinary(file) {
       try {
@@ -1227,6 +1240,13 @@ var OpenSSL = (function () {
           })
           .then(receiver, function (reason) {
             err('failed to asynchronously prepare wasm: ' + reason);
+            if (isFileURI(wasmBinaryFile)) {
+              err(
+                'warning: Loading from a file URI (' +
+                  wasmBinaryFile +
+                  ') is not supported in most browsers. See https://emscripten.org/docs/getting_started/FAQ.html#how-do-i-run-a-local-webserver-for-testing-why-does-my-program-stall-in-downloading-or-preparing'
+              );
+            }
             abort(reason);
           });
       }
@@ -1674,14 +1694,6 @@ var OpenSSL = (function () {
         }
         return node;
       },
-      getFileDataAsRegularArray: function (node) {
-        if (node.contents && node.contents.subarray) {
-          var arr = [];
-          for (var i = 0; i < node.usedBytes; ++i) arr.push(node.contents[i]);
-          return arr;
-        }
-        return node.contents;
-      },
       getFileDataAsTypedArray: function (node) {
         if (!node.contents) return new Uint8Array(0);
         if (node.contents.subarray) return node.contents.subarray(0, node.usedBytes);
@@ -1699,28 +1711,20 @@ var OpenSSL = (function () {
         var oldContents = node.contents;
         node.contents = new Uint8Array(newCapacity);
         if (node.usedBytes > 0) node.contents.set(oldContents.subarray(0, node.usedBytes), 0);
-        return;
       },
       resizeFileStorage: function (node, newSize) {
         if (node.usedBytes == newSize) return;
         if (newSize == 0) {
           node.contents = null;
           node.usedBytes = 0;
-          return;
-        }
-        if (!node.contents || node.contents.subarray) {
+        } else {
           var oldContents = node.contents;
           node.contents = new Uint8Array(newSize);
           if (oldContents) {
             node.contents.set(oldContents.subarray(0, Math.min(newSize, node.usedBytes)));
           }
           node.usedBytes = newSize;
-          return;
         }
-        if (!node.contents) node.contents = [];
-        if (node.contents.length > newSize) node.contents.length = newSize;
-        else while (node.contents.length < newSize) node.contents.push(0);
-        node.usedBytes = newSize;
       },
       node_ops: {
         getattr: function (node) {
@@ -3852,19 +3856,25 @@ var OpenSSL = (function () {
       mappings: {},
       DEFAULT_POLLMASK: 5,
       umask: 511,
-      calculateAt: function (dirfd, path) {
-        if (path[0] !== '/') {
-          var dir;
-          if (dirfd === -100) {
-            dir = FS.cwd();
-          } else {
-            var dirstream = FS.getStream(dirfd);
-            if (!dirstream) throw new FS.ErrnoError(8);
-            dir = dirstream.path;
-          }
-          path = PATH.join2(dir, path);
+      calculateAt: function (dirfd, path, allowEmpty) {
+        if (path[0] === '/') {
+          return path;
         }
-        return path;
+        var dir;
+        if (dirfd === -100) {
+          dir = FS.cwd();
+        } else {
+          var dirstream = FS.getStream(dirfd);
+          if (!dirstream) throw new FS.ErrnoError(8);
+          dir = dirstream.path;
+        }
+        if (path.length == 0) {
+          if (!allowEmpty) {
+            throw new FS.ErrnoError(44);
+          }
+          return dir;
+        }
+        return PATH.join2(dir, path);
       },
       doStat: function (func, path, buf) {
         try {
@@ -4087,482 +4097,6 @@ var OpenSSL = (function () {
         if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
         return -e.errno;
       }
-    }
-    function ___sys_access(path, amode) {
-      try {
-        path = SYSCALLS.getStr(path);
-        return SYSCALLS.doAccess(path, amode);
-      } catch (e) {
-        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-        return -e.errno;
-      }
-    }
-    function ___sys_chmod(path, mode) {
-      try {
-        path = SYSCALLS.getStr(path);
-        FS.chmod(path, mode);
-        return 0;
-      } catch (e) {
-        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-        return -e.errno;
-      }
-    }
-    function ___sys_dup(fd) {
-      try {
-        var old = SYSCALLS.getStreamFromFD(fd);
-        return FS.open(old.path, old.flags, 0).fd;
-      } catch (e) {
-        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-        return -e.errno;
-      }
-    }
-    function setErrNo(value) {
-      HEAP32[___errno_location() >> 2] = value;
-      return value;
-    }
-    function ___sys_fcntl64(fd, cmd, varargs) {
-      SYSCALLS.varargs = varargs;
-      try {
-        var stream = SYSCALLS.getStreamFromFD(fd);
-        switch (cmd) {
-          case 0: {
-            var arg = SYSCALLS.get();
-            if (arg < 0) {
-              return -28;
-            }
-            var newStream;
-            newStream = FS.open(stream.path, stream.flags, 0, arg);
-            return newStream.fd;
-          }
-          case 1:
-          case 2:
-            return 0;
-          case 3:
-            return stream.flags;
-          case 4: {
-            var arg = SYSCALLS.get();
-            stream.flags |= arg;
-            return 0;
-          }
-          case 12: {
-            var arg = SYSCALLS.get();
-            var offset = 0;
-            HEAP16[(arg + offset) >> 1] = 2;
-            return 0;
-          }
-          case 13:
-          case 14:
-            return 0;
-          case 16:
-          case 8:
-            return -28;
-          case 9:
-            setErrNo(28);
-            return -1;
-          default: {
-            return -28;
-          }
-        }
-      } catch (e) {
-        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-        return -e.errno;
-      }
-    }
-    function ___sys_fstat64(fd, buf) {
-      try {
-        var stream = SYSCALLS.getStreamFromFD(fd);
-        return SYSCALLS.doStat(FS.stat, stream.path, buf);
-      } catch (e) {
-        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-        return -e.errno;
-      }
-    }
-    function ___sys_getdents64(fd, dirp, count) {
-      try {
-        var stream = SYSCALLS.getStreamFromFD(fd);
-        if (!stream.getdents) {
-          stream.getdents = FS.readdir(stream.path);
-        }
-        var struct_size = 280;
-        var pos = 0;
-        var off = FS.llseek(stream, 0, 1);
-        var idx = Math.floor(off / struct_size);
-        while (idx < stream.getdents.length && pos + struct_size <= count) {
-          var id;
-          var type;
-          var name = stream.getdents[idx];
-          if (name[0] === '.') {
-            id = 1;
-            type = 4;
-          } else {
-            var child = FS.lookupNode(stream.node, name);
-            id = child.id;
-            type = FS.isChrdev(child.mode)
-              ? 2
-              : FS.isDir(child.mode)
-              ? 4
-              : FS.isLink(child.mode)
-              ? 10
-              : 8;
-          }
-          (tempI64 = [
-            id >>> 0,
-            ((tempDouble = id),
-            +Math.abs(tempDouble) >= 1
-              ? tempDouble > 0
-                ? (Math.min(+Math.floor(tempDouble / 4294967296), 4294967295) | 0) >>> 0
-                : ~~+Math.ceil((tempDouble - +(~~tempDouble >>> 0)) / 4294967296) >>> 0
-              : 0),
-          ]),
-            (HEAP32[(dirp + pos) >> 2] = tempI64[0]),
-            (HEAP32[(dirp + pos + 4) >> 2] = tempI64[1]);
-          (tempI64 = [
-            ((idx + 1) * struct_size) >>> 0,
-            ((tempDouble = (idx + 1) * struct_size),
-            +Math.abs(tempDouble) >= 1
-              ? tempDouble > 0
-                ? (Math.min(+Math.floor(tempDouble / 4294967296), 4294967295) | 0) >>> 0
-                : ~~+Math.ceil((tempDouble - +(~~tempDouble >>> 0)) / 4294967296) >>> 0
-              : 0),
-          ]),
-            (HEAP32[(dirp + pos + 8) >> 2] = tempI64[0]),
-            (HEAP32[(dirp + pos + 12) >> 2] = tempI64[1]);
-          HEAP16[(dirp + pos + 16) >> 1] = 280;
-          HEAP8[(dirp + pos + 18) >> 0] = type;
-          stringToUTF8(name, dirp + pos + 19, 256);
-          pos += struct_size;
-          idx += 1;
-        }
-        FS.llseek(stream, idx * struct_size, 0);
-        return pos;
-      } catch (e) {
-        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-        return -e.errno;
-      }
-    }
-    function ___sys_getegid32() {
-      return 0;
-    }
-    function ___sys_geteuid32() {
-      return ___sys_getegid32();
-    }
-    function ___sys_getgid32() {
-      return ___sys_getegid32();
-    }
-    function ___sys_getpid() {
-      return 42;
-    }
-    function ___sys_getuid32() {
-      return ___sys_getegid32();
-    }
-    function ___sys_ioctl(fd, op, varargs) {
-      SYSCALLS.varargs = varargs;
-      try {
-        var stream = SYSCALLS.getStreamFromFD(fd);
-        switch (op) {
-          case 21509:
-          case 21505: {
-            if (!stream.tty) return -59;
-            return 0;
-          }
-          case 21510:
-          case 21511:
-          case 21512:
-          case 21506:
-          case 21507:
-          case 21508: {
-            if (!stream.tty) return -59;
-            return 0;
-          }
-          case 21519: {
-            if (!stream.tty) return -59;
-            var argp = SYSCALLS.get();
-            HEAP32[argp >> 2] = 0;
-            return 0;
-          }
-          case 21520: {
-            if (!stream.tty) return -59;
-            return -28;
-          }
-          case 21531: {
-            var argp = SYSCALLS.get();
-            return FS.ioctl(stream, op, argp);
-          }
-          case 21523: {
-            if (!stream.tty) return -59;
-            return 0;
-          }
-          case 21524: {
-            if (!stream.tty) return -59;
-            return 0;
-          }
-          default:
-            abort('bad ioctl syscall ' + op);
-        }
-      } catch (e) {
-        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-        return -e.errno;
-      }
-    }
-    function ___sys_lstat64(path, buf) {
-      try {
-        path = SYSCALLS.getStr(path);
-        return SYSCALLS.doStat(FS.lstat, path, buf);
-      } catch (e) {
-        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-        return -e.errno;
-      }
-    }
-    function syscallMunmap(addr, len) {
-      if ((addr | 0) === -1 || len === 0) {
-        return -28;
-      }
-      var info = SYSCALLS.mappings[addr];
-      if (!info) return 0;
-      if (len === info.len) {
-        var stream = FS.getStream(info.fd);
-        if (stream) {
-          if (info.prot & 2) {
-            SYSCALLS.doMsync(addr, stream, len, info.flags, info.offset);
-          }
-          FS.munmap(stream);
-        }
-        SYSCALLS.mappings[addr] = null;
-        if (info.allocated) {
-          _free(info.malloc);
-        }
-      }
-      return 0;
-    }
-    function ___sys_munmap(addr, len) {
-      try {
-        return syscallMunmap(addr, len);
-      } catch (e) {
-        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-        return -e.errno;
-      }
-    }
-    function ___sys_open(path, flags, varargs) {
-      SYSCALLS.varargs = varargs;
-      try {
-        var pathname = SYSCALLS.getStr(path);
-        var mode = varargs ? SYSCALLS.get() : 0;
-        var stream = FS.open(pathname, flags, mode);
-        return stream.fd;
-      } catch (e) {
-        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-        return -e.errno;
-      }
-    }
-    var PIPEFS = {
-      BUCKET_BUFFER_SIZE: 8192,
-      mount: function (mount) {
-        return FS.createNode(null, '/', 16384 | 511, 0);
-      },
-      createPipe: function () {
-        var pipe = { buckets: [] };
-        pipe.buckets.push({
-          buffer: new Uint8Array(PIPEFS.BUCKET_BUFFER_SIZE),
-          offset: 0,
-          roffset: 0,
-        });
-        var rName = PIPEFS.nextname();
-        var wName = PIPEFS.nextname();
-        var rNode = FS.createNode(PIPEFS.root, rName, 4096, 0);
-        var wNode = FS.createNode(PIPEFS.root, wName, 4096, 0);
-        rNode.pipe = pipe;
-        wNode.pipe = pipe;
-        var readableStream = FS.createStream({
-          path: rName,
-          node: rNode,
-          flags: 0,
-          seekable: false,
-          stream_ops: PIPEFS.stream_ops,
-        });
-        rNode.stream = readableStream;
-        var writableStream = FS.createStream({
-          path: wName,
-          node: wNode,
-          flags: 1,
-          seekable: false,
-          stream_ops: PIPEFS.stream_ops,
-        });
-        wNode.stream = writableStream;
-        return { readable_fd: readableStream.fd, writable_fd: writableStream.fd };
-      },
-      stream_ops: {
-        poll: function (stream) {
-          var pipe = stream.node.pipe;
-          if ((stream.flags & 2097155) === 1) {
-            return 256 | 4;
-          } else {
-            if (pipe.buckets.length > 0) {
-              for (var i = 0; i < pipe.buckets.length; i++) {
-                var bucket = pipe.buckets[i];
-                if (bucket.offset - bucket.roffset > 0) {
-                  return 64 | 1;
-                }
-              }
-            }
-          }
-          return 0;
-        },
-        ioctl: function (stream, request, varargs) {
-          return ERRNO_CODES.EINVAL;
-        },
-        fsync: function (stream) {
-          return ERRNO_CODES.EINVAL;
-        },
-        read: function (stream, buffer, offset, length, position) {
-          var pipe = stream.node.pipe;
-          var currentLength = 0;
-          for (var i = 0; i < pipe.buckets.length; i++) {
-            var bucket = pipe.buckets[i];
-            currentLength += bucket.offset - bucket.roffset;
-          }
-          assert(buffer instanceof ArrayBuffer || ArrayBuffer.isView(buffer));
-          var data = buffer.subarray(offset, offset + length);
-          if (length <= 0) {
-            return 0;
-          }
-          if (currentLength == 0) {
-            throw new FS.ErrnoError(ERRNO_CODES.EAGAIN);
-          }
-          var toRead = Math.min(currentLength, length);
-          var totalRead = toRead;
-          var toRemove = 0;
-          for (var i = 0; i < pipe.buckets.length; i++) {
-            var currBucket = pipe.buckets[i];
-            var bucketSize = currBucket.offset - currBucket.roffset;
-            if (toRead <= bucketSize) {
-              var tmpSlice = currBucket.buffer.subarray(currBucket.roffset, currBucket.offset);
-              if (toRead < bucketSize) {
-                tmpSlice = tmpSlice.subarray(0, toRead);
-                currBucket.roffset += toRead;
-              } else {
-                toRemove++;
-              }
-              data.set(tmpSlice);
-              break;
-            } else {
-              var tmpSlice = currBucket.buffer.subarray(currBucket.roffset, currBucket.offset);
-              data.set(tmpSlice);
-              data = data.subarray(tmpSlice.byteLength);
-              toRead -= tmpSlice.byteLength;
-              toRemove++;
-            }
-          }
-          if (toRemove && toRemove == pipe.buckets.length) {
-            toRemove--;
-            pipe.buckets[toRemove].offset = 0;
-            pipe.buckets[toRemove].roffset = 0;
-          }
-          pipe.buckets.splice(0, toRemove);
-          return totalRead;
-        },
-        write: function (stream, buffer, offset, length, position) {
-          var pipe = stream.node.pipe;
-          assert(buffer instanceof ArrayBuffer || ArrayBuffer.isView(buffer));
-          var data = buffer.subarray(offset, offset + length);
-          var dataLen = data.byteLength;
-          if (dataLen <= 0) {
-            return 0;
-          }
-          var currBucket = null;
-          if (pipe.buckets.length == 0) {
-            currBucket = {
-              buffer: new Uint8Array(PIPEFS.BUCKET_BUFFER_SIZE),
-              offset: 0,
-              roffset: 0,
-            };
-            pipe.buckets.push(currBucket);
-          } else {
-            currBucket = pipe.buckets[pipe.buckets.length - 1];
-          }
-          assert(currBucket.offset <= PIPEFS.BUCKET_BUFFER_SIZE);
-          var freeBytesInCurrBuffer = PIPEFS.BUCKET_BUFFER_SIZE - currBucket.offset;
-          if (freeBytesInCurrBuffer >= dataLen) {
-            currBucket.buffer.set(data, currBucket.offset);
-            currBucket.offset += dataLen;
-            return dataLen;
-          } else if (freeBytesInCurrBuffer > 0) {
-            currBucket.buffer.set(data.subarray(0, freeBytesInCurrBuffer), currBucket.offset);
-            currBucket.offset += freeBytesInCurrBuffer;
-            data = data.subarray(freeBytesInCurrBuffer, data.byteLength);
-          }
-          var numBuckets = (data.byteLength / PIPEFS.BUCKET_BUFFER_SIZE) | 0;
-          var remElements = data.byteLength % PIPEFS.BUCKET_BUFFER_SIZE;
-          for (var i = 0; i < numBuckets; i++) {
-            var newBucket = {
-              buffer: new Uint8Array(PIPEFS.BUCKET_BUFFER_SIZE),
-              offset: PIPEFS.BUCKET_BUFFER_SIZE,
-              roffset: 0,
-            };
-            pipe.buckets.push(newBucket);
-            newBucket.buffer.set(data.subarray(0, PIPEFS.BUCKET_BUFFER_SIZE));
-            data = data.subarray(PIPEFS.BUCKET_BUFFER_SIZE, data.byteLength);
-          }
-          if (remElements > 0) {
-            var newBucket = {
-              buffer: new Uint8Array(PIPEFS.BUCKET_BUFFER_SIZE),
-              offset: data.byteLength,
-              roffset: 0,
-            };
-            pipe.buckets.push(newBucket);
-            newBucket.buffer.set(data);
-          }
-          return dataLen;
-        },
-        close: function (stream) {
-          var pipe = stream.node.pipe;
-          pipe.buckets = null;
-        },
-      },
-      nextname: function () {
-        if (!PIPEFS.nextname.current) {
-          PIPEFS.nextname.current = 0;
-        }
-        return 'pipe[' + PIPEFS.nextname.current++ + ']';
-      },
-    };
-    function ___sys_pipe(fdPtr) {
-      try {
-        if (fdPtr == 0) {
-          throw new FS.ErrnoError(21);
-        }
-        var res = PIPEFS.createPipe();
-        HEAP32[fdPtr >> 2] = res.readable_fd;
-        HEAP32[(fdPtr + 4) >> 2] = res.writable_fd;
-        return 0;
-      } catch (e) {
-        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-        return -e.errno;
-      }
-    }
-    function ___sys_readlink(path, buf, bufsize) {
-      try {
-        path = SYSCALLS.getStr(path);
-        return SYSCALLS.doReadlink(path, buf, bufsize);
-      } catch (e) {
-        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-        return -e.errno;
-      }
-    }
-    function ___sys_rename(old_path, new_path) {
-      try {
-        old_path = SYSCALLS.getStr(old_path);
-        new_path = SYSCALLS.getStr(new_path);
-        FS.rename(old_path, new_path);
-        return 0;
-      } catch (e) {
-        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-        return -e.errno;
-      }
-    }
-    function ___sys_setpgid(pid, pgid) {
-      if (pid && pid !== 42) return -71;
-      if (pgid && pgid !== 42) return -63;
-      return 0;
     }
     var SOCKFS = {
       mount: function (mount) {
@@ -5040,6 +4574,15 @@ var OpenSSL = (function () {
         },
       },
     };
+    function getSocketFromFD(fd) {
+      var socket = SOCKFS.getSocket(fd);
+      if (!socket) throw new FS.ErrnoError(8);
+      return socket;
+    }
+    function setErrNo(value) {
+      HEAP32[___errno_location() >> 2] = value;
+      return value;
+    }
     function __inet_pton4_raw(str) {
       var b = str.split('.');
       for (var i = 0; i < 4; i++) {
@@ -5102,6 +4645,47 @@ var OpenSSL = (function () {
         (parts[7] << 16) | parts[6],
       ];
     }
+    function writeSockaddr(sa, family, addr, port, addrlen) {
+      switch (family) {
+        case 2:
+          addr = __inet_pton4_raw(addr);
+          if (addrlen) {
+            HEAP32[addrlen >> 2] = 16;
+          }
+          HEAP16[sa >> 1] = family;
+          HEAP32[(sa + 4) >> 2] = addr;
+          HEAP16[(sa + 2) >> 1] = _htons(port);
+          (tempI64 = [
+            0 >>> 0,
+            ((tempDouble = 0),
+            +Math.abs(tempDouble) >= 1
+              ? tempDouble > 0
+                ? (Math.min(+Math.floor(tempDouble / 4294967296), 4294967295) | 0) >>> 0
+                : ~~+Math.ceil((tempDouble - +(~~tempDouble >>> 0)) / 4294967296) >>> 0
+              : 0),
+          ]),
+            (HEAP32[(sa + 8) >> 2] = tempI64[0]),
+            (HEAP32[(sa + 12) >> 2] = tempI64[1]);
+          break;
+        case 10:
+          addr = __inet_pton6_raw(addr);
+          if (addrlen) {
+            HEAP32[addrlen >> 2] = 28;
+          }
+          HEAP32[sa >> 2] = family;
+          HEAP32[(sa + 8) >> 2] = addr[0];
+          HEAP32[(sa + 12) >> 2] = addr[1];
+          HEAP32[(sa + 16) >> 2] = addr[2];
+          HEAP32[(sa + 20) >> 2] = addr[3];
+          HEAP16[(sa + 2) >> 1] = _htons(port);
+          HEAP32[(sa + 4) >> 2] = 0;
+          HEAP32[(sa + 24) >> 2] = 0;
+          break;
+        default:
+          return 5;
+      }
+      return 0;
+    }
     var DNS = {
       address_map: { id: 1, addrs: {}, names: {} },
       lookup_name: function (name) {
@@ -5132,6 +4716,35 @@ var OpenSSL = (function () {
         return null;
       },
     };
+    function ___sys_accept4(fd, addr, addrlen, flags) {
+      try {
+        var sock = getSocketFromFD(fd);
+        var newsock = sock.sock_ops.accept(sock);
+        if (addr) {
+          var errno = writeSockaddr(
+            addr,
+            newsock.family,
+            DNS.lookup_name(newsock.daddr),
+            newsock.dport,
+            addrlen
+          );
+          assert(!errno);
+        }
+        return newsock.stream.fd;
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_access(path, amode) {
+      try {
+        path = SYSCALLS.getStr(path);
+        return SYSCALLS.doAccess(path, amode);
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
     function __inet_ntop4_raw(addr) {
       return (
         (addr & 255) +
@@ -5212,7 +4825,7 @@ var OpenSSL = (function () {
       }
       return str;
     }
-    function __read_sockaddr(sa, salen) {
+    function readSockaddr(sa, salen) {
       var family = HEAP16[sa >> 1];
       var port = _ntohs(HEAPU16[(sa + 2) >> 1]);
       var addr;
@@ -5241,248 +4854,579 @@ var OpenSSL = (function () {
       }
       return { family: family, addr: addr, port: port };
     }
-    function __write_sockaddr(sa, family, addr, port, addrlen) {
-      switch (family) {
-        case 2:
-          addr = __inet_pton4_raw(addr);
-          if (addrlen) {
-            HEAP32[addrlen >> 2] = 16;
+    function getSocketAddress(addrp, addrlen, allowNull) {
+      if (allowNull && addrp === 0) return null;
+      var info = readSockaddr(addrp, addrlen);
+      if (info.errno) throw new FS.ErrnoError(info.errno);
+      info.addr = DNS.lookup_addr(info.addr) || info.addr;
+      return info;
+    }
+    function ___sys_bind(fd, addr, addrlen) {
+      try {
+        var sock = getSocketFromFD(fd);
+        var info = getSocketAddress(addr, addrlen);
+        sock.sock_ops.bind(sock, info.addr, info.port);
+        return 0;
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_chmod(path, mode) {
+      try {
+        path = SYSCALLS.getStr(path);
+        FS.chmod(path, mode);
+        return 0;
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_connect(fd, addr, addrlen) {
+      try {
+        var sock = getSocketFromFD(fd);
+        var info = getSocketAddress(addr, addrlen);
+        sock.sock_ops.connect(sock, info.addr, info.port);
+        return 0;
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_dup(fd) {
+      try {
+        var old = SYSCALLS.getStreamFromFD(fd);
+        return FS.open(old.path, old.flags, 0).fd;
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_fcntl64(fd, cmd, varargs) {
+      SYSCALLS.varargs = varargs;
+      try {
+        var stream = SYSCALLS.getStreamFromFD(fd);
+        switch (cmd) {
+          case 0: {
+            var arg = SYSCALLS.get();
+            if (arg < 0) {
+              return -28;
+            }
+            var newStream;
+            newStream = FS.open(stream.path, stream.flags, 0, arg);
+            return newStream.fd;
           }
-          HEAP16[sa >> 1] = family;
-          HEAP32[(sa + 4) >> 2] = addr;
-          HEAP16[(sa + 2) >> 1] = _htons(port);
-          break;
-        case 10:
-          addr = __inet_pton6_raw(addr);
-          if (addrlen) {
-            HEAP32[addrlen >> 2] = 28;
+          case 1:
+          case 2:
+            return 0;
+          case 3:
+            return stream.flags;
+          case 4: {
+            var arg = SYSCALLS.get();
+            stream.flags |= arg;
+            return 0;
           }
-          HEAP32[sa >> 2] = family;
-          HEAP32[(sa + 8) >> 2] = addr[0];
-          HEAP32[(sa + 12) >> 2] = addr[1];
-          HEAP32[(sa + 16) >> 2] = addr[2];
-          HEAP32[(sa + 20) >> 2] = addr[3];
-          HEAP16[(sa + 2) >> 1] = _htons(port);
-          HEAP32[(sa + 4) >> 2] = 0;
-          HEAP32[(sa + 24) >> 2] = 0;
-          break;
-        default:
-          return 5;
+          case 12: {
+            var arg = SYSCALLS.get();
+            var offset = 0;
+            HEAP16[(arg + offset) >> 1] = 2;
+            return 0;
+          }
+          case 13:
+          case 14:
+            return 0;
+          case 16:
+          case 8:
+            return -28;
+          case 9:
+            setErrNo(28);
+            return -1;
+          default: {
+            return -28;
+          }
+        }
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_fstat64(fd, buf) {
+      try {
+        var stream = SYSCALLS.getStreamFromFD(fd);
+        return SYSCALLS.doStat(FS.stat, stream.path, buf);
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_getdents64(fd, dirp, count) {
+      try {
+        var stream = SYSCALLS.getStreamFromFD(fd);
+        if (!stream.getdents) {
+          stream.getdents = FS.readdir(stream.path);
+        }
+        var struct_size = 280;
+        var pos = 0;
+        var off = FS.llseek(stream, 0, 1);
+        var idx = Math.floor(off / struct_size);
+        while (idx < stream.getdents.length && pos + struct_size <= count) {
+          var id;
+          var type;
+          var name = stream.getdents[idx];
+          if (name[0] === '.') {
+            id = 1;
+            type = 4;
+          } else {
+            var child = FS.lookupNode(stream.node, name);
+            id = child.id;
+            type = FS.isChrdev(child.mode)
+              ? 2
+              : FS.isDir(child.mode)
+              ? 4
+              : FS.isLink(child.mode)
+              ? 10
+              : 8;
+          }
+          (tempI64 = [
+            id >>> 0,
+            ((tempDouble = id),
+            +Math.abs(tempDouble) >= 1
+              ? tempDouble > 0
+                ? (Math.min(+Math.floor(tempDouble / 4294967296), 4294967295) | 0) >>> 0
+                : ~~+Math.ceil((tempDouble - +(~~tempDouble >>> 0)) / 4294967296) >>> 0
+              : 0),
+          ]),
+            (HEAP32[(dirp + pos) >> 2] = tempI64[0]),
+            (HEAP32[(dirp + pos + 4) >> 2] = tempI64[1]);
+          (tempI64 = [
+            ((idx + 1) * struct_size) >>> 0,
+            ((tempDouble = (idx + 1) * struct_size),
+            +Math.abs(tempDouble) >= 1
+              ? tempDouble > 0
+                ? (Math.min(+Math.floor(tempDouble / 4294967296), 4294967295) | 0) >>> 0
+                : ~~+Math.ceil((tempDouble - +(~~tempDouble >>> 0)) / 4294967296) >>> 0
+              : 0),
+          ]),
+            (HEAP32[(dirp + pos + 8) >> 2] = tempI64[0]),
+            (HEAP32[(dirp + pos + 12) >> 2] = tempI64[1]);
+          HEAP16[(dirp + pos + 16) >> 1] = 280;
+          HEAP8[(dirp + pos + 18) >> 0] = type;
+          stringToUTF8(name, dirp + pos + 19, 256);
+          pos += struct_size;
+          idx += 1;
+        }
+        FS.llseek(stream, idx * struct_size, 0);
+        return pos;
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_getegid32() {
+      return 0;
+    }
+    function ___sys_geteuid32() {
+      return ___sys_getegid32();
+    }
+    function ___sys_getgid32() {
+      return ___sys_getegid32();
+    }
+    function ___sys_getpid() {
+      return 42;
+    }
+    function ___sys_getsockname(fd, addr, addrlen) {
+      try {
+        err('__sys_getsockname ' + fd);
+        var sock = getSocketFromFD(fd);
+        var errno = writeSockaddr(
+          addr,
+          sock.family,
+          DNS.lookup_name(sock.saddr || '0.0.0.0'),
+          sock.sport,
+          addrlen
+        );
+        assert(!errno);
+        return 0;
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_getsockopt(fd, level, optname, optval, optlen) {
+      try {
+        var sock = getSocketFromFD(fd);
+        if (level === 1) {
+          if (optname === 4) {
+            HEAP32[optval >> 2] = sock.error;
+            HEAP32[optlen >> 2] = 4;
+            sock.error = null;
+            return 0;
+          }
+        }
+        return -50;
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_getuid32() {
+      return ___sys_getegid32();
+    }
+    function ___sys_ioctl(fd, op, varargs) {
+      SYSCALLS.varargs = varargs;
+      try {
+        var stream = SYSCALLS.getStreamFromFD(fd);
+        switch (op) {
+          case 21509:
+          case 21505: {
+            if (!stream.tty) return -59;
+            return 0;
+          }
+          case 21510:
+          case 21511:
+          case 21512:
+          case 21506:
+          case 21507:
+          case 21508: {
+            if (!stream.tty) return -59;
+            return 0;
+          }
+          case 21519: {
+            if (!stream.tty) return -59;
+            var argp = SYSCALLS.get();
+            HEAP32[argp >> 2] = 0;
+            return 0;
+          }
+          case 21520: {
+            if (!stream.tty) return -59;
+            return -28;
+          }
+          case 21531: {
+            var argp = SYSCALLS.get();
+            return FS.ioctl(stream, op, argp);
+          }
+          case 21523: {
+            if (!stream.tty) return -59;
+            return 0;
+          }
+          case 21524: {
+            if (!stream.tty) return -59;
+            return 0;
+          }
+          default:
+            abort('bad ioctl syscall ' + op);
+        }
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_listen(fd, backlog) {
+      try {
+        var sock = getSocketFromFD(fd);
+        sock.sock_ops.listen(sock, backlog);
+        return 0;
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_lstat64(path, buf) {
+      try {
+        path = SYSCALLS.getStr(path);
+        return SYSCALLS.doStat(FS.lstat, path, buf);
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function syscallMunmap(addr, len) {
+      if ((addr | 0) === -1 || len === 0) {
+        return -28;
+      }
+      var info = SYSCALLS.mappings[addr];
+      if (!info) return 0;
+      if (len === info.len) {
+        var stream = FS.getStream(info.fd);
+        if (stream) {
+          if (info.prot & 2) {
+            SYSCALLS.doMsync(addr, stream, len, info.flags, info.offset);
+          }
+          FS.munmap(stream);
+        }
+        SYSCALLS.mappings[addr] = null;
+        if (info.allocated) {
+          _free(info.malloc);
+        }
       }
       return 0;
     }
-    function ___sys_socketcall(call, socketvararg) {
+    function ___sys_munmap(addr, len) {
       try {
-        SYSCALLS.varargs = socketvararg;
-        var getSocketFromFD = function () {
-          var socket = SOCKFS.getSocket(SYSCALLS.get());
-          if (!socket) throw new FS.ErrnoError(8);
-          return socket;
-        };
-        var getSocketAddress = function (allowNull) {
-          var addrp = SYSCALLS.get(),
-            addrlen = SYSCALLS.get();
-          if (allowNull && addrp === 0) return null;
-          var info = __read_sockaddr(addrp, addrlen);
-          if (info.errno) throw new FS.ErrnoError(info.errno);
-          info.addr = DNS.lookup_addr(info.addr) || info.addr;
-          return info;
-        };
-        switch (call) {
-          case 1: {
-            var domain = SYSCALLS.get(),
-              type = SYSCALLS.get(),
-              protocol = SYSCALLS.get();
-            var sock = SOCKFS.createSocket(domain, type, protocol);
-            assert(sock.stream.fd < 64);
-            return sock.stream.fd;
-          }
-          case 2: {
-            var sock = getSocketFromFD(),
-              info = getSocketAddress();
-            sock.sock_ops.bind(sock, info.addr, info.port);
-            return 0;
-          }
-          case 3: {
-            var sock = getSocketFromFD(),
-              info = getSocketAddress();
-            sock.sock_ops.connect(sock, info.addr, info.port);
-            return 0;
-          }
-          case 4: {
-            var sock = getSocketFromFD(),
-              backlog = SYSCALLS.get();
-            sock.sock_ops.listen(sock, backlog);
-            return 0;
-          }
-          case 5: {
-            var sock = getSocketFromFD(),
-              addr = SYSCALLS.get(),
-              addrlen = SYSCALLS.get();
-            var newsock = sock.sock_ops.accept(sock);
-            if (addr) {
-              var errno = __write_sockaddr(
-                addr,
-                newsock.family,
-                DNS.lookup_name(newsock.daddr),
-                newsock.dport,
-                addrlen
-              );
-              assert(!errno);
+        return syscallMunmap(addr, len);
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_open(path, flags, varargs) {
+      SYSCALLS.varargs = varargs;
+      try {
+        var pathname = SYSCALLS.getStr(path);
+        var mode = varargs ? SYSCALLS.get() : 0;
+        var stream = FS.open(pathname, flags, mode);
+        return stream.fd;
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    var PIPEFS = {
+      BUCKET_BUFFER_SIZE: 8192,
+      mount: function (mount) {
+        return FS.createNode(null, '/', 16384 | 511, 0);
+      },
+      createPipe: function () {
+        var pipe = { buckets: [] };
+        pipe.buckets.push({
+          buffer: new Uint8Array(PIPEFS.BUCKET_BUFFER_SIZE),
+          offset: 0,
+          roffset: 0,
+        });
+        var rName = PIPEFS.nextname();
+        var wName = PIPEFS.nextname();
+        var rNode = FS.createNode(PIPEFS.root, rName, 4096, 0);
+        var wNode = FS.createNode(PIPEFS.root, wName, 4096, 0);
+        rNode.pipe = pipe;
+        wNode.pipe = pipe;
+        var readableStream = FS.createStream({
+          path: rName,
+          node: rNode,
+          flags: 0,
+          seekable: false,
+          stream_ops: PIPEFS.stream_ops,
+        });
+        rNode.stream = readableStream;
+        var writableStream = FS.createStream({
+          path: wName,
+          node: wNode,
+          flags: 1,
+          seekable: false,
+          stream_ops: PIPEFS.stream_ops,
+        });
+        wNode.stream = writableStream;
+        return { readable_fd: readableStream.fd, writable_fd: writableStream.fd };
+      },
+      stream_ops: {
+        poll: function (stream) {
+          var pipe = stream.node.pipe;
+          if ((stream.flags & 2097155) === 1) {
+            return 256 | 4;
+          } else {
+            if (pipe.buckets.length > 0) {
+              for (var i = 0; i < pipe.buckets.length; i++) {
+                var bucket = pipe.buckets[i];
+                if (bucket.offset - bucket.roffset > 0) {
+                  return 64 | 1;
+                }
+              }
             }
-            return newsock.stream.fd;
           }
-          case 6: {
-            var sock = getSocketFromFD(),
-              addr = SYSCALLS.get(),
-              addrlen = SYSCALLS.get();
-            var errno = __write_sockaddr(
-              addr,
-              sock.family,
-              DNS.lookup_name(sock.saddr || '0.0.0.0'),
-              sock.sport,
-              addrlen
-            );
-            assert(!errno);
+          return 0;
+        },
+        ioctl: function (stream, request, varargs) {
+          return ERRNO_CODES.EINVAL;
+        },
+        fsync: function (stream) {
+          return ERRNO_CODES.EINVAL;
+        },
+        read: function (stream, buffer, offset, length, position) {
+          var pipe = stream.node.pipe;
+          var currentLength = 0;
+          for (var i = 0; i < pipe.buckets.length; i++) {
+            var bucket = pipe.buckets[i];
+            currentLength += bucket.offset - bucket.roffset;
+          }
+          assert(buffer instanceof ArrayBuffer || ArrayBuffer.isView(buffer));
+          var data = buffer.subarray(offset, offset + length);
+          if (length <= 0) {
             return 0;
           }
-          case 7: {
-            var sock = getSocketFromFD(),
-              addr = SYSCALLS.get(),
-              addrlen = SYSCALLS.get();
-            if (!sock.daddr) {
-              return -53;
-            }
-            var errno = __write_sockaddr(
-              addr,
-              sock.family,
-              DNS.lookup_name(sock.daddr),
-              sock.dport,
-              addrlen
-            );
-            assert(!errno);
-            return 0;
+          if (currentLength == 0) {
+            throw new FS.ErrnoError(ERRNO_CODES.EAGAIN);
           }
-          case 11: {
-            var sock = getSocketFromFD(),
-              message = SYSCALLS.get(),
-              length = SYSCALLS.get(),
-              flags = SYSCALLS.get(),
-              dest = getSocketAddress(true);
-            if (!dest) {
-              return FS.write(sock.stream, HEAP8, message, length);
+          var toRead = Math.min(currentLength, length);
+          var totalRead = toRead;
+          var toRemove = 0;
+          for (var i = 0; i < pipe.buckets.length; i++) {
+            var currBucket = pipe.buckets[i];
+            var bucketSize = currBucket.offset - currBucket.roffset;
+            if (toRead <= bucketSize) {
+              var tmpSlice = currBucket.buffer.subarray(currBucket.roffset, currBucket.offset);
+              if (toRead < bucketSize) {
+                tmpSlice = tmpSlice.subarray(0, toRead);
+                currBucket.roffset += toRead;
+              } else {
+                toRemove++;
+              }
+              data.set(tmpSlice);
+              break;
             } else {
-              return sock.sock_ops.sendmsg(sock, HEAP8, message, length, dest.addr, dest.port);
+              var tmpSlice = currBucket.buffer.subarray(currBucket.roffset, currBucket.offset);
+              data.set(tmpSlice);
+              data = data.subarray(tmpSlice.byteLength);
+              toRead -= tmpSlice.byteLength;
+              toRemove++;
             }
           }
-          case 12: {
-            var sock = getSocketFromFD(),
-              buf = SYSCALLS.get(),
-              len = SYSCALLS.get(),
-              flags = SYSCALLS.get(),
-              addr = SYSCALLS.get(),
-              addrlen = SYSCALLS.get();
-            var msg = sock.sock_ops.recvmsg(sock, len);
-            if (!msg) return 0;
-            if (addr) {
-              var errno = __write_sockaddr(
-                addr,
-                sock.family,
-                DNS.lookup_name(msg.addr),
-                msg.port,
-                addrlen
-              );
-              assert(!errno);
-            }
-            HEAPU8.set(msg.buffer, buf);
-            return msg.buffer.byteLength;
+          if (toRemove && toRemove == pipe.buckets.length) {
+            toRemove--;
+            pipe.buckets[toRemove].offset = 0;
+            pipe.buckets[toRemove].roffset = 0;
           }
-          case 14: {
-            return -50;
+          pipe.buckets.splice(0, toRemove);
+          return totalRead;
+        },
+        write: function (stream, buffer, offset, length, position) {
+          var pipe = stream.node.pipe;
+          assert(buffer instanceof ArrayBuffer || ArrayBuffer.isView(buffer));
+          var data = buffer.subarray(offset, offset + length);
+          var dataLen = data.byteLength;
+          if (dataLen <= 0) {
+            return 0;
           }
-          case 15: {
-            var sock = getSocketFromFD(),
-              level = SYSCALLS.get(),
-              optname = SYSCALLS.get(),
-              optval = SYSCALLS.get(),
-              optlen = SYSCALLS.get();
-            if (level === 1) {
-              if (optname === 4) {
-                HEAP32[optval >> 2] = sock.error;
-                HEAP32[optlen >> 2] = 4;
-                sock.error = null;
-                return 0;
-              }
-            }
-            return -50;
+          var currBucket = null;
+          if (pipe.buckets.length == 0) {
+            currBucket = {
+              buffer: new Uint8Array(PIPEFS.BUCKET_BUFFER_SIZE),
+              offset: 0,
+              roffset: 0,
+            };
+            pipe.buckets.push(currBucket);
+          } else {
+            currBucket = pipe.buckets[pipe.buckets.length - 1];
           }
-          case 16: {
-            var sock = getSocketFromFD(),
-              message = SYSCALLS.get(),
-              flags = SYSCALLS.get();
-            var iov = HEAP32[(message + 8) >> 2];
-            var num = HEAP32[(message + 12) >> 2];
-            var addr, port;
-            var name = HEAP32[message >> 2];
-            var namelen = HEAP32[(message + 4) >> 2];
-            if (name) {
-              var info = __read_sockaddr(name, namelen);
-              if (info.errno) return -info.errno;
-              port = info.port;
-              addr = DNS.lookup_addr(info.addr) || info.addr;
-            }
-            var total = 0;
-            for (var i = 0; i < num; i++) {
-              total += HEAP32[(iov + (8 * i + 4)) >> 2];
-            }
-            var view = new Uint8Array(total);
-            var offset = 0;
-            for (var i = 0; i < num; i++) {
-              var iovbase = HEAP32[(iov + (8 * i + 0)) >> 2];
-              var iovlen = HEAP32[(iov + (8 * i + 4)) >> 2];
-              for (var j = 0; j < iovlen; j++) {
-                view[offset++] = HEAP8[(iovbase + j) >> 0];
-              }
-            }
-            return sock.sock_ops.sendmsg(sock, view, 0, total, addr, port);
+          assert(currBucket.offset <= PIPEFS.BUCKET_BUFFER_SIZE);
+          var freeBytesInCurrBuffer = PIPEFS.BUCKET_BUFFER_SIZE - currBucket.offset;
+          if (freeBytesInCurrBuffer >= dataLen) {
+            currBucket.buffer.set(data, currBucket.offset);
+            currBucket.offset += dataLen;
+            return dataLen;
+          } else if (freeBytesInCurrBuffer > 0) {
+            currBucket.buffer.set(data.subarray(0, freeBytesInCurrBuffer), currBucket.offset);
+            currBucket.offset += freeBytesInCurrBuffer;
+            data = data.subarray(freeBytesInCurrBuffer, data.byteLength);
           }
-          case 17: {
-            var sock = getSocketFromFD(),
-              message = SYSCALLS.get(),
-              flags = SYSCALLS.get();
-            var iov = HEAP32[(message + 8) >> 2];
-            var num = HEAP32[(message + 12) >> 2];
-            var total = 0;
-            for (var i = 0; i < num; i++) {
-              total += HEAP32[(iov + (8 * i + 4)) >> 2];
-            }
-            var msg = sock.sock_ops.recvmsg(sock, total);
-            if (!msg) return 0;
-            var name = HEAP32[message >> 2];
-            if (name) {
-              var errno = __write_sockaddr(name, sock.family, DNS.lookup_name(msg.addr), msg.port);
-              assert(!errno);
-            }
-            var bytesRead = 0;
-            var bytesRemaining = msg.buffer.byteLength;
-            for (var i = 0; bytesRemaining > 0 && i < num; i++) {
-              var iovbase = HEAP32[(iov + (8 * i + 0)) >> 2];
-              var iovlen = HEAP32[(iov + (8 * i + 4)) >> 2];
-              if (!iovlen) {
-                continue;
-              }
-              var length = Math.min(iovlen, bytesRemaining);
-              var buf = msg.buffer.subarray(bytesRead, bytesRead + length);
-              HEAPU8.set(buf, iovbase + bytesRead);
-              bytesRead += length;
-              bytesRemaining -= length;
-            }
-            return bytesRead;
+          var numBuckets = (data.byteLength / PIPEFS.BUCKET_BUFFER_SIZE) | 0;
+          var remElements = data.byteLength % PIPEFS.BUCKET_BUFFER_SIZE;
+          for (var i = 0; i < numBuckets; i++) {
+            var newBucket = {
+              buffer: new Uint8Array(PIPEFS.BUCKET_BUFFER_SIZE),
+              offset: PIPEFS.BUCKET_BUFFER_SIZE,
+              roffset: 0,
+            };
+            pipe.buckets.push(newBucket);
+            newBucket.buffer.set(data.subarray(0, PIPEFS.BUCKET_BUFFER_SIZE));
+            data = data.subarray(PIPEFS.BUCKET_BUFFER_SIZE, data.byteLength);
           }
-          default: {
-            return -52;
+          if (remElements > 0) {
+            var newBucket = {
+              buffer: new Uint8Array(PIPEFS.BUCKET_BUFFER_SIZE),
+              offset: data.byteLength,
+              roffset: 0,
+            };
+            pipe.buckets.push(newBucket);
+            newBucket.buffer.set(data);
           }
+          return dataLen;
+        },
+        close: function (stream) {
+          var pipe = stream.node.pipe;
+          pipe.buckets = null;
+        },
+      },
+      nextname: function () {
+        if (!PIPEFS.nextname.current) {
+          PIPEFS.nextname.current = 0;
         }
+        return 'pipe[' + PIPEFS.nextname.current++ + ']';
+      },
+    };
+    function ___sys_pipe(fdPtr) {
+      try {
+        if (fdPtr == 0) {
+          throw new FS.ErrnoError(21);
+        }
+        var res = PIPEFS.createPipe();
+        HEAP32[fdPtr >> 2] = res.readable_fd;
+        HEAP32[(fdPtr + 4) >> 2] = res.writable_fd;
+        return 0;
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_readlink(path, buf, bufsize) {
+      try {
+        path = SYSCALLS.getStr(path);
+        return SYSCALLS.doReadlink(path, buf, bufsize);
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_rename(old_path, new_path) {
+      try {
+        old_path = SYSCALLS.getStr(old_path);
+        new_path = SYSCALLS.getStr(new_path);
+        FS.rename(old_path, new_path);
+        return 0;
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_sendto(fd, message, length, flags, addr, addr_len) {
+      try {
+        var sock = getSocketFromFD(fd);
+        var dest = getSocketAddress(addr, addr_len, true);
+        if (!dest) {
+          return FS.write(sock.stream, HEAP8, message, length);
+        } else {
+          return sock.sock_ops.sendmsg(sock, HEAP8, message, length, dest.addr, dest.port);
+        }
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_setpgid(pid, pgid) {
+      if (pid && pid !== 42) return -71;
+      if (pgid && pgid !== 42) return -63;
+      return 0;
+    }
+    function ___sys_setsockopt(fd) {
+      try {
+        return -50;
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_shutdown(fd, how) {
+      try {
+        getSocketFromFD(fd);
+        return -52;
+      } catch (e) {
+        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
+        return -e.errno;
+      }
+    }
+    function ___sys_socket(domain, type, protocol) {
+      try {
+        var sock = SOCKFS.createSocket(domain, type, protocol);
+        assert(sock.stream.fd < 64);
+        return sock.stream.fd;
       } catch (e) {
         if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
         return -e.errno;
@@ -5586,7 +5530,6 @@ var OpenSSL = (function () {
       }
     }
     function _emscripten_resize_heap(requestedSize) {
-      requestedSize = requestedSize >>> 0;
       var oldSize = _emscripten_get_heap_size();
       assert(requestedSize > oldSize);
       var maxHeapSize = 2147483648;
@@ -5600,13 +5543,12 @@ var OpenSSL = (function () {
         );
         return false;
       }
-      var minHeapSize = 16777216;
       for (var cutDown = 1; cutDown <= 4; cutDown *= 2) {
         var overGrownHeapSize = oldSize * (1 + 0.2 / cutDown);
         overGrownHeapSize = Math.min(overGrownHeapSize, requestedSize + 100663296);
         var newSize = Math.min(
           maxHeapSize,
-          alignUp(Math.max(minHeapSize, requestedSize, overGrownHeapSize), 65536)
+          alignUp(Math.max(requestedSize, overGrownHeapSize), 65536)
         );
         var replacement = emscripten_realloc_buffer(newSize);
         if (replacement) {
@@ -5804,7 +5746,7 @@ var OpenSSL = (function () {
         salen = family === 10 ? 28 : 16;
         addr = family === 10 ? __inet_ntop6_raw(addr) : __inet_ntop4_raw(addr);
         sa = _malloc(salen);
-        errno = __write_sockaddr(sa, family, addr, port);
+        errno = writeSockaddr(sa, family, addr, port);
         assert(!errno);
         ai = _malloc(32);
         HEAP32[(ai + 4) >> 2] = family;
@@ -5922,7 +5864,7 @@ var OpenSSL = (function () {
       return 0;
     }
     function _getnameinfo(sa, salen, node, nodelen, serv, servlen, flags) {
-      var info = __read_sockaddr(sa, salen);
+      var info = readSockaddr(sa, salen);
       if (info.errno) {
         return -6;
       }
@@ -6526,8 +6468,11 @@ var OpenSSL = (function () {
     var asmLibraryArg = {
       __gmtime_r: ___gmtime_r,
       __sys__newselect: ___sys__newselect,
+      __sys_accept4: ___sys_accept4,
       __sys_access: ___sys_access,
+      __sys_bind: ___sys_bind,
       __sys_chmod: ___sys_chmod,
+      __sys_connect: ___sys_connect,
       __sys_dup: ___sys_dup,
       __sys_fcntl64: ___sys_fcntl64,
       __sys_fstat64: ___sys_fstat64,
@@ -6536,16 +6481,22 @@ var OpenSSL = (function () {
       __sys_geteuid32: ___sys_geteuid32,
       __sys_getgid32: ___sys_getgid32,
       __sys_getpid: ___sys_getpid,
+      __sys_getsockname: ___sys_getsockname,
+      __sys_getsockopt: ___sys_getsockopt,
       __sys_getuid32: ___sys_getuid32,
       __sys_ioctl: ___sys_ioctl,
+      __sys_listen: ___sys_listen,
       __sys_lstat64: ___sys_lstat64,
       __sys_munmap: ___sys_munmap,
       __sys_open: ___sys_open,
       __sys_pipe: ___sys_pipe,
       __sys_readlink: ___sys_readlink,
       __sys_rename: ___sys_rename,
+      __sys_sendto: ___sys_sendto,
       __sys_setpgid: ___sys_setpgid,
-      __sys_socketcall: ___sys_socketcall,
+      __sys_setsockopt: ___sys_setsockopt,
+      __sys_shutdown: ___sys_shutdown,
+      __sys_socket: ___sys_socket,
       __sys_stat64: ___sys_stat64,
       __sys_symlink: ___sys_symlink,
       __sys_unlink: ___sys_unlink,
@@ -6927,6 +6878,18 @@ var OpenSSL = (function () {
           "'setErrNo' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
         );
       };
+    if (!Object.getOwnPropertyDescriptor(Module, 'readSockaddr'))
+      Module['readSockaddr'] = function () {
+        abort(
+          "'readSockaddr' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'writeSockaddr'))
+      Module['writeSockaddr'] = function () {
+        abort(
+          "'writeSockaddr' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
     if (!Object.getOwnPropertyDescriptor(Module, 'DNS'))
       Module['DNS'] = function () {
         abort("'DNS' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)");
@@ -7093,6 +7056,18 @@ var OpenSSL = (function () {
       Module['syscallMunmap'] = function () {
         abort(
           "'syscallMunmap' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'getSocketFromFD'))
+      Module['getSocketFromFD'] = function () {
+        abort(
+          "'getSocketFromFD' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
+    if (!Object.getOwnPropertyDescriptor(Module, 'getSocketAddress'))
+      Module['getSocketAddress'] = function () {
+        abort(
+          "'getSocketAddress' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
         );
       };
     if (!Object.getOwnPropertyDescriptor(Module, 'JSEvents'))
@@ -7546,6 +7521,12 @@ var OpenSSL = (function () {
       Module['SOCKFS'] = function () {
         abort("'SOCKFS' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)");
       };
+    if (!Object.getOwnPropertyDescriptor(Module, '_setNetworkCallback'))
+      Module['_setNetworkCallback'] = function () {
+        abort(
+          "'_setNetworkCallback' was not exported. add it to EXTRA_EXPORTED_RUNTIME_METHODS (see the FAQ)"
+        );
+      };
     if (!Object.getOwnPropertyDescriptor(Module, 'tempFixedLengthArray'))
       Module['tempFixedLengthArray'] = function () {
         abort(
@@ -7828,15 +7809,20 @@ var OpenSSL = (function () {
         calledMain = true;
       }
     }
+    function stackCheckInit() {
+      _emscripten_stack_init();
+      writeStackCookie();
+    }
     function run(args) {
       args = args || arguments_;
       if (runDependencies > 0) {
         return;
       }
-      _emscripten_stack_init();
-      writeStackCookie();
+      stackCheckInit();
       preRun();
-      if (runDependencies > 0) return;
+      if (runDependencies > 0) {
+        return;
+      }
       function doRun() {
         if (calledRun) return;
         calledRun = true;
