@@ -5,9 +5,12 @@ import { downloadFile } from '../../utils/downloadFile';
 
 import './App.css';
 
-function App() {
-  const command = useRef(new Command());
+const command = new Command();
+const delay = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
 
+function App() {
   const [stdout, setStdout] = useState();
   const [stderr, setStderr] = useState();
   const [text, setText] = useState();
@@ -15,13 +18,14 @@ function App() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const runCommand = (args) => {
+  const runCommand = async (args) => {
     setIsLoading(true);
-    command.current.run(args);
+    await delay(10);
+    await command.run(args);
   };
 
   useEffect(() => {
-    const result = command.current.resultAsObservable.subscribe((value) => {
+    const result = command.resultAsObservable.subscribe((value) => {
       if (value) {
         setIsLoading(false);
       }
