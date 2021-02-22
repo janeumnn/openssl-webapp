@@ -3,6 +3,11 @@ import { Subject } from 'rxjs';
 
 class Command {
   constructor() {
+    this.wasmModule = fetch('/openssl.wasm')
+      .then((response) => response.arrayBuffer())
+      .then((bytes) => {
+        return WebAssembly.compile(bytes);
+      });
     this.resultSubject = new Subject();
   }
 
@@ -10,7 +15,7 @@ class Command {
     return this.resultSubject.asObservable();
   }
 
-  getByteArray(file) {
+  async getByteArray(file) {
     const fileReader = new FileReader();
     return new Promise(function (resolve, reject) {
       fileReader.readAsArrayBuffer(file);
@@ -30,7 +35,7 @@ class Command {
    * @param {string} args OpenSSL Command
    * @param {(string|File[])} data Command data to process
    */
-  run(args, data) {
+  async run(args, data) {
     let inputText = false;
     let inputFiles = false;
     let writeFiles = [];
@@ -43,11 +48,10 @@ class Command {
     }
     if (data && Object.prototype.toString.call(data) === '[object Array]') {
       inputFiles = true;
-      data.forEach((file) => {
-        this.getByteArray(file).then((byteArray) => {
-          writeFiles.push({ name: file.name, buffer: byteArray });
-        });
-      });
+      for (const file of data) {
+        const byteArray = await this.getByteArray(file);
+        writeFiles.push({ name: file.name, buffer: byteArray });
+      }
     }
 
     let output = {
@@ -57,7 +61,15 @@ class Command {
       file: null,
     };
 
+    const wasmModule = this.wasmModule;
     const moduleObj = {
+      thisProgram: 'openssl',
+      instantiateWasm: function (imports, successCallback) {
+        wasmModule.then((module) => {
+          WebAssembly.instantiate(module, imports).then(successCallback);
+        });
+        return {};
+      },
       print: function (line) {
         output.stdout += line + '\n';
       },
@@ -68,36 +80,33 @@ class Command {
 
     const argsArray = this.convertArgsToArray(args);
 
-    OpenSSL(moduleObj).then((module) => {
-      try {
+    OpenSSL(moduleObj)
+      .then((instance) => {
         if (inputText) {
-          module['FS'].writeFile(this.getFileInParameter(argsArray), data);
+          instance['FS'].writeFile(this.getFileInParameter(argsArray), data);
         } else if (inputFiles) {
           writeFiles.forEach((file) => {
-            module['FS'].writeFile(file.name, file.buffer);
+            instance['FS'].writeFile(file.name, file.buffer);
           });
         }
 
-        module.callMain(argsArray);
+        instance.callMain(argsArray);
 
         if (inputText) {
-          output.text = module['FS'].readFile(this.getFileOutParameter(argsArray), {
+          output.text = instance['FS'].readFile(this.getFileOutParameter(argsArray), {
             encoding: 'utf8',
           });
         } else if (this.getFileOutParameter(argsArray)) {
-          const readFileBuffer = module['FS'].readFile(this.getFileOutParameter(argsArray), {
+          const readFileBuffer = instance['FS'].readFile(this.getFileOutParameter(argsArray), {
             encoding: 'binary',
           });
           output.file = new File([readFileBuffer], this.getFileOutParameter(argsArray), {
             type: 'application/octet-stream',
           });
         }
-      } catch (e) {
-        output.stderr = `${e.name}: ${e.message}`;
-      } finally {
-        this.resultSubject.next(output);
-      }
-    });
+      })
+      .catch((e) => (output.stderr = `${e.name}: ${e.message}`))
+      .finally(() => this.resultSubject.next(output));
   }
 
   convertArgsToArray(args) {
