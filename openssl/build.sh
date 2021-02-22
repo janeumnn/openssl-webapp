@@ -1,6 +1,6 @@
 #!/bin/sh
 
-OPENSSL_VERSION="openssl-3.0.0-alpha10"
+OPENSSL_VERSION="openssl-3.0.0-alpha12"
 OPENSSL_DIR=${OPENSSL_VERSION}
 OPENSSL_JS_PATH="../src/core/openssl.js"
 OPENSSL_WASM_PATH="../public/openssl.wasm"
@@ -39,7 +39,7 @@ export LDFLAGS="\
   -s USE_ES6_IMPORT_META=0\
   -s ALLOW_MEMORY_GROWTH=1\
   -s ASSERTIONS=1" # For logging purposes. Can be removed!
-  # -s WASM_BIGINT=1\ -- Disabled due to tests
+# -s WASM_BIGINT=1\  Disabled due to tests
 
 emconfigure ./Configure \
   no-hw \
