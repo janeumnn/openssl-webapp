@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { FormFile } from 'react-bootstrap';
 import CommandLine from '../../components/command-line/CommandLine';
 import Command from '../../core/command';
 import { downloadFile } from '../../utils/downloadFile';
@@ -11,6 +12,8 @@ const delay = (ms) => {
 };
 
 function App() {
+  const [inputFiles, setInputFiles] = useState([]);
+
   const [stdout, setStdout] = useState();
   const [stderr, setStderr] = useState();
   const [text, setText] = useState();
@@ -21,7 +24,11 @@ function App() {
   const runCommand = async (args) => {
     setIsLoading(true);
     await delay(10);
-    await command.run(args);
+    if (inputFiles.length) {
+      await command.run(args, inputFiles);
+    } else {
+      await command.run(args);
+    }
   };
 
   useEffect(() => {
@@ -61,6 +68,12 @@ function App() {
 
   return (
     <div className="App">
+      <FormFile className="mt-3 mb-3" custom>
+        <FormFile.Input onChange={(e) => setInputFiles([...e.target.files])} multiple />
+        <FormFile.Label data-browse="Browse...">
+          {inputFiles.length ? inputFiles.map((f) => f.name).join(', ') : 'No files selected'}
+        </FormFile.Label>
+      </FormFile>
       <CommandLine
         commandArgs={runCommand}
         result={stdout ?? stderr}
