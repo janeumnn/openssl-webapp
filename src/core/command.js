@@ -40,13 +40,19 @@ class Command {
     let inputFiles = false;
     let writeFiles = [];
 
+    const argsArray = this.convertArgsToArray(args);
+
     if (args && !(Object.prototype.toString.call(args) === '[object String]')) {
       return;
     }
     if (data && Object.prototype.toString.call(data) === '[object String]') {
       inputText = true;
     }
-    if (data && Object.prototype.toString.call(data) === '[object Array]') {
+    if (
+      data &&
+      Object.prototype.toString.call(data) === '[object Array]' &&
+      this.commandHasInputFiles(argsArray, data)
+    ) {
       inputFiles = true;
       for (const file of data) {
         const byteArray = await this.getByteArray(file);
@@ -77,8 +83,6 @@ class Command {
         output.stderr += line + '\n';
       },
     };
-
-    const argsArray = this.convertArgsToArray(args);
 
     OpenSSL(moduleObj)
       .then((instance) => {
@@ -123,6 +127,12 @@ class Command {
     } else {
       return null;
     }
+  }
+
+  commandHasInputFiles(argsArray, inputFiles) {
+    const filtered = argsArray.map((value) => (value.includes('file:') ? value.slice(5) : value));
+    const matches = inputFiles.filter((file) => filtered.includes(file.name, 1));
+    return inputFiles.length === matches.length;
   }
 }
 
