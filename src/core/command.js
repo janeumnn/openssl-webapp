@@ -57,7 +57,7 @@ class Command {
     let output = {
       stdout: '',
       stderr: '',
-      text: null,
+      text: '',
       file: null,
     };
 
@@ -105,7 +105,7 @@ class Command {
           });
         }
       })
-      .catch((e) => (output.stderr = `${e.name}: ${e.message}`))
+      .catch((error) => (output.stderr = `${error.name}: ${error.message}`))
       .finally(() => this.resultSubject.next(output));
   }
 

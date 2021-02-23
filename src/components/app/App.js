@@ -7,18 +7,14 @@ import { downloadFile } from '../../utils/downloadFile';
 import './App.css';
 
 const command = new Command();
+
 const delay = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 function App() {
+  const [output, setOutput] = useState({ stdout: '', stderr: '', text: '', file: null });
   const [inputFiles, setInputFiles] = useState([]);
-
-  const [stdout, setStdout] = useState();
-  const [stderr, setStderr] = useState();
-  const [text, setText] = useState();
-  const [file, setFile] = useState();
-
   const [isLoading, setIsLoading] = useState(false);
 
   const runCommand = async (args) => {
@@ -35,29 +31,10 @@ function App() {
     const result = command.resultAsObservable.subscribe((value) => {
       if (value) {
         setIsLoading(false);
-      }
-
-      if (value.stdout) {
-        setStdout(value.stdout);
-      } else {
-        setStdout(null);
-      }
-
-      if (value.stderr) {
-        setStderr(value.stderr);
-      } else {
-        setStderr(null);
-      }
-
-      if (value.text) {
-        setText(value.text);
-      } else {
-        setText(null);
-      }
-
-      if (value.file) {
-        setFile(value.file);
-        downloadFile(value.file, value.file.name, null);
+        setOutput(value);
+        if (value.file) {
+          downloadFile(value.file, value.file.name, null);
+        }
       }
     });
 
@@ -71,12 +48,12 @@ function App() {
       <FormFile className="mt-3 mb-3" custom>
         <FormFile.Input onChange={(e) => setInputFiles([...e.target.files])} multiple />
         <FormFile.Label data-browse="Browse...">
-          {inputFiles.length ? inputFiles.map((f) => f.name).join(', ') : 'No files selected'}
+          {inputFiles.length ? inputFiles.map((f) => f.name).join(', ') : 'Select files...'}
         </FormFile.Label>
       </FormFile>
       <CommandLine
-        commandArgs={runCommand}
-        result={stdout ?? stderr}
+        runCommand={runCommand}
+        result={{ stdout: output.stdout, stderr: output.stderr, text: output.text }}
         isLoading={isLoading}
       ></CommandLine>
     </div>
