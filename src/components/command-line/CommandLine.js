@@ -2,14 +2,24 @@ import React, { useRef, useState } from 'react';
 
 import './CommandLine.css';
 
-function CommandLine({ commandArgs, result, isLoading }) {
+function CommandLine({ runCommand, result, isLoading }) {
   const input = useRef();
   const [command, setCommand] = useState();
 
-  const handleSubmit = (ev) => {
-    ev.preventDefault();
+  const diplayResult = (result) => {
+    if (result.text) {
+      return `${result.stderr}\n\n${result.text}`;
+    }
+    if (result.stdout) {
+      return result.stdout;
+    }
+    return result.stderr;
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
     setCommand(`OpenSSL> ${input.current.value}`);
-    commandArgs(input.current.value);
+    runCommand(input.current.value);
     input.current.value = '';
   };
 
@@ -22,7 +32,7 @@ function CommandLine({ commandArgs, result, isLoading }) {
             <div className="spinner-border text-light" role="status"></div>
           </div>
         ) : (
-          <p>{result}</p>
+          <p>{diplayResult(result)}</p>
         )}
       </div>
       <form onSubmit={handleSubmit}>
