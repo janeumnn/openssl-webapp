@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FormFile } from 'react-bootstrap';
+import CardControl from '../card-control/CardControl';
 import CommandLine from '../../components/command-line/CommandLine';
 import Command from '../../core/command';
 import { downloadFile } from '../../utils/downloadFile';
@@ -45,6 +46,7 @@ function App() {
 
   return (
     <div className="App">
+      <CardControl></CardControl>
       <FormFile className="mt-3 mb-3" custom>
         <FormFile.Input onChange={(e) => setInputFiles([...e.target.files])} multiple />
         <FormFile.Label data-browse="Browse...">
