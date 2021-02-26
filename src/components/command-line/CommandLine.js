@@ -1,10 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
+import { useStore } from '../../contexts/store';
 
 import './CommandLine.css';
 
-function CommandLine({ runCommand, result, isLoading }) {
+function CommandLine({ runCommand, result }) {
+  const { state, dispatch } = useStore();
   const input = useRef();
-  const [command, setCommand] = useState();
 
   const diplayResult = (result) => {
     if (result.text) {
@@ -18,7 +19,7 @@ function CommandLine({ runCommand, result, isLoading }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setCommand(`OpenSSL> ${input.current.value}`);
+    dispatch({ type: 'SET_COMMAND', command: input.current.value });
     runCommand(input.current.value);
     input.current.value = '';
   };
@@ -26,8 +27,8 @@ function CommandLine({ runCommand, result, isLoading }) {
   return (
     <div className="CommandLine">
       <div className="CommandLine-output">
-        <p className="CommandLine-command">{command}</p>
-        {isLoading ? (
+        <p className="CommandLine-command">{state.command ? `OpenSSL> ${state.command}` : ``}</p>
+        {state.isLoading ? (
           <div className="CommandLine-loader">
             <div className="spinner-border text-light" role="status"></div>
           </div>
