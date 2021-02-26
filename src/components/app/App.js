@@ -56,7 +56,7 @@ function App() {
 
   return (
     <div className="App">
-      <CardControl></CardControl>
+      <CardControl runCommand={runCommand}></CardControl>
       <FormFile className="mt-3 mb-3" custom>
         <FormFile.Input onChange={handleFileInputChange} multiple />
         <FormFile.Label data-browse="Browse...">

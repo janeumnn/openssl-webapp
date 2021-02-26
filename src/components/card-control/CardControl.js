@@ -1,7 +1,8 @@
 import { Card, Nav, Tab } from 'react-bootstrap';
+import TabGenrsa from './components/tab-genrsa/TabGenrsa';
 import './CardControl.css';
 
-function CardControl() {
+function CardControl({ runCommand }) {
   return (
     <Tab.Container defaultActiveKey="encryption">
       <Card>
@@ -21,7 +22,9 @@ function CardControl() {
         <Card.Body>
           <Tab.Content>
             <Tab.Pane eventKey="encryption"></Tab.Pane>
-            <Tab.Pane eventKey="genrsa"></Tab.Pane>
+            <Tab.Pane eventKey="genrsa">
+              <TabGenrsa runCommand={runCommand}></TabGenrsa>
+            </Tab.Pane>
             <Tab.Pane eventKey="hashing"></Tab.Pane>
           </Tab.Content>
         </Card.Body>
