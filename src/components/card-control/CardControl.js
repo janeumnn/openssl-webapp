@@ -1,5 +1,6 @@
 import { Card, Nav, Tab } from 'react-bootstrap';
 import TabGenrsa from './components/tab-genrsa/TabGenrsa';
+import TabDigest from './components/tab-digest/TabDigest';
 import './CardControl.css';
 
 function CardControl({ runCommand }) {
@@ -15,7 +16,7 @@ function CardControl({ runCommand }) {
               <Nav.Link eventKey="genrsa">RSA</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="hashing">Hashing</Nav.Link>
+              <Nav.Link eventKey="digest">Digest</Nav.Link>
             </Nav.Item>
           </Nav>
         </Card.Header>
@@ -25,7 +26,9 @@ function CardControl({ runCommand }) {
             <Tab.Pane eventKey="genrsa">
               <TabGenrsa runCommand={runCommand}></TabGenrsa>
             </Tab.Pane>
-            <Tab.Pane eventKey="hashing"></Tab.Pane>
+            <Tab.Pane eventKey="digest">
+              <TabDigest runCommand={runCommand}></TabDigest>
+            </Tab.Pane>
           </Tab.Content>
         </Card.Body>
       </Card>
