@@ -48,13 +48,10 @@ class Command {
     if (data && Object.prototype.toString.call(data) === '[object String]') {
       inputText = true;
     }
-    if (
-      data &&
-      Object.prototype.toString.call(data) === '[object Array]' &&
-      this.commandHasInputFiles(argsArray, data)
-    ) {
+    if (data && Object.prototype.toString.call(data) === '[object Array]') {
       inputFiles = true;
-      for (const file of data) {
+      const filteredFiles = this.filterInputFiles(argsArray, data);
+      for (const file of filteredFiles) {
         const byteArray = await this.getByteArray(file);
         writeFiles.push({ name: file.name, buffer: byteArray });
       }
@@ -129,10 +126,12 @@ class Command {
     }
   }
 
-  commandHasInputFiles(argsArray, inputFiles) {
+  filterInputFiles(argsArray, inputFiles) {
     const filtered = argsArray.map((value) => (value.includes('file:') ? value.slice(5) : value));
     const matches = inputFiles.filter((file) => filtered.includes(file.name, 1));
-    return inputFiles.length === matches.length;
+    return matches.length
+      ? inputFiles.filter((file) => matches.map((file) => file.name).includes(file.name))
+      : [];
   }
 }
 
