@@ -19,10 +19,12 @@ function App() {
   const [output, setOutput] = useState({ stdout: '', stderr: '', text: '', file: null });
   const [inputFiles, setInputFiles] = useState([]);
 
-  const runCommand = async (args) => {
+  const runCommand = async (args, text = '') => {
     dispatch({ type: 'SET_LOADING', isLoading: true });
     await delay(30);
-    if (inputFiles.length) {
+    if (text) {
+      await command.run(args, text);
+    } else if (inputFiles.length) {
       await command.run(args, inputFiles);
     } else {
       await command.run(args);
