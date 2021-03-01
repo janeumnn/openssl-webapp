@@ -84,7 +84,7 @@ class Command {
     OpenSSL(moduleObj)
       .then((instance) => {
         if (inputText) {
-          instance['FS'].writeFile(this.getFileInParameter(argsArray), data);
+          instance['FS'].writeFile(this.getFileInParameter(argsArray), data + '\n');
         } else if (inputFiles) {
           writeFiles.forEach((file) => {
             instance['FS'].writeFile(file.name, file.buffer);
