@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button, Col, Form } from 'react-bootstrap';
 import { useStore } from '../../../../contexts/store';
+import { buildGenrsa } from '../../../../core/commandBuilder';
 
 import './TabGenrsa.css';
 
@@ -16,26 +17,6 @@ function TabGenrsa({ runCommand }) {
     outFile: 'id_rsa',
     numbits: NUMBITS[0],
   });
-
-  const commandBuilder = () => {
-    let command = ['genrsa'];
-    for (const key of Object.keys(genrsa)) {
-      switch (key) {
-        case 'out':
-          if (genrsa.out) command.push('-out');
-          break;
-        case 'outFile':
-          if (genrsa.out) command.push(genrsa.outFile);
-          break;
-        case 'numbits':
-          command.push(genrsa.numbits);
-          break;
-        default:
-          break;
-      }
-    }
-    return command.join(' ');
-  };
 
   const set = (key) => (event) => {
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
@@ -66,7 +47,7 @@ function TabGenrsa({ runCommand }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (checkValidation()) {
-      const command = commandBuilder();
+      const command = buildGenrsa(genrsa);
       dispatch({ type: 'SET_COMMAND', command: command });
       runCommand(command);
     }

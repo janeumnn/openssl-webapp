@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Col, Form } from 'react-bootstrap';
 import { useStore } from '../../../../contexts/store';
+import { buildDgst } from '../../../../core/commandBuilder';
 
 import './TabDigest.css';
 
@@ -19,23 +20,6 @@ function TabDigest({ runCommand }) {
   useEffect(() => {
     setDgst((prev) => ({ ...prev, file: '' }));
   }, [state.fileNames]);
-
-  const commandBuilder = () => {
-    let command = ['dgst'];
-    for (const key of Object.keys(dgst)) {
-      switch (key) {
-        case 'algorithm':
-          command.push(`-${dgst.algorithm}`);
-          break;
-        case 'file':
-          command.push(dgst.file);
-          break;
-        default:
-          break;
-      }
-    }
-    return command.join(' ');
-  };
 
   const set = (key) => (event) => {
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
@@ -62,7 +46,7 @@ function TabDigest({ runCommand }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (checkValidation()) {
-      const command = commandBuilder();
+      const command = buildDgst(dgst);
       dispatch({ type: 'SET_COMMAND', command: command });
       runCommand(command);
     }
