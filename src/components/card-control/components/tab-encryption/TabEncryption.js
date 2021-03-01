@@ -9,6 +9,7 @@ import {
   ToggleButtonGroup,
 } from 'react-bootstrap';
 import { useStore } from '../../../../contexts/store';
+import { buildEnc } from '../../../../core/commandBuilder';
 
 import './TabEncryption.css';
 
@@ -52,58 +53,6 @@ function TabEncryption({ runCommand }) {
   useEffect(() => {
     setEnc((prev) => ({ ...prev, inFile: '', kValFile: '' }));
   }, [state.fileNames]);
-
-  const commandBuilder = () => {
-    let command = ['enc'];
-    for (const key of Object.keys(enc)) {
-      switch (key) {
-        case 'e':
-          if (enc.e) command.push('-e');
-          break;
-        case 'd':
-          if (enc.d) command.push('-d');
-          break;
-        case 'cipher':
-          command.push(`-${enc.cipher}`);
-          break;
-        case 'inFile':
-          if (!enc.text) command.push(`-in ${enc.inFile}`);
-          else command.push('-in input');
-          break;
-        case 'outFile':
-          if (!enc.text) command.push(`-out ${enc.outFile}`);
-          else command.push('-out output');
-          break;
-        case 'k':
-          if (enc.k) command.push('-k');
-          break;
-        case 'kVal':
-          if (enc.k) command.push(enc.kVal);
-          break;
-        case 'kfile':
-          if (enc.kfile) command.push('-kfile');
-          break;
-        case 'kValFile':
-          if (enc.kfile) command.push(enc.kValFile);
-          break;
-        case 'pbkdf2':
-          if (enc.pbkdf2) command.push('-pbkdf2');
-          break;
-        case 'iv':
-          if (enc.iv) command.push('-iv');
-          break;
-        case 'ivVal':
-          if (enc.iv) command.push(enc.ivVal);
-          break;
-        case 'a':
-          if (enc.a) command.push('-a');
-          break;
-        default:
-          break;
-      }
-    }
-    return command.join(' ');
-  };
 
   const set = (key) => (event) => {
     const value =
@@ -193,7 +142,7 @@ function TabEncryption({ runCommand }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (checkValidation()) {
-      const command = commandBuilder();
+      const command = buildEnc(enc);
       dispatch({ type: 'SET_COMMAND', command: command });
       runCommand(command, enc.textVal);
     }
