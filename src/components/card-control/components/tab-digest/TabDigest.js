@@ -55,7 +55,7 @@ function TabDigest({ runCommand }) {
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Form.Row className="justify-content-start">
-        <Col md={2}>
+        <Col md={5}>
           <Form.Group>
             <Form.Label className="mb-2">Hash function</Form.Label>
             <Form.Control as="select" value={dgst.algorithm} onChange={set('algorithm')} custom>
@@ -65,7 +65,7 @@ function TabDigest({ runCommand }) {
             </Form.Control>
           </Form.Group>
         </Col>
-        <Col md={2}>
+        <Col md={5}>
           <Form.Group>
             <Form.Check.Label className="mb-2">File</Form.Check.Label>
             <Form.Control

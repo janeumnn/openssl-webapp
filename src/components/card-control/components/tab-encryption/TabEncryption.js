@@ -171,7 +171,7 @@ function TabEncryption({ runCommand }) {
         </Col>
       </Form.Row>
       <Form.Row>
-        <Col>
+        <Col md={10}>
           <Form.Group>
             <Form.Check
               type="checkbox"
@@ -194,7 +194,7 @@ function TabEncryption({ runCommand }) {
         </Col>
       </Form.Row>
       <Form.Row className="justify-content-start">
-        <Col md={2}>
+        <Col md={3}>
           <Form.Group>
             <Form.Label className="mb-2">Cipher</Form.Label>
             <Form.Control as="select" value={enc.cipher} onChange={set('cipher')} custom>
@@ -204,7 +204,7 @@ function TabEncryption({ runCommand }) {
             </Form.Control>
           </Form.Group>
         </Col>
-        <Col md={2}>
+        <Col md={3}>
           <Form.Group>
             <Form.Label className="mb-2">File input</Form.Label>
             <Form.Control
@@ -225,7 +225,7 @@ function TabEncryption({ runCommand }) {
             <Form.Control.Feedback type="invalid">No file selected</Form.Control.Feedback>
           </Form.Group>
         </Col>
-        <Col md={2}>
+        <Col md={4}>
           <Form.Group>
             <Form.Label className="mb-2">File output</Form.Label>
             <InputGroup>
@@ -255,7 +255,7 @@ function TabEncryption({ runCommand }) {
         </Col>
       </Form.Row>
       <Form.Row className="justify-content-start">
-        <Col md={3}>
+        <Col md={5} lg={5}>
           <Form.Group>
             <Form.Label className="mb-2">Passphrase</Form.Label>
             <InputGroup>
@@ -299,7 +299,7 @@ function TabEncryption({ runCommand }) {
             </InputGroup>
           </Form.Group>
         </Col>
-        <Col md={3} lg={3}>
+        <Col md={5} lg={5}>
           <Form.Group>
             <Form.Check
               type="checkbox"

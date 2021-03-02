@@ -56,7 +56,7 @@ function TabGenrsa({ runCommand }) {
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Form.Row className="justify-content-start">
-        <Col md={2}>
+        <Col md={5}>
           <Form.Group>
             <Form.Check type="checkbox" className="mb-2">
               <Form.Check.Input
@@ -76,7 +76,7 @@ function TabGenrsa({ runCommand }) {
             <Form.Control.Feedback type="invalid">No text input</Form.Control.Feedback>
           </Form.Group>
         </Col>
-        <Col md={2}>
+        <Col md={5}>
           <Form.Group>
             <Form.Label className="mb-2">Numbits</Form.Label>
             <Form.Control as="select" value={genrsa.numbits} onChange={set('numbits')} custom>
