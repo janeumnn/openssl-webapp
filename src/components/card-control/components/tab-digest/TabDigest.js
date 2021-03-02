@@ -58,7 +58,7 @@ function TabDigest({ runCommand }) {
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Row>
-        <Form.Group as={Col} md={5}>
+        <Form.Group as={Col} md={5} controlId="dgst-algorithm">
           <Form.Label className="mb-2">Hash function</Form.Label>
           <Form.Control as="select" value={dgst.algorithm} onChange={set('algorithm')} custom>
             {ALGORITHMS.map((algorithm) => (
@@ -66,8 +66,8 @@ function TabDigest({ runCommand }) {
             ))}
           </Form.Control>
         </Form.Group>
-        <Form.Group as={Col} md={5}>
-          <Form.Check.Label className="mb-2">File</Form.Check.Label>
+        <Form.Group as={Col} md={5} controlId="dgst-file-in">
+          <Form.Label className="mb-2">File</Form.Label>
           <Form.Control
             as="select"
             value={dgst.file ? dgst.file : '1'}

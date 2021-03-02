@@ -187,6 +187,7 @@ function TabEncryption({ runCommand }) {
           />
           {enc.text && (
             <Form.Control
+              id="enc-text-in"
               as="textarea"
               className="mt-2"
               placeholder="Enter text to encrypt/decrypt..."
@@ -199,7 +200,7 @@ function TabEncryption({ runCommand }) {
         </Form.Group>
       </Form.Row>
       <Form.Row>
-        <Form.Group as={Col} md={3}>
+        <Form.Group as={Col} md={3} controlId="enc-cipher">
           <Form.Label className="mb-2">Cipher</Form.Label>
           <Form.Control as="select" value={enc.cipher} onChange={set('cipher')} custom>
             {CIPHERS.map((cipher) => (
@@ -207,7 +208,7 @@ function TabEncryption({ runCommand }) {
             ))}
           </Form.Control>
         </Form.Group>
-        <Form.Group as={Col} md={3}>
+        <Form.Group as={Col} md={3} controlId="enc-file-in">
           <Form.Label className="mb-2">File input</Form.Label>
           <Form.Control
             as="select"
@@ -226,7 +227,7 @@ function TabEncryption({ runCommand }) {
           </Form.Control>
           <Form.Control.Feedback type="invalid">No file selected</Form.Control.Feedback>
         </Form.Group>
-        <Form.Group as={Col} md={4}>
+        <Form.Group as={Col} md={4} controlId="enc-file-out">
           <Form.Label className="mb-2">File output</Form.Label>
           <InputGroup>
             <Form.Control
@@ -254,7 +255,7 @@ function TabEncryption({ runCommand }) {
         </Form.Group>
       </Form.Row>
       <Form.Row>
-        <Form.Group as={Col} md={5} lg={5}>
+        <Form.Group as={Col} md={5} lg={5} controlId="enc-passphrase">
           <Form.Label className="mb-2">Passphrase</Form.Label>
           <InputGroup>
             {enc.k ? (
@@ -307,6 +308,7 @@ function TabEncryption({ runCommand }) {
             custom
           />
           <Form.Control
+            id="enc-initvector-in"
             as="input"
             placeholder="Hex value..."
             value={enc.ivVal}

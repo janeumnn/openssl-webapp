@@ -70,6 +70,7 @@ function TabGenrsa({ runCommand }) {
             custom
           />
           <Form.Control
+            id="genrsa-file-name"
             as="input"
             value={genrsa.outFile}
             onChange={set('outFile')}
@@ -78,7 +79,7 @@ function TabGenrsa({ runCommand }) {
           />
           <Form.Control.Feedback type="invalid">No text input</Form.Control.Feedback>
         </Form.Group>
-        <Form.Group as={Col} md={5}>
+        <Form.Group as={Col} md={5} controlId="genrsa-numbits">
           <Form.Label className="mb-2">Numbits</Form.Label>
           <Form.Control as="select" value={genrsa.numbits} onChange={set('numbits')} custom>
             {NUMBITS.map((numbits) => (
