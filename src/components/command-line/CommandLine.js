@@ -1,28 +1,39 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
+import { useStore } from '../../contexts/store';
 
 import './CommandLine.css';
 
-function CommandLine({ commandArgs, result, isLoading }) {
+function CommandLine({ runCommand, result }) {
+  const { state, dispatch } = useStore();
   const input = useRef();
-  const [command, setCommand] = useState();
 
-  const handleSubmit = (ev) => {
-    ev.preventDefault();
-    setCommand(`OpenSSL> ${input.current.value}`);
-    commandArgs(input.current.value);
+  const diplayResult = (result) => {
+    if (result.text) {
+      return `${result.stderr}\n\n${result.text}`;
+    }
+    if (result.stdout) {
+      return result.stdout;
+    }
+    return result.stderr;
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    dispatch({ type: 'SET_COMMAND', command: input.current.value });
+    runCommand(input.current.value);
     input.current.value = '';
   };
 
   return (
     <div className="CommandLine">
       <div className="CommandLine-output">
-        <p className="CommandLine-command">{command}</p>
-        {isLoading ? (
+        <p className="CommandLine-command">{state.command ? `OpenSSL> ${state.command}` : ''}</p>
+        {state.isLoading ? (
           <div className="CommandLine-loader">
             <div className="spinner-border text-light" role="status"></div>
           </div>
         ) : (
-          <p>{result}</p>
+          <p>{diplayResult(result)}</p>
         )}
       </div>
       <form onSubmit={handleSubmit}>

@@ -1,70 +1,75 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { FormFile } from 'react-bootstrap';
+import CardControl from '../card-control/CardControl';
 import CommandLine from '../../components/command-line/CommandLine';
 import Command from '../../core/command';
+import { useStore } from '../../contexts/store';
 import { downloadFile } from '../../utils/downloadFile';
 
 import './App.css';
 
 const command = new Command();
+
 const delay = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 function App() {
-  const [stdout, setStdout] = useState();
-  const [stderr, setStderr] = useState();
-  const [text, setText] = useState();
-  const [file, setFile] = useState();
+  const { dispatch } = useStore();
+  const [output, setOutput] = useState({ stdout: '', stderr: '', text: '', file: null });
+  const [inputFiles, setInputFiles] = useState([]);
 
-  const [isLoading, setIsLoading] = useState(false);
-
-  const runCommand = async (args) => {
-    setIsLoading(true);
-    await delay(10);
-    await command.run(args);
+  const runCommand = async (args, text = '') => {
+    dispatch({ type: 'SET_LOADING', isLoading: true });
+    await delay(30);
+    if (text) {
+      await command.run(args, text);
+    } else if (inputFiles.length) {
+      await command.run(args, inputFiles);
+    } else {
+      await command.run(args);
+    }
   };
 
   useEffect(() => {
     const result = command.resultAsObservable.subscribe((value) => {
       if (value) {
-        setIsLoading(false);
-      }
-
-      if (value.stdout) {
-        setStdout(value.stdout);
-      } else {
-        setStdout(null);
-      }
-
-      if (value.stderr) {
-        setStderr(value.stderr);
-      } else {
-        setStderr(null);
-      }
-
-      if (value.text) {
-        setText(value.text);
-      } else {
-        setText(null);
-      }
-
-      if (value.file) {
-        setFile(value.file);
-        downloadFile(value.file, value.file.name, null);
+        dispatch({ type: 'SET_LOADING', isLoading: false });
+        setOutput(value);
+        if (value.file) {
+          downloadFile(value.file, value.file.name, null);
+        }
       }
     });
 
     return () => {
       result.unsubscribe();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleFileInputChange = (event) => {
+    setInputFiles([...event.target.files]);
+    dispatch({
+      type: 'SET_FILENAMES',
+      fileNames: [...event.target.files].map((file) => file.name),
+    });
+  };
 
   return (
     <div className="App">
+      <label>Input</label>
+      <FormFile className="mb-3" custom>
+        <FormFile.Input onChange={handleFileInputChange} multiple />
+        <FormFile.Label data-browse="Browse...">
+          {inputFiles.length ? inputFiles.map((file) => file.name).join(', ') : 'Select files...'}
+        </FormFile.Label>
+      </FormFile>
+      <CardControl runCommand={runCommand}></CardControl>
+      <label className="mt-3">Output</label>
       <CommandLine
-        commandArgs={runCommand}
-        result={stdout ?? stderr}
-        isLoading={isLoading}
+        runCommand={runCommand}
+        result={{ stdout: output.stdout, stderr: output.stderr, text: output.text }}
       ></CommandLine>
     </div>
   );
