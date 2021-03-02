@@ -43,8 +43,7 @@ function TabDigest({ runCommand }) {
     return valid;
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const execute = () => {
     if (checkValidation()) {
       const command = buildDgst(dgst);
       dispatch({ type: 'SET_COMMAND', command: command });
@@ -52,8 +51,12 @@ function TabDigest({ runCommand }) {
     }
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  };
+
   return (
-    <Form noValidate onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit}>
       <Form.Row>
         <Form.Group as={Col} md={5}>
           <Form.Label className="mb-2">Hash function</Form.Label>
@@ -82,7 +85,7 @@ function TabDigest({ runCommand }) {
           <Form.Control.Feedback type="invalid">No file selected</Form.Control.Feedback>
         </Form.Group>
       </Form.Row>
-      <Button type="submit" disabled={state.isLoading}>
+      <Button type="button" onClick={execute} disabled={state.isLoading}>
         Execute
       </Button>
     </Form>
