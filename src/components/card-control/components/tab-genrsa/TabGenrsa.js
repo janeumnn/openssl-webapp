@@ -55,37 +55,32 @@ function TabGenrsa({ runCommand }) {
 
   return (
     <Form noValidate onSubmit={handleSubmit}>
-      <Form.Row className="justify-content-start">
-        <Col md={5}>
-          <Form.Group>
-            <Form.Check type="checkbox" className="mb-2">
-              <Form.Check.Input
-                type="checkbox"
-                checked={genrsa.out}
-                onChange={set('out')}
-              ></Form.Check.Input>
-              <Form.Check.Label>File output</Form.Check.Label>
-            </Form.Check>
-            <Form.Control
-              as="input"
-              value={genrsa.outFile}
-              onChange={set('outFile')}
-              disabled={!genrsa.out}
-              isInvalid={validation.fileOutput}
-            ></Form.Control>
-            <Form.Control.Feedback type="invalid">No text input</Form.Control.Feedback>
-          </Form.Group>
-        </Col>
-        <Col md={5}>
-          <Form.Group>
-            <Form.Label className="mb-2">Numbits</Form.Label>
-            <Form.Control as="select" value={genrsa.numbits} onChange={set('numbits')} custom>
-              {NUMBITS.map((numbits) => (
-                <option key={numbits}>{numbits}</option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-        </Col>
+      <Form.Row>
+        <Form.Group as={Col} md={5}>
+          <Form.Check
+            type="checkbox"
+            className="mb-2"
+            label="File output"
+            checked={genrsa.out}
+            onChange={set('out')}
+          />
+          <Form.Control
+            as="input"
+            value={genrsa.outFile}
+            onChange={set('outFile')}
+            disabled={!genrsa.out}
+            isInvalid={validation.fileOutput}
+          />
+          <Form.Control.Feedback type="invalid">No text input</Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group as={Col} md={5}>
+          <Form.Label className="mb-2">Numbits</Form.Label>
+          <Form.Control as="select" value={genrsa.numbits} onChange={set('numbits')} custom>
+            {NUMBITS.map((numbits) => (
+              <option key={numbits}>{numbits}</option>
+            ))}
+          </Form.Control>
+        </Form.Group>
       </Form.Row>
       <Button type="submit" disabled={state.isLoading}>
         Execute

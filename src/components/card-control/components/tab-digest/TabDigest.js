@@ -54,37 +54,33 @@ function TabDigest({ runCommand }) {
 
   return (
     <Form noValidate onSubmit={handleSubmit}>
-      <Form.Row className="justify-content-start">
-        <Col md={5}>
-          <Form.Group>
-            <Form.Label className="mb-2">Hash function</Form.Label>
-            <Form.Control as="select" value={dgst.algorithm} onChange={set('algorithm')} custom>
-              {ALGORITHMS.map((algorithm) => (
-                <option key={algorithm}>{algorithm}</option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-        </Col>
-        <Col md={5}>
-          <Form.Group>
-            <Form.Check.Label className="mb-2">File</Form.Check.Label>
-            <Form.Control
-              as="select"
-              value={dgst.file ? dgst.file : '1'}
-              onChange={set('file')}
-              isInvalid={validation.fileInput}
-              custom
-            >
-              <option value="1" disabled hidden>
-                Select...
-              </option>
-              {state.fileNames.map((file) => (
-                <option key={file}>{file}</option>
-              ))}
-            </Form.Control>
-            <Form.Control.Feedback type="invalid">No file selected</Form.Control.Feedback>
-          </Form.Group>
-        </Col>
+      <Form.Row>
+        <Form.Group as={Col} md={5}>
+          <Form.Label className="mb-2">Hash function</Form.Label>
+          <Form.Control as="select" value={dgst.algorithm} onChange={set('algorithm')} custom>
+            {ALGORITHMS.map((algorithm) => (
+              <option key={algorithm}>{algorithm}</option>
+            ))}
+          </Form.Control>
+        </Form.Group>
+        <Form.Group as={Col} md={5}>
+          <Form.Check.Label className="mb-2">File</Form.Check.Label>
+          <Form.Control
+            as="select"
+            value={dgst.file ? dgst.file : '1'}
+            onChange={set('file')}
+            isInvalid={validation.fileInput}
+            custom
+          >
+            <option value="1" disabled hidden>
+              Select...
+            </option>
+            {state.fileNames.map((file) => (
+              <option key={file}>{file}</option>
+            ))}
+          </Form.Control>
+          <Form.Control.Feedback type="invalid">No file selected</Form.Control.Feedback>
+        </Form.Group>
       </Form.Row>
       <Button type="submit" disabled={state.isLoading}>
         Execute
