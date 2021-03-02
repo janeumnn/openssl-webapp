@@ -6,6 +6,7 @@ import { buildGenrsa } from '../../../../core/commandBuilder';
 import './TabGenrsa.css';
 
 const NUMBITS = ['1024', '2048', '4096'];
+const FILENAME = 'id_rsa';
 
 function TabGenrsa({ runCommand }) {
   const { state, dispatch } = useStore();
@@ -14,7 +15,7 @@ function TabGenrsa({ runCommand }) {
   });
   const [genrsa, setGenrsa] = useState({
     out: false,
-    outFile: 'id_rsa',
+    outFile: FILENAME,
     numbits: NUMBITS[0],
   });
 
@@ -22,7 +23,7 @@ function TabGenrsa({ runCommand }) {
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
     switch (key) {
       case 'out':
-        setGenrsa((prev) => ({ ...prev, [key]: value }));
+        setGenrsa((prev) => ({ ...prev, [key]: value, outFile: FILENAME }));
         setValidation((prev) => ({ ...prev, fileOutput: false }));
         break;
       case 'outFile':
@@ -37,7 +38,7 @@ function TabGenrsa({ runCommand }) {
 
   const checkValidation = () => {
     let valid = true;
-    if (!genrsa.outFile) {
+    if (genrsa.out && !genrsa.outFile) {
       setValidation((prev) => ({ ...prev, fileOutput: true }));
       valid = false;
     }

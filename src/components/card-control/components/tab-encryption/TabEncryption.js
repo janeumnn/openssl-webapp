@@ -90,7 +90,7 @@ function TabEncryption({ runCommand }) {
         break;
       case 'iv':
         setEnc((prev) => ({ ...prev, [key]: value }));
-        if (!value) setValidation((prev) => ({ ...prev, initVector: false }));
+        setValidation((prev) => ({ ...prev, initVector: false }));
         break;
       case 'ivVal':
         setEnc((prev) => ({ ...prev, [key]: value }));
@@ -98,7 +98,12 @@ function TabEncryption({ runCommand }) {
         break;
       case 'text':
         setEnc((prev) => ({ ...prev, [key]: value, textVal: '' }));
-        setValidation((prev) => ({ ...prev, fileInput: false, fileOutput: false }));
+        setValidation((prev) => ({
+          ...prev,
+          textInput: false,
+          fileInput: false,
+          fileOutput: false,
+        }));
         break;
       case 'textVal':
         setEnc((prev) => ({ ...prev, [key]: value }));
