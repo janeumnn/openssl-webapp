@@ -27,7 +27,7 @@ function CommandLine({ runCommand, result }) {
   return (
     <div className="CommandLine">
       <div className="CommandLine-output">
-        <p className="CommandLine-command">{state.command ? `OpenSSL> ${state.command}` : ``}</p>
+        <p className="CommandLine-command">{state.command ? `OpenSSL> ${state.command}` : ''}</p>
         {state.isLoading ? (
           <div className="CommandLine-loader">
             <div className="spinner-border text-light" role="status"></div>

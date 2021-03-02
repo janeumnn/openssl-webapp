@@ -120,11 +120,11 @@ function TabEncryption({ runCommand }) {
       setValidation((prev) => ({ ...prev, fileOutput: true }));
       valid = false;
     }
-    if (!enc.kfile && !enc.kVal) {
+    if (enc.k && !enc.kVal) {
       setValidation((prev) => ({ ...prev, passphrase: true }));
       valid = false;
     }
-    if (!enc.k && !enc.kValFile) {
+    if (enc.kfile && !enc.kValFile) {
       setValidation((prev) => ({ ...prev, passphrase: true }));
       valid = false;
     }
@@ -150,187 +150,159 @@ function TabEncryption({ runCommand }) {
 
   return (
     <Form noValidate onSubmit={handleSubmit}>
-      <Form.Row className="justify-content-start">
-        <Col>
-          <Form.Group>
-            <Form.Check
-              inline
-              type="radio"
-              label="Encryption"
-              checked={enc.e}
-              onChange={set('e')}
-            ></Form.Check>
-            <Form.Check
-              inline
-              type="radio"
-              label="Decryption"
-              checked={!enc.e}
-              onChange={set('d')}
-            ></Form.Check>
-          </Form.Group>
-        </Col>
+      <Form.Row>
+        <Form.Group as={Col}>
+          <Form.Check inline type="radio" label="Encryption" checked={enc.e} onChange={set('e')} />
+          <Form.Check inline type="radio" label="Decryption" checked={!enc.e} onChange={set('d')} />
+        </Form.Group>
       </Form.Row>
       <Form.Row>
-        <Col md={10}>
-          <Form.Group>
-            <Form.Check
-              type="checkbox"
-              label="Use text input"
-              checked={enc.text}
-              onChange={set('text')}
-            ></Form.Check>
-            {enc.text && (
-              <Form.Control
-                as="textarea"
-                className="mt-2"
-                placeholder="Enter text to encrypt/decrypt..."
-                rows={2}
-                onChange={set('textVal')}
-                isInvalid={validation.textInput}
-              ></Form.Control>
-            )}
-            <Form.Control.Feedback type="invalid">No text input</Form.Control.Feedback>
-          </Form.Group>
-        </Col>
-      </Form.Row>
-      <Form.Row className="justify-content-start">
-        <Col md={3}>
-          <Form.Group>
-            <Form.Label className="mb-2">Cipher</Form.Label>
-            <Form.Control as="select" value={enc.cipher} onChange={set('cipher')} custom>
-              {CIPHERS.map((cipher) => (
-                <option key={cipher}>{cipher}</option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-        </Col>
-        <Col md={3}>
-          <Form.Group>
-            <Form.Label className="mb-2">File input</Form.Label>
+        <Form.Group as={Col} md={10}>
+          <Form.Check
+            type="checkbox"
+            label="Use text input"
+            checked={enc.text}
+            onChange={set('text')}
+          />
+          {enc.text && (
             <Form.Control
-              as="select"
-              value={enc.inFile ? enc.inFile : '1'}
-              onChange={set('inFile')}
-              isInvalid={validation.fileInput}
-              disabled={enc.text}
-              custom
-            >
-              <option value="1" disabled hidden>
-                Select...
-              </option>
-              {state.fileNames.map((file) => (
-                <option key={file}>{file}</option>
-              ))}
-            </Form.Control>
-            <Form.Control.Feedback type="invalid">No file selected</Form.Control.Feedback>
-          </Form.Group>
-        </Col>
-        <Col md={4}>
-          <Form.Group>
-            <Form.Label className="mb-2">File output</Form.Label>
-            <InputGroup>
-              <Form.Control
-                as="input"
-                placeholder="Filename..."
-                onChange={set('outFile')}
-                isInvalid={validation.fileOutput}
-                disabled={enc.text}
-              ></Form.Control>
-              <InputGroup.Append>
-                <ButtonGroup toggle>
-                  <ToggleButton
-                    type="checkbox"
-                    variant="secondary"
-                    value="1"
-                    checked={enc.a}
-                    onChange={set('a')}
-                  >
-                    Base64
-                  </ToggleButton>
-                </ButtonGroup>
-              </InputGroup.Append>
-              <Form.Control.Feedback type="invalid">No filename specified</Form.Control.Feedback>
-            </InputGroup>
-          </Form.Group>
-        </Col>
+              as="textarea"
+              className="mt-2"
+              placeholder="Enter text to encrypt/decrypt..."
+              rows={2}
+              onChange={set('textVal')}
+              isInvalid={validation.textInput}
+            />
+          )}
+          <Form.Control.Feedback type="invalid">No text input</Form.Control.Feedback>
+        </Form.Group>
       </Form.Row>
-      <Form.Row className="justify-content-start">
-        <Col md={5} lg={5}>
-          <Form.Group>
-            <Form.Label className="mb-2">Passphrase</Form.Label>
-            <InputGroup>
-              {enc.k ? (
-                <Form.Control
-                  as="input"
-                  placeholder="Input..."
-                  value={enc.kVal}
-                  onChange={set('kVal')}
-                  isInvalid={validation.passphrase}
-                ></Form.Control>
-              ) : (
-                <>
-                  <Form.Control
-                    as="select"
-                    value={enc.kValFile ? enc.kValFile : '1'}
-                    onChange={set('kValFile')}
-                    isInvalid={validation.passphrase}
-                    custom
-                  >
-                    <option value="1" disabled hidden>
-                      Select...
-                    </option>
-                    {state.fileNames.map((file) => (
-                      <option key={file}>{file}</option>
-                    ))}
-                  </Form.Control>
-                </>
-              )}
-              <InputGroup.Append>
-                <ToggleButtonGroup type="radio" name="passphrase-options" defaultValue="1">
-                  <ToggleButton variant="secondary" value="1" onChange={set('k')}>
-                    Text
-                  </ToggleButton>
-                  <ToggleButton variant="secondary" value="2" onChange={set('kfile')}>
-                    File
-                  </ToggleButton>
-                </ToggleButtonGroup>
-              </InputGroup.Append>
-              <Form.Control.Feedback type="invalid">No passphrase specified</Form.Control.Feedback>
-            </InputGroup>
-          </Form.Group>
-        </Col>
-        <Col md={5} lg={5}>
-          <Form.Group>
-            <Form.Check
-              type="checkbox"
-              className="mb-2"
-              label="Initialization Vector"
-              checked={enc.iv}
-              onChange={set('iv')}
-            ></Form.Check>
+      <Form.Row>
+        <Form.Group as={Col} md={3}>
+          <Form.Label className="mb-2">Cipher</Form.Label>
+          <Form.Control as="select" value={enc.cipher} onChange={set('cipher')} custom>
+            {CIPHERS.map((cipher) => (
+              <option key={cipher}>{cipher}</option>
+            ))}
+          </Form.Control>
+        </Form.Group>
+        <Form.Group as={Col} md={3}>
+          <Form.Label className="mb-2">File input</Form.Label>
+          <Form.Control
+            as="select"
+            value={enc.inFile ? enc.inFile : '1'}
+            onChange={set('inFile')}
+            isInvalid={validation.fileInput}
+            disabled={enc.text}
+            custom
+          >
+            <option value="1" disabled hidden>
+              Select...
+            </option>
+            {state.fileNames.map((file) => (
+              <option key={file}>{file}</option>
+            ))}
+          </Form.Control>
+          <Form.Control.Feedback type="invalid">No file selected</Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group as={Col} md={4}>
+          <Form.Label className="mb-2">File output</Form.Label>
+          <InputGroup>
             <Form.Control
               as="input"
-              placeholder="Hex value..."
-              value={enc.ivVal}
-              onChange={set('ivVal')}
-              disabled={!enc.iv}
-              isInvalid={validation.initVector}
-            ></Form.Control>
-            <Form.Control.Feedback type="invalid">No value specified</Form.Control.Feedback>
-          </Form.Group>
-        </Col>
+              placeholder="Filename..."
+              onChange={set('outFile')}
+              isInvalid={validation.fileOutput}
+              disabled={enc.text}
+            />
+            <InputGroup.Append>
+              <ButtonGroup toggle>
+                <ToggleButton
+                  type="checkbox"
+                  variant="secondary"
+                  value="1"
+                  checked={enc.a}
+                  onChange={set('a')}
+                >
+                  Base64
+                </ToggleButton>
+              </ButtonGroup>
+            </InputGroup.Append>
+            <Form.Control.Feedback type="invalid">No filename specified</Form.Control.Feedback>
+          </InputGroup>
+        </Form.Group>
       </Form.Row>
-      <Form.Row className="justify-content-start">
-        <Col>
-          <Form.Group>
-            <Form.Check
-              type="checkbox"
-              label="PBKDF2"
-              checked={enc.pbkdf2}
-              onChange={set('pbkdf2')}
-            ></Form.Check>
-          </Form.Group>
-        </Col>
+      <Form.Row>
+        <Form.Group as={Col} md={5} lg={5}>
+          <Form.Label className="mb-2">Passphrase</Form.Label>
+          <InputGroup>
+            {enc.k ? (
+              <Form.Control
+                as="input"
+                placeholder="Input..."
+                value={enc.kVal}
+                onChange={set('kVal')}
+                isInvalid={validation.passphrase}
+              />
+            ) : (
+              <>
+                <Form.Control
+                  as="select"
+                  value={enc.kValFile ? enc.kValFile : '1'}
+                  onChange={set('kValFile')}
+                  isInvalid={validation.passphrase}
+                  custom
+                >
+                  <option value="1" disabled hidden>
+                    Select...
+                  </option>
+                  {state.fileNames.map((file) => (
+                    <option key={file}>{file}</option>
+                  ))}
+                </Form.Control>
+              </>
+            )}
+            <InputGroup.Append>
+              <ToggleButtonGroup type="radio" name="passphrase-options" defaultValue="1">
+                <ToggleButton variant="secondary" value="1" onChange={set('k')}>
+                  Text
+                </ToggleButton>
+                <ToggleButton variant="secondary" value="2" onChange={set('kfile')}>
+                  File
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </InputGroup.Append>
+            <Form.Control.Feedback type="invalid">No passphrase specified</Form.Control.Feedback>
+          </InputGroup>
+        </Form.Group>
+        <Form.Group as={Col} md={5} lg={5}>
+          <Form.Check
+            type="checkbox"
+            className="mb-2"
+            label="Initialization Vector"
+            checked={enc.iv}
+            onChange={set('iv')}
+          />
+          <Form.Control
+            as="input"
+            placeholder="Hex value..."
+            value={enc.ivVal}
+            onChange={set('ivVal')}
+            disabled={!enc.iv}
+            isInvalid={validation.initVector}
+          />
+          <Form.Control.Feedback type="invalid">No value specified</Form.Control.Feedback>
+        </Form.Group>
+      </Form.Row>
+      <Form.Row>
+        <Form.Group as={Col} md={2}>
+          <Form.Check
+            type="checkbox"
+            label="PBKDF2"
+            checked={enc.pbkdf2}
+            onChange={set('pbkdf2')}
+          />
+        </Form.Group>
       </Form.Row>
       <Button type="submit" disabled={state.isLoading}>
         Execute
