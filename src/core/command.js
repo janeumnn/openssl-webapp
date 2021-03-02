@@ -40,6 +40,8 @@ class Command {
     let inputFiles = false;
     let writeFiles = [];
 
+    const argsArray = this.convertArgsToArray(args);
+
     if (args && !(Object.prototype.toString.call(args) === '[object String]')) {
       return;
     }
@@ -48,7 +50,8 @@ class Command {
     }
     if (data && Object.prototype.toString.call(data) === '[object Array]') {
       inputFiles = true;
-      for (const file of data) {
+      const filteredFiles = this.filterInputFiles(argsArray, data);
+      for (const file of filteredFiles) {
         const byteArray = await this.getByteArray(file);
         writeFiles.push({ name: file.name, buffer: byteArray });
       }
@@ -57,7 +60,7 @@ class Command {
     let output = {
       stdout: '',
       stderr: '',
-      text: null,
+      text: '',
       file: null,
     };
 
@@ -78,12 +81,10 @@ class Command {
       },
     };
 
-    const argsArray = this.convertArgsToArray(args);
-
     OpenSSL(moduleObj)
       .then((instance) => {
         if (inputText) {
-          instance['FS'].writeFile(this.getFileInParameter(argsArray), data);
+          instance['FS'].writeFile(this.getFileInParameter(argsArray), data + '\n');
         } else if (inputFiles) {
           writeFiles.forEach((file) => {
             instance['FS'].writeFile(file.name, file.buffer);
@@ -105,7 +106,7 @@ class Command {
           });
         }
       })
-      .catch((e) => (output.stderr = `${e.name}: ${e.message}`))
+      .catch((error) => (output.stderr = `${error.name}: ${error.message}`))
       .finally(() => this.resultSubject.next(output));
   }
 
@@ -123,6 +124,14 @@ class Command {
     } else {
       return null;
     }
+  }
+
+  filterInputFiles(argsArray, inputFiles) {
+    const filtered = argsArray.map((value) => (value.includes('file:') ? value.slice(5) : value));
+    const matches = inputFiles.filter((file) => filtered.includes(file.name, 1));
+    return matches.length
+      ? inputFiles.filter((file) => matches.map((file) => file.name).includes(file.name))
+      : [];
   }
 }
 
