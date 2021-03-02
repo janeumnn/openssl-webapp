@@ -58,13 +58,15 @@ function App() {
 
   return (
     <div className="App">
-      <CardControl runCommand={runCommand}></CardControl>
-      <FormFile className="mt-3 mb-3" custom>
+      <label>Input</label>
+      <FormFile className="mb-3" custom>
         <FormFile.Input onChange={handleFileInputChange} multiple />
         <FormFile.Label data-browse="Browse...">
           {inputFiles.length ? inputFiles.map((file) => file.name).join(', ') : 'Select files...'}
         </FormFile.Label>
       </FormFile>
+      <CardControl runCommand={runCommand}></CardControl>
+      <label className="mt-3">Output</label>
       <CommandLine
         runCommand={runCommand}
         result={{ stdout: output.stdout, stderr: output.stderr, text: output.text }}
