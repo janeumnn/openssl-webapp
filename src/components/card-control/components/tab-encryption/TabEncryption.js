@@ -139,8 +139,7 @@ function TabEncryption({ runCommand }) {
     return valid;
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const execute = () => {
     if (checkValidation()) {
       const command = buildEnc(enc);
       dispatch({ type: 'SET_COMMAND', command: command });
@@ -148,8 +147,12 @@ function TabEncryption({ runCommand }) {
     }
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  };
+
   return (
-    <Form noValidate onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit}>
       <Form.Row>
         <Form.Group as={Col}>
           <Form.Check inline type="radio" label="Encryption" checked={enc.e} onChange={set('e')} />
@@ -304,7 +307,7 @@ function TabEncryption({ runCommand }) {
           />
         </Form.Group>
       </Form.Row>
-      <Button type="submit" disabled={state.isLoading}>
+      <Button type="button" onClick={execute} disabled={state.isLoading}>
         Execute
       </Button>
     </Form>
