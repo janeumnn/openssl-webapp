@@ -61,11 +61,13 @@ function TabGenrsa({ runCommand }) {
       <Form.Row>
         <Form.Group as={Col} md={5}>
           <Form.Check
+            id="genrsa-file-out"
             type="checkbox"
             className="mb-2"
             label="File output"
             checked={genrsa.out}
             onChange={set('out')}
+            custom
           />
           <Form.Control
             as="input"

@@ -155,17 +155,35 @@ function TabEncryption({ runCommand }) {
     <Form onSubmit={handleSubmit}>
       <Form.Row>
         <Form.Group as={Col}>
-          <Form.Check inline type="radio" label="Encryption" checked={enc.e} onChange={set('e')} />
-          <Form.Check inline type="radio" label="Decryption" checked={!enc.e} onChange={set('d')} />
+          <Form.Check
+            id="enc-encrypt"
+            type="radio"
+            label="Encryption"
+            checked={enc.e}
+            onChange={set('e')}
+            inline
+            custom
+          />
+          <Form.Check
+            id="enc-decrypt"
+            type="radio"
+            label="Decryption"
+            checked={!enc.e}
+            onChange={set('d')}
+            inline
+            custom
+          />
         </Form.Group>
       </Form.Row>
       <Form.Row>
         <Form.Group as={Col} md={10}>
           <Form.Check
+            id="enc-text"
             type="checkbox"
             label="Use text input"
             checked={enc.text}
             onChange={set('text')}
+            custom
           />
           {enc.text && (
             <Form.Control
@@ -280,11 +298,13 @@ function TabEncryption({ runCommand }) {
         </Form.Group>
         <Form.Group as={Col} md={5} lg={5}>
           <Form.Check
+            id="enc-initvector"
             type="checkbox"
             className="mb-2"
             label="Initialization Vector"
             checked={enc.iv}
             onChange={set('iv')}
+            custom
           />
           <Form.Control
             as="input"
@@ -300,10 +320,12 @@ function TabEncryption({ runCommand }) {
       <Form.Row>
         <Form.Group as={Col} md={2}>
           <Form.Check
+            id="enc-pbkdf"
             type="checkbox"
             label="PBKDF2"
             checked={enc.pbkdf2}
             onChange={set('pbkdf2')}
+            custom
           />
         </Form.Group>
       </Form.Row>
