@@ -2,6 +2,7 @@
   "name": "openssl-webapp",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://janeumnn.github.io/openssl-webapp",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
@@ -15,12 +16,15 @@
     "web-vitals": "^0.2.4"
   },
   "devDependencies": {
+    "gh-pages": "^3.1.0",
     "husky": "^4.3.6",
     "jest-fetch-mock": "^3.0.3",
     "lint-staged": "^10.5.3",
     "prettier": "^2.2.1"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "build:openssl": "cd openssl && ./build.sh && npm run format:openssl",
