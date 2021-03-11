@@ -33,9 +33,10 @@ class Command {
 
   /**
    * @param {string} args OpenSSL Command
-   * @param {(string|File[])} data Command data to process
+   * @param {File[]} files Command files to process
+   * @param {string} text Command text to process
    */
-  async run(args, data) {
+  async run(args, files = null, text = '') {
     let inputText = false;
     let inputFiles = false;
     let writeFiles = [];
@@ -45,12 +46,12 @@ class Command {
     if (args && !(Object.prototype.toString.call(args) === '[object String]')) {
       return;
     }
-    if (data && Object.prototype.toString.call(data) === '[object String]') {
+    if (text && Object.prototype.toString.call(text) === '[object String]') {
       inputText = true;
     }
-    if (data && Object.prototype.toString.call(data) === '[object Array]') {
+    if (files && Object.prototype.toString.call(files) === '[object Array]') {
       inputFiles = true;
-      const filteredFiles = this.filterInputFiles(argsArray, data);
+      const filteredFiles = this.filterInputFiles(argsArray, files);
       for (const file of filteredFiles) {
         const byteArray = await this.getByteArray(file);
         writeFiles.push({ name: file.name, buffer: byteArray });
@@ -84,8 +85,9 @@ class Command {
     OpenSSL(moduleObj)
       .then((instance) => {
         if (inputText) {
-          instance['FS'].writeFile(this.getFileInParameter(argsArray), data + '\n');
-        } else if (inputFiles) {
+          instance['FS'].writeFile(this.getFileInParameter(argsArray), text);
+        }
+        if (inputFiles) {
           writeFiles.forEach((file) => {
             instance['FS'].writeFile(file.name, file.buffer);
           });
