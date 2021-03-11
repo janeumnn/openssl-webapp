@@ -16,7 +16,7 @@ function TabGenrsa({ runCommand }) {
   const [genrsa, setGenrsa] = useState({
     out: false,
     outFile: FILENAME,
-    numbits: NUMBITS[0],
+    numbits: NUMBITS[1],
   });
 
   const set = (key) => (event) => {
@@ -81,10 +81,10 @@ function TabGenrsa({ runCommand }) {
           <Form.Control.Feedback type="invalid">No text input</Form.Control.Feedback>
         </Form.Group>
         <Form.Group as={Col} md={5} controlId="genrsa-numbits">
-          <Form.Label className="mb-2">Numbits</Form.Label>
+          <Form.Label className="mb-2">Key length</Form.Label>
           <Form.Control as="select" value={genrsa.numbits} onChange={set('numbits')} custom>
             {NUMBITS.map((numbits) => (
-              <option key={numbits}>{numbits}</option>
+              <option key={numbits} value={numbits}>{`${numbits}-bit`}</option>
             ))}
           </Form.Control>
         </Form.Group>

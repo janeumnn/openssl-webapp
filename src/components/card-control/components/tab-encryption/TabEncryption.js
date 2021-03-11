@@ -307,7 +307,7 @@ function TabEncryption({ runCommand }) {
             id="enc-initvector"
             type="checkbox"
             className="mb-2"
-            label="Initialization Vector"
+            label="Initialization vector"
             checked={enc.iv}
             onChange={set('iv')}
             custom

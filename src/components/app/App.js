@@ -21,7 +21,7 @@ function App() {
 
   const runCommand = async (args, text = '') => {
     dispatch({ type: 'SET_LOADING', isLoading: true });
-    await delay(30);
+    await delay(50);
     if (text && inputFiles.length) {
       await command.run(args, inputFiles, text);
     } else if (text) {
