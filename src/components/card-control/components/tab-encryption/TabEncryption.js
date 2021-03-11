@@ -148,7 +148,7 @@ function TabEncryption({ runCommand }) {
     if (checkValidation()) {
       const command = buildEnc(enc);
       dispatch({ type: 'SET_COMMAND', command: command });
-      runCommand(command, enc.textVal);
+      runCommand(command, `${enc.textVal}\n`);
     }
   };
 
