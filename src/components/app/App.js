@@ -46,7 +46,7 @@ function App() {
       if (value) {
         dispatch({ type: 'SET_LOADING', isLoading: false });
         setOutput(value);
-        if (value.file) {
+        if (value.file && value.file.size !== 0) {
           dispatch({ type: 'SET_OUTPUTFILE', outputFile: value.file });
         }
       }
