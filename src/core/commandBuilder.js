@@ -54,14 +54,37 @@ const buildGenrsa = (genrsa) => {
   const command = ['genrsa'];
   for (const key of Object.keys(genrsa)) {
     switch (key) {
-      case 'out':
-        if (genrsa.out) command.push('-out');
-        break;
       case 'outFile':
-        if (genrsa.out) command.push(genrsa.outFile);
+        command.push(`-out ${genrsa.outFile}`);
         break;
       case 'numbits':
         command.push(genrsa.numbits);
+        break;
+      default:
+        break;
+    }
+  }
+  return command.join(' ');
+};
+
+const buildRsa = (rsa) => {
+  const command = ['rsa'];
+  for (const key of Object.keys(rsa)) {
+    switch (key) {
+      case 'pubin':
+        if (rsa.pubin) command.push('-pubin');
+        break;
+      case 'in':
+        command.push(`-in ${rsa.in}`);
+        break;
+      case 'pubout':
+        if (rsa.pubout) command.push('-pubout');
+        break;
+      case 'out':
+        if (rsa.out) command.push('-out');
+        break;
+      case 'outFile':
+        if (rsa.out) command.push(rsa.outFile);
         break;
       default:
         break;
@@ -87,4 +110,4 @@ const buildDgst = (dgst) => {
   return command.join(' ');
 };
 
-export { buildEnc, buildGenrsa, buildDgst };
+export { buildEnc, buildGenrsa, buildRsa, buildDgst };

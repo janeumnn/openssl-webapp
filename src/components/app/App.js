@@ -67,7 +67,7 @@ function App() {
 
   return (
     <div className="App">
-      <label>Input</label>
+      <label>Input (files to be loaded)</label>
       <FormFile className="mb-3" custom>
         <FormFile.Input onChange={handleFileInputChange} multiple />
         <FormFile.Label data-browse="Browse...">
