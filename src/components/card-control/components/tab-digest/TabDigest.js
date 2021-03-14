@@ -47,7 +47,7 @@ function TabDigest({ runCommand }) {
     if (checkValidation()) {
       const command = buildDgst(dgst);
       dispatch({ type: 'SET_COMMAND', command: command });
-      runCommand(command);
+      runCommand(command, 'dgst');
     }
   };
 

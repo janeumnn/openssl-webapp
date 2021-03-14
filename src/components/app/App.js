@@ -4,7 +4,6 @@ import CardControl from '../card-control/CardControl';
 import CommandLine from '../../components/command-line/CommandLine';
 import Command from '../../core/command';
 import { useStore } from '../../contexts/store';
-import { downloadFile } from '../../utils/downloadFile';
 
 import './App.css';
 
@@ -19,17 +18,26 @@ function App() {
   const [output, setOutput] = useState({ stdout: '', stderr: '', text: '', file: null });
   const [inputFiles, setInputFiles] = useState([]);
 
-  const runCommand = async (args, text = '') => {
+  const runCommand = async (args, commandType = '', files = [], text = '') => {
     dispatch({ type: 'SET_LOADING', isLoading: true });
     await delay(50);
-    if (text && inputFiles.length) {
-      await command.run(args, inputFiles, text);
-    } else if (text) {
-      await command.run(args, null, text);
-    } else if (inputFiles.length) {
-      await command.run(args, inputFiles, null);
-    } else {
-      await command.run(args);
+
+    switch (commandType) {
+      case 'enc':
+        await command.run(args, inputFiles, text);
+        break;
+      case 'genrsa':
+        await command.run(args, null, null);
+        break;
+      case 'rsa':
+        await command.run(args, files, null);
+        break;
+      case 'dgst':
+        await command.run(args, inputFiles, null);
+        break;
+      default:
+        await command.run(args, inputFiles);
+        break;
     }
   };
 
@@ -39,7 +47,7 @@ function App() {
         dispatch({ type: 'SET_LOADING', isLoading: false });
         setOutput(value);
         if (value.file) {
-          downloadFile(value.file, value.file.name, null);
+          dispatch({ type: 'SET_OUTPUTFILE', outputFile: value.file });
         }
       }
     });
@@ -47,8 +55,7 @@ function App() {
     return () => {
       result.unsubscribe();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleFileInputChange = (event) => {
     setInputFiles([...event.target.files]);

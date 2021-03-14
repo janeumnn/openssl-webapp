@@ -1,7 +1,12 @@
 import React, { createContext, useContext, useReducer } from 'react';
 
 const StoreContext = createContext();
-const initialState = { isLoading: false, command: '', fileNames: [] };
+const initialState = {
+  isLoading: false,
+  command: '',
+  fileNames: [],
+  outputFile: null,
+};
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -19,6 +24,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         fileNames: action.fileNames,
+      };
+    case 'SET_OUTPUTFILE':
+      return {
+        ...state,
+        outputFile: action.outputFile,
       };
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
