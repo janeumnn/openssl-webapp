@@ -270,6 +270,7 @@ function TabEncryption({ runCommand }) {
                     value="1"
                     checked={enc.a}
                     onChange={set('a')}
+                    disabled={enc.text}
                   >
                     Base64
                   </ToggleButton>

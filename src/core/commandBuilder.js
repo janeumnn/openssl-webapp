@@ -17,7 +17,6 @@ const buildEnc = (enc) => {
         break;
       case 'outFile':
         if (!enc.text) command.push(`-out ${enc.outFile}`);
-        else command.push('-out output');
         break;
       case 'k':
         if (enc.k) command.push('-k');
@@ -41,7 +40,7 @@ const buildEnc = (enc) => {
         if (enc.iv) command.push(enc.ivVal);
         break;
       case 'a':
-        if (enc.a) command.push('-a');
+        if (enc.a || enc.text) command.push('-a');
         break;
       default:
         break;
