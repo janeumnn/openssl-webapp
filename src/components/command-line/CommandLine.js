@@ -7,16 +7,6 @@ function CommandLine({ runCommand, result }) {
   const { state, dispatch } = useStore();
   const input = useRef();
 
-  const diplayResult = (result) => {
-    if (result.text) {
-      return `${result.stderr}\n\n${result.text}`;
-    }
-    if (result.stdout) {
-      return result.stdout;
-    }
-    return result.stderr;
-  };
-
   const handleSubmit = (event) => {
     event.preventDefault();
     dispatch({ type: 'SET_COMMAND', command: input.current.value });
@@ -27,13 +17,16 @@ function CommandLine({ runCommand, result }) {
   return (
     <div className="CommandLine">
       <div className="CommandLine-output">
-        <p className="CommandLine-command">{state.command ? `OpenSSL> ${state.command}` : ''}</p>
+        {state.command && <p className="CommandLine-command">{`OpenSSL> ${state.command}`}</p>}
         {state.isLoading ? (
           <div className="CommandLine-loader">
             <div className="spinner-border text-light" role="status"></div>
           </div>
         ) : (
-          <p>{diplayResult(result)}</p>
+          <>
+            {result.stderr && <p>{`${result.stderr}\n`}</p>}
+            {result.stdout && <p>{result.stdout}</p>}
+          </>
         )}
       </div>
       <form onSubmit={handleSubmit}>

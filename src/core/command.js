@@ -61,7 +61,6 @@ class Command {
     let output = {
       stdout: '',
       stderr: '',
-      text: '',
       file: null,
     };
 
@@ -95,11 +94,7 @@ class Command {
 
         instance.callMain(argsArray);
 
-        if (inputText) {
-          output.text = instance['FS'].readFile(this.getFileOutParameter(argsArray), {
-            encoding: 'utf8',
-          });
-        } else if (this.getFileOutParameter(argsArray)) {
+        if (this.getFileOutParameter(argsArray)) {
           const readFileBuffer = instance['FS'].readFile(this.getFileOutParameter(argsArray), {
             encoding: 'binary',
           });
