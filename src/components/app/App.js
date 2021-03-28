@@ -15,7 +15,7 @@ const delay = (ms) => {
 
 function App() {
   const { dispatch } = useStore();
-  const [output, setOutput] = useState({ stdout: '', stderr: '', text: '', file: null });
+  const [output, setOutput] = useState({ stdout: '', stderr: '', file: null });
   const [inputFiles, setInputFiles] = useState([]);
 
   const runCommand = async (args, commandType = '', files = [], text = '') => {
@@ -78,7 +78,7 @@ function App() {
       <label className="mt-3">Output</label>
       <CommandLine
         runCommand={runCommand}
-        result={{ stdout: output.stdout, stderr: output.stderr, text: output.text }}
+        result={{ stdout: output.stdout, stderr: output.stderr }}
       ></CommandLine>
     </div>
   );
