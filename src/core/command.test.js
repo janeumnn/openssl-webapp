@@ -6,7 +6,7 @@ let inputText;
 
 beforeAll(() => {
   inputFile = new File(['This is a test'], 'testFile');
-  inputText = 'This is a text';
+  inputText = 'This is a text\n';
 });
 
 describe('test if result observable emits values', () => {
@@ -30,9 +30,9 @@ describe('test if result observable emits values', () => {
 
   test('result has a text', (done) => {
     const command = new Command();
-    command.run('enc -base64 -in file -out output', null, inputText);
+    command.run('enc -base64 -in file', null, inputText);
     command.resultAsObservable.pipe(take(1)).subscribe((value) => {
-      expect(value.text).toBeTruthy();
+      expect(value.stdout).toBeTruthy();
       done();
     });
   });
@@ -144,13 +144,14 @@ describe('symmetric encryption methods with an input file', () => {
 describe('symmetric encryption methods with an input text in a base64 format', () => {
   test('aes-256-cbc encryption and decryption', (done) => {
     const command = new Command();
-    command.run(`enc -e -a -aes-256-cbc -k 1234 -in file -out output`, null, inputText);
+    command.run(`enc -e -a -aes-256-cbc -k 1234 -in file`, null, inputText);
     command.resultAsObservable.pipe(take(2)).subscribe((value) => {
-      if (value.text !== inputText) {
-        command.run(`enc -d -a -aes-256-cbc -k 1234 -in file -out output`, null, value.text);
+      console.log(value);
+      if (value.stdout !== inputText) {
+        command.run(`enc -d -a -aes-256-cbc -k 1234 -in file`, null, value.stdout);
       }
-      if (value.text === inputText) {
-        expect(value.text).toEqual(inputText);
+      if (value.stdout === inputText) {
+        expect(value.stdout).toEqual(inputText);
         done();
       }
     });
@@ -158,13 +159,13 @@ describe('symmetric encryption methods with an input text in a base64 format', (
 
   test('camellia-256-cbc encryption and decryption', (done) => {
     const command = new Command();
-    command.run(`enc -e -a -camellia-256-cbc -k 1234 -in file -out output`, null, inputText);
+    command.run(`enc -e -a -camellia-256-cbc -k 1234 -in file`, null, inputText);
     command.resultAsObservable.pipe(take(2)).subscribe((value) => {
-      if (value.text !== inputText) {
-        command.run(`enc -d -a -camellia-256-cbc -k 1234 -in file -out output`, null, value.text);
+      if (value.stdout !== inputText) {
+        command.run(`enc -d -a -camellia-256-cbc -k 1234 -in file`, null, value.stdout);
       }
-      if (value.text === inputText) {
-        expect(value.text).toEqual(inputText);
+      if (value.stdout === inputText) {
+        expect(value.stdout).toEqual(inputText);
         done();
       }
     });
@@ -172,13 +173,13 @@ describe('symmetric encryption methods with an input text in a base64 format', (
 
   test('des3 encryption and decryption', (done) => {
     const command = new Command();
-    command.run(`enc -e -a -des3 -k 1234 -in file -out output`, null, inputText);
+    command.run(`enc -e -a -des3 -k 1234 -in file`, null, inputText);
     command.resultAsObservable.pipe(take(2)).subscribe((value) => {
-      if (value.text !== inputText) {
-        command.run(`enc -d -a -des3 -k 1234 -in file -out output`, null, value.text);
+      if (value.stdout !== inputText) {
+        command.run(`enc -d -a -des3 -k 1234 -in file`, null, value.stdout);
       }
-      if (value.text === inputText) {
-        expect(value.text).toEqual(inputText);
+      if (value.stdout === inputText) {
+        expect(value.stdout).toEqual(inputText);
         done();
       }
     });
@@ -186,13 +187,13 @@ describe('symmetric encryption methods with an input text in a base64 format', (
 
   test('des-ede3-cbc encryption and decryption', (done) => {
     const command = new Command();
-    command.run(`enc -e -a -des-ede3-cbc -k 1234 -in file -out output`, null, inputText);
+    command.run(`enc -e -a -des-ede3-cbc -k 1234 -in file`, null, inputText);
     command.resultAsObservable.pipe(take(2)).subscribe((value) => {
-      if (value.text !== inputText) {
-        command.run(`enc -d -a -des-ede3-cbc -k 1234 -in file -out output`, null, value.text);
+      if (value.stdout !== inputText) {
+        command.run(`enc -d -a -des-ede3-cbc -k 1234 -in file`, null, value.stdout);
       }
-      if (value.text === inputText) {
-        expect(value.text).toEqual(inputText);
+      if (value.stdout === inputText) {
+        expect(value.stdout).toEqual(inputText);
         done();
       }
     });
