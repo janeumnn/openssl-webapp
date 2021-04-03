@@ -51,8 +51,17 @@ function TabEncryption({ runCommand }) {
   });
 
   useEffect(() => {
-    setEnc((prev) => ({ ...prev, inFile: '', kValFile: '' }));
-  }, [state.fileNames]);
+    setEnc((prev) => {
+      const hasInFile = state.files.find((item) => item.file.name === prev.inFile);
+      const hasKValFile = state.files.find((item) => item.file.name === prev.kValFile);
+
+      return {
+        ...prev,
+        inFile: hasInFile ? prev.inFile : '',
+        kValFile: hasKValFile ? prev.kValFile : '',
+      };
+    });
+  }, [state.files]);
 
   const set = (key) => (event) => {
     const value =
@@ -71,14 +80,14 @@ function TabEncryption({ runCommand }) {
         setValidation((prev) => ({ ...prev, fileInput: false }));
         break;
       case 'outFile':
-        setEnc((prev) => ({ ...prev, [key]: value }));
+        setEnc((prev) => ({ ...prev, [key]: value.replace(/\s/g, '') }));
         setValidation((prev) => ({ ...prev, fileOutput: false }));
         break;
       case 'k':
         setEnc((prev) => ({ ...prev, [key]: value, kfile: !value, kValFile: '' }));
         break;
       case 'kVal':
-        setEnc((prev) => ({ ...prev, [key]: value }));
+        setEnc((prev) => ({ ...prev, [key]: value.replace(/\s/g, '') }));
         setValidation((prev) => ({ ...prev, passphrase: false }));
         break;
       case 'kfile':
@@ -93,7 +102,7 @@ function TabEncryption({ runCommand }) {
         setValidation((prev) => ({ ...prev, initVector: false }));
         break;
       case 'ivVal':
-        setEnc((prev) => ({ ...prev, [key]: value }));
+        setEnc((prev) => ({ ...prev, [key]: value.replace(/\s/g, '') }));
         setValidation((prev) => ({ ...prev, initVector: false }));
         break;
       case 'text':
@@ -239,6 +248,7 @@ function TabEncryption({ runCommand }) {
             <Form.Control
               as="input"
               placeholder="Filename..."
+              value={enc.outFile}
               onChange={set('outFile')}
               isInvalid={validation.fileOutput}
               disabled={enc.text}

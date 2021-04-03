@@ -55,7 +55,7 @@ function TabGenrsa({ runCommand }) {
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
     switch (key) {
       case 'outFile':
-        setGenrsa((prev) => ({ ...prev, [key]: value.trim() }));
+        setGenrsa((prev) => ({ ...prev, [key]: value.replace(/\s/g, '') }));
         setValidation((prev) => ({ ...prev, fileOutput: false }));
         break;
       default:
@@ -91,7 +91,7 @@ function TabGenrsa({ runCommand }) {
       in: privateKey,
       pubout: true,
       out: true,
-      outFile: privateKey.replace(/\.[^/.]+$/, '.').concat('pub'),
+      outFile: privateKey.split('.').slice(0, -1).join('.').concat('.pub'),
     };
     const command = buildRsa(rsaArguments);
 
