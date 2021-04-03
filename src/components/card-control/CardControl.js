@@ -9,23 +9,24 @@ import './CardControl.css';
 
 function CardControl({ runCommand }) {
   const { state } = useStore();
+  const [tabKey, setTabKey] = useState('');
   const [newFileAdded, setNewFileAdded] = useState(false);
   const lastIndex = useRef(0);
 
   useEffect(() => {
     const lastItem = state.files[state.files.length - 1];
-    if (lastItem?.output && state.files.length >= lastIndex.current) {
+    if (lastItem?.output && state.files.length >= lastIndex.current && tabKey !== 'files') {
       setNewFileAdded(true);
     }
     lastIndex.current = state.files.length;
-  }, [state.files]);
+  }, [state.files]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const resetCount = (key) => {
-    if (key === 'files') setNewFileAdded(false);
-  };
+  useEffect(() => {
+    if (tabKey === 'files') setNewFileAdded(false);
+  }, [tabKey]);
 
   return (
-    <Tab.Container defaultActiveKey="encryption" onSelect={(k) => resetCount(k)}>
+    <Tab.Container defaultActiveKey="encryption" onSelect={(k) => setTabKey(k)}>
       <Card>
         <Card.Header>
           <Nav variant="tabs">
