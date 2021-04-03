@@ -78,8 +78,8 @@ function TabDigest({ runCommand }) {
             <option value="1" disabled hidden>
               Select...
             </option>
-            {state.fileNames.map((file) => (
-              <option key={file}>{file}</option>
+            {state.files.map((item) => (
+              <option key={item.file.name}>{item.file.name}</option>
             ))}
           </Form.Control>
           <Form.Control.Feedback type="invalid">No file selected</Form.Control.Feedback>
