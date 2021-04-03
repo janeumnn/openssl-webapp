@@ -1,4 +1,4 @@
-import { Card, Nav, Tab } from 'react-bootstrap';
+import { Card, Nav, Navbar, Tab } from 'react-bootstrap';
 import TabGenrsa from './components/tab-genrsa/TabGenrsa';
 import TabEncryption from './components/tab-encryption/TabEncryption';
 import TabDigest from './components/tab-digest/TabDigest';
@@ -26,42 +26,44 @@ function CardControl({ runCommand }) {
   }, [tabKey]);
 
   return (
-    <Tab.Container defaultActiveKey="encryption" onSelect={(k) => setTabKey(k)}>
-      <Card>
-        <Card.Header>
-          <Nav variant="tabs">
-            <Nav.Item>
-              <Nav.Link eventKey="encryption">Encryption</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="genrsa">RSA</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="digest">Digest</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="files">Files{newFileAdded && '*'}</Nav.Link>
-            </Nav.Item>
-          </Nav>
-        </Card.Header>
-        <Card.Body>
-          <Tab.Content>
-            <Tab.Pane eventKey="encryption">
-              <TabEncryption runCommand={runCommand}></TabEncryption>
-            </Tab.Pane>
-            <Tab.Pane eventKey="genrsa">
-              <TabGenrsa runCommand={runCommand}></TabGenrsa>
-            </Tab.Pane>
-            <Tab.Pane eventKey="digest">
-              <TabDigest runCommand={runCommand}></TabDigest>
-            </Tab.Pane>
-            <Tab.Pane eventKey="files">
-              <TabFiles></TabFiles>
-            </Tab.Pane>
-          </Tab.Content>
-        </Card.Body>
-      </Card>
-    </Tab.Container>
+    <div className="mb-3">
+      <Tab.Container defaultActiveKey="encryption" onSelect={(k) => setTabKey(k)}>
+        <Card>
+          <Card.Header>
+            <Nav className="flex-column flex-md-row" variant="pills">
+              <Nav.Item>
+                <Nav.Link eventKey="encryption">Encryption</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="genrsa">RSA-Keygen</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="digest">Digest</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="files">Files{newFileAdded && '*'}</Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </Card.Header>
+          <Card.Body>
+            <Tab.Content>
+              <Tab.Pane eventKey="encryption">
+                <TabEncryption runCommand={runCommand}></TabEncryption>
+              </Tab.Pane>
+              <Tab.Pane eventKey="genrsa">
+                <TabGenrsa runCommand={runCommand}></TabGenrsa>
+              </Tab.Pane>
+              <Tab.Pane eventKey="digest">
+                <TabDigest runCommand={runCommand}></TabDigest>
+              </Tab.Pane>
+              <Tab.Pane eventKey="files">
+                <TabFiles></TabFiles>
+              </Tab.Pane>
+            </Tab.Content>
+          </Card.Body>
+        </Card>
+      </Tab.Container>
+    </div>
   );
 }
 
