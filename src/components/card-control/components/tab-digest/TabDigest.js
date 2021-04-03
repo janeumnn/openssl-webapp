@@ -18,8 +18,15 @@ function TabDigest({ runCommand }) {
   });
 
   useEffect(() => {
-    setDgst((prev) => ({ ...prev, file: '' }));
-  }, [state.fileNames]);
+    setDgst((prev) => {
+      const hasFile = state.files.find((item) => item.file.name === prev.file);
+
+      return {
+        ...prev,
+        file: hasFile ? prev.file : '',
+      };
+    });
+  }, [state.files]);
 
   const set = (key) => (event) => {
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
