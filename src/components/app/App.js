@@ -59,7 +59,6 @@ function App() {
   return (
     <div className="App">
       <CardControl runCommand={runCommand}></CardControl>
-      <label className="mt-3">Output</label>
       <CommandLine
         runCommand={runCommand}
         result={{ stdout: output.stdout, stderr: output.stderr }}

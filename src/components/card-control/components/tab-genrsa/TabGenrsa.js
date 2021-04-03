@@ -158,14 +158,14 @@ function TabGenrsa({ runCommand }) {
         </Form.Group>
       </Form.Row>
       <Form.Row>
-        <Form.Group as={Col} lg={'auto'} md={'auto'}>
+        <Form.Group className="mb-md-0" as={Col} lg={'auto'} md={'auto'}>
           <Button type="button" onClick={execute} disabled={state.isLoading}>
             Execute
           </Button>
         </Form.Group>
         {privateKey && (
           <>
-            <Form.Group as={Col} lg={'auto'} md={'auto'}>
+            <Form.Group className="mb-md-0" as={Col} lg={'auto'} md={'auto'}>
               <Button
                 title={privateKey}
                 variant="outline-secondary"
@@ -176,7 +176,7 @@ function TabGenrsa({ runCommand }) {
               </Button>
             </Form.Group>
             {!publicKey ? (
-              <Form.Group as={Col} lg={'auto'} md={'auto'}>
+              <Form.Group className="mb-md-0" as={Col} lg={'auto'} md={'auto'}>
                 <Button
                   variant="outline-secondary"
                   onClick={generatePublicKey}
@@ -186,7 +186,7 @@ function TabGenrsa({ runCommand }) {
                 </Button>
               </Form.Group>
             ) : (
-              <Form.Group as={Col} lg={'auto'} md={'auto'}>
+              <Form.Group className="mb-md-0" as={Col} lg={'auto'} md={'auto'}>
                 <Button
                   title={publicKey}
                   variant="outline-secondary"
