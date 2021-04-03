@@ -4,8 +4,7 @@ const StoreContext = createContext();
 const initialState = {
   isLoading: false,
   command: '',
-  fileNames: [],
-  outputFile: null,
+  files: [],
 };
 
 const reducer = (state, action) => {
@@ -15,21 +14,37 @@ const reducer = (state, action) => {
         ...state,
         isLoading: action.isLoading,
       };
+
     case 'SET_COMMAND':
       return {
         ...state,
         command: action.command,
       };
-    case 'SET_FILENAMES':
+
+    case 'ADD_FILES':
+      const fileExists = !!state.files.filter((item) =>
+        action.items.some((x) => x.file.name === item.file.name)
+      ).length;
+      if (fileExists) {
+        return {
+          ...state,
+          files: state.files.map(
+            (item) => action.items.find((x) => x.file.name === item.file.name) || item
+          ),
+        };
+      }
+
       return {
         ...state,
-        fileNames: action.fileNames,
+        files: [...state.files, ...action.items],
       };
-    case 'SET_OUTPUTFILE':
+
+    case 'DELETE_FILE':
       return {
         ...state,
-        outputFile: action.outputFile,
+        files: state.files.filter((item) => item !== action.item),
       };
+
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }

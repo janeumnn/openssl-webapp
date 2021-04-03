@@ -2,11 +2,30 @@ import { Card, Nav, Tab } from 'react-bootstrap';
 import TabGenrsa from './components/tab-genrsa/TabGenrsa';
 import TabEncryption from './components/tab-encryption/TabEncryption';
 import TabDigest from './components/tab-digest/TabDigest';
+import TabFiles from './components/tab-files/TabFiles';
+import { useEffect, useRef, useState } from 'react';
+import { useStore } from '../../contexts/store';
 import './CardControl.css';
 
 function CardControl({ runCommand }) {
+  const { state } = useStore();
+  const [newFileAdded, setNewFileAdded] = useState(false);
+  const lastIndex = useRef(0);
+
+  useEffect(() => {
+    const lastItem = state.files[state.files.length - 1];
+    if (lastItem?.output && state.files.length >= lastIndex.current) {
+      setNewFileAdded(true);
+    }
+    lastIndex.current = state.files.length;
+  }, [state.files]);
+
+  const resetCount = (key) => {
+    if (key === 'files') setNewFileAdded(false);
+  };
+
   return (
-    <Tab.Container defaultActiveKey="encryption">
+    <Tab.Container defaultActiveKey="encryption" onSelect={(k) => resetCount(k)}>
       <Card>
         <Card.Header>
           <Nav variant="tabs">
@@ -18,6 +37,9 @@ function CardControl({ runCommand }) {
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="digest">Digest</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="files">Files{newFileAdded && '*'}</Nav.Link>
             </Nav.Item>
           </Nav>
         </Card.Header>
@@ -31,6 +53,9 @@ function CardControl({ runCommand }) {
             </Tab.Pane>
             <Tab.Pane eventKey="digest">
               <TabDigest runCommand={runCommand}></TabDigest>
+            </Tab.Pane>
+            <Tab.Pane eventKey="files">
+              <TabFiles></TabFiles>
             </Tab.Pane>
           </Tab.Content>
         </Card.Body>
