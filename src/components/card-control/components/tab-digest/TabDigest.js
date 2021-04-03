@@ -18,8 +18,15 @@ function TabDigest({ runCommand }) {
   });
 
   useEffect(() => {
-    setDgst((prev) => ({ ...prev, file: '' }));
-  }, [state.fileNames]);
+    setDgst((prev) => {
+      const hasFile = state.files.find((item) => item.file.name === prev.file);
+
+      return {
+        ...prev,
+        file: hasFile ? prev.file : '',
+      };
+    });
+  }, [state.files]);
 
   const set = (key) => (event) => {
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
@@ -78,8 +85,8 @@ function TabDigest({ runCommand }) {
             <option value="1" disabled hidden>
               Select...
             </option>
-            {state.fileNames.map((file) => (
-              <option key={file}>{file}</option>
+            {state.files.map((item) => (
+              <option key={item.file.name}>{item.file.name}</option>
             ))}
           </Form.Control>
           <Form.Control.Feedback type="invalid">No file selected</Form.Control.Feedback>
