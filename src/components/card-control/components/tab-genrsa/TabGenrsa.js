@@ -91,7 +91,7 @@ function TabGenrsa({ runCommand }) {
       in: privateKey,
       pubout: true,
       out: true,
-      outFile: privateKey.split('.').slice(0, -1).join('.').concat('.pub'),
+      outFile: privateKey.replace(/\.([^.]*)$/, '').concat('.pub'),
     };
     const command = buildRsa(rsaArguments);
 
