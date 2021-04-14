@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-OPENSSL_VERSION="openssl-3.0.0-alpha12"
+OPENSSL_VERSION="openssl-3.0.0-alpha14"
 OPENSSL_DIR=${OPENSSL_VERSION}
 OPENSSL_JS_PATH="../src/core/openssl.js"
 OPENSSL_WASM_PATH="../public/openssl.wasm"
@@ -27,7 +27,8 @@ cd ${OPENSSL_DIR} || exit 1
 
 export CC=emcc
 export CXX=emcc
-export LDFLAGS="\
+
+LDFLAGS="\
   -s ENVIRONMENT='web'\
   -s FILESYSTEM=1\
   -s MODULARIZE=1\
@@ -37,9 +38,14 @@ export LDFLAGS="\
   -s EXIT_RUNTIME=1\
   -s EXPORT_ES6=1\
   -s USE_ES6_IMPORT_META=0\
-  -s ALLOW_MEMORY_GROWTH=1\
-  -s ASSERTIONS=1" # For logging purposes. Can be removed!
-# -s WASM_BIGINT=1\  Disabled due to tests
+  -s ALLOW_MEMORY_GROWTH=1"
+# -s WASM_BIGINT=1  Disabled due to tests
+
+if [[ $1 == "debug" ]]; then
+  LDFLAGS="$LDFLAGS -s ASSERTIONS=1" # For logging purposes.
+fi
+
+export LDFLAGS
 
 emconfigure ./Configure \
   no-hw \
