@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/app/App';
 import { StoreProvider } from './contexts/store';
+import { Container } from 'react-bootstrap';
 import './index.css';
 
 if (process.env.REACT_APP_ENV !== 'cto') {
@@ -12,7 +13,13 @@ if (process.env.REACT_APP_ENV !== 'cto') {
 ReactDOM.render(
   <React.StrictMode>
     <StoreProvider>
-      <App />
+      {process.env.REACT_APP_ENV !== 'cto' ? (
+        <Container className="mt-3">
+          <App />
+        </Container>
+      ) : (
+        <App />
+      )}
     </StoreProvider>
   </React.StrictMode>,
   document.getElementById('root')
