@@ -11,7 +11,6 @@ import {
   Modal,
   Row,
 } from 'react-bootstrap';
-import { ReactComponent as TrashIcon } from '../../../../assets/trash.svg';
 import { downloadFile } from '../../../../utils/downloadFile';
 import './TabFiles.css';
 
@@ -30,7 +29,7 @@ function File({ item, showConfirmation }) {
           </Button>
         )}
         <Button variant="outline-secondary" onClick={() => showConfirmation(file.current)}>
-          <TrashIcon />
+          <i class="fas fa-trash"></i>
         </Button>
       </InputGroup.Append>
     </InputGroup>

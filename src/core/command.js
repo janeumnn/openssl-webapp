@@ -3,7 +3,8 @@ import { Subject } from 'rxjs';
 
 class Command {
   constructor() {
-    this.wasmModule = fetch(`${window.location.href}/openssl.wasm`)
+    const baseUrl = window.CTO_Globals?.pluginRoot || window.location.href;
+    this.wasmModule = fetch(`${baseUrl}/openssl.wasm`)
       .then((response) => response.arrayBuffer())
       .then((bytes) => {
         return WebAssembly.compile(bytes);
