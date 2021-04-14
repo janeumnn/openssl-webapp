@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
 import { useStore } from '../../../../contexts/store';
 import {
-  Accordion,
+  Badge,
   Button,
-  Card,
   Col,
+  Collapse,
   Form,
   FormFile,
   InputGroup,
@@ -20,16 +20,14 @@ function File({ item, showConfirmation }) {
     <InputGroup className="mt-2 mb-2">
       <Form.Control value={file.current.name} disabled></Form.Control>
       <InputGroup.Append>
-        {item.output && (
-          <Button
-            variant="outline-secondary"
-            onClick={() => downloadFile(file.current, file.current.name, null)}
-          >
-            Download
-          </Button>
-        )}
+        <Button
+          variant="outline-secondary"
+          onClick={() => downloadFile(file.current, file.current.name, null)}
+        >
+          Download
+        </Button>
         <Button variant="outline-secondary" onClick={() => showConfirmation(file.current)}>
-          <i class="fas fa-trash"></i>
+          <i className="fas fa-trash"></i>
         </Button>
       </InputGroup.Append>
     </InputGroup>
@@ -57,6 +55,7 @@ function ConfirmDeletion({ show, handleCancel, handleConfirmation }) {
 
 function TabFiles() {
   const { state, dispatch } = useStore();
+  const [openFiles, setOpenFiles] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
   const fileToDelete = useRef(null);
@@ -96,54 +95,36 @@ function TabFiles() {
     <>
       <Row>
         <Col lg={7}>
-          <FormFile custom>
-            <FormFile.Input onChange={handleFileInputChange} multiple />
-            <FormFile.Label data-browse="Browse...">Select files...</FormFile.Label>
-          </FormFile>
-          <Accordion className="mt-3">
-            <Card>
-              <Accordion.Toggle as={Card.Header} eventKey="0" style={{ padding: '0.7rem' }}>
-                Input files{' '}
-                <span className="badge badge-secondary">
-                  {state.files.filter((item) => !item.output).length || false}
-                </span>
-              </Accordion.Toggle>
-              <Accordion.Collapse eventKey="0">
-                <Card.Body>
-                  {state.files
-                    .filter((item) => !item.output)
-                    .map((item) => (
-                      <File
-                        key={item.file.name}
-                        item={item}
-                        showConfirmation={handleShowModal}
-                      ></File>
-                    ))}
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
-            <Card>
-              <Accordion.Toggle as={Card.Header} eventKey="1" style={{ padding: '0.7rem' }}>
-                Output files{' '}
-                <span className="badge badge-secondary">
-                  {state.files.filter((item) => item.output).length || false}
-                </span>
-              </Accordion.Toggle>
-              <Accordion.Collapse eventKey="1">
-                <Card.Body>
-                  {state.files
-                    .filter((item) => item.output)
-                    .map((item) => (
-                      <File
-                        key={item.file.name}
-                        item={item}
-                        showConfirmation={handleShowModal}
-                      ></File>
-                    ))}
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
-          </Accordion>
+          <label>Files</label>
+          <InputGroup>
+            <InputGroup.Prepend>
+              <Button variant="secondary" onClick={() => setOpenFiles(!openFiles)}>
+                <i
+                  className="fas fa-chevron-down"
+                  style={{
+                    transform: openFiles ? 'rotate(180deg)' : 'rotate(0)',
+                    transition: 'all 0.2s linear',
+                  }}
+                ></i>
+              </Button>
+            </InputGroup.Prepend>
+            <FormFile custom>
+              <FormFile.Input onChange={handleFileInputChange} multiple />
+              <FormFile.Label data-browse="Browse...">
+                Select files...{' '}
+                <Badge pill variant="secondary">
+                  {state.files.length || false}
+                </Badge>
+              </FormFile.Label>
+            </FormFile>
+          </InputGroup>
+          <Collapse in={openFiles}>
+            <div>
+              {state.files.map((item) => (
+                <File key={item.file.name} item={item} showConfirmation={handleShowModal}></File>
+              ))}
+            </div>
+          </Collapse>
         </Col>
       </Row>
       <ConfirmDeletion
