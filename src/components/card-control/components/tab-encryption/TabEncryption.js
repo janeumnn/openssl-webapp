@@ -36,19 +36,20 @@ function TabEncryption({ runCommand }) {
     e: true,
     d: false,
     cipher: CIPHERS[0],
+    in: false,
     inFile: '',
     out: false,
     outFile: '',
     k: true,
-    kVal: '',
+    kVal: 'my_passphrase',
     kfile: false,
     kValFile: '',
     pbkdf2: false,
     iv: false,
     ivVal: '',
     a: false,
-    text: false,
-    textVal: '',
+    text: true,
+    textVal: 'Lorem ipsum dolor sit amet',
   });
 
   useEffect(() => {
@@ -76,6 +77,15 @@ function TabEncryption({ runCommand }) {
       case 'd':
         setEnc((prev) => ({ ...prev, [key]: value, e: !value }));
         break;
+      case 'in':
+        setEnc((prev) => ({ ...prev, [key]: value, text: !value }));
+        setValidation((prev) => ({
+          ...prev,
+          textInput: false,
+          fileInput: false,
+          fileOutput: false,
+        }));
+        break;
       case 'inFile':
         setEnc((prev) => ({ ...prev, [key]: value }));
         setValidation((prev) => ({ ...prev, fileInput: false }));
@@ -90,13 +100,15 @@ function TabEncryption({ runCommand }) {
         break;
       case 'k':
         setEnc((prev) => ({ ...prev, [key]: value, kfile: !value, kValFile: '' }));
+        setValidation((prev) => ({ ...prev, passphrase: false }));
         break;
       case 'kVal':
         setEnc((prev) => ({ ...prev, [key]: value.replace(/\s/g, '') }));
         setValidation((prev) => ({ ...prev, passphrase: false }));
         break;
       case 'kfile':
-        setEnc((prev) => ({ ...prev, [key]: value, k: !value, kVal: '' }));
+        setEnc((prev) => ({ ...prev, [key]: value, k: !value }));
+        setValidation((prev) => ({ ...prev, passphrase: false }));
         break;
       case 'kValFile':
         setEnc((prev) => ({ ...prev, [key]: value }));
@@ -111,7 +123,7 @@ function TabEncryption({ runCommand }) {
         setValidation((prev) => ({ ...prev, initVector: false }));
         break;
       case 'text':
-        setEnc((prev) => ({ ...prev, [key]: value, textVal: '' }));
+        setEnc((prev) => ({ ...prev, [key]: value, textVal: '', in: !value }));
         setValidation((prev) => ({
           ...prev,
           textInput: false,
@@ -131,7 +143,7 @@ function TabEncryption({ runCommand }) {
 
   const checkValidation = () => {
     let valid = true;
-    if (!enc.text && !enc.inFile) {
+    if (enc.in && !enc.inFile) {
       setValidation((prev) => ({ ...prev, fileInput: true }));
       valid = false;
     }
@@ -173,21 +185,26 @@ function TabEncryption({ runCommand }) {
 
   return (
     <Form onSubmit={handleSubmit}>
+      <Form.Label className="mb-3 font-weight-bold">Choose mode:</Form.Label>
       <Form.Row>
-        <Form.Group as={Col}>
+        <Form.Group as={Col} xs={4} sm={3} md={2}>
           <Form.Check
             id="enc-encrypt"
             type="radio"
             label="Encryption"
+            className="text-nowrap"
             checked={enc.e}
             onChange={set('e')}
             inline
             custom
           />
+        </Form.Group>
+        <Form.Group as={Col} xs={'auto'}>
           <Form.Check
             id="enc-decrypt"
             type="radio"
             label="Decryption"
+            className="text-nowrap"
             checked={!enc.e}
             onChange={set('d')}
             inline
@@ -195,32 +212,73 @@ function TabEncryption({ runCommand }) {
           />
         </Form.Group>
       </Form.Row>
+      <hr className="mt-0 mb-3" />
+      <Form.Label className="mb-3 font-weight-bold">Options:</Form.Label>
       <Form.Row>
-        <Form.Group as={Col} md={10}>
+        <Form.Group as={Col} xs={4} sm={3} md={2}>
           <Form.Check
             id="enc-text"
-            type="checkbox"
-            label="Use text input"
+            type="radio"
+            label="Text input"
+            className="text-nowrap"
             checked={enc.text}
             onChange={set('text')}
+            inline
             custom
           />
-          {enc.text && (
-            <Form.Control
-              id="enc-text-in"
-              as="textarea"
-              className="mt-2"
-              placeholder="Enter text to encrypt/decrypt..."
-              rows={2}
-              onChange={set('textVal')}
-              isInvalid={validation.textInput}
-            />
-          )}
-          <Form.Control.Feedback type="invalid">No text input</Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group as={Col} xs={'auto'}>
+          <Form.Check
+            id="enc-file-in"
+            type="radio"
+            label="File input"
+            className="text-nowrap"
+            checked={!enc.text}
+            onChange={set('in')}
+            inline
+            custom
+          />
         </Form.Group>
       </Form.Row>
       <Form.Row>
-        <Form.Group as={Col} md={3} controlId="enc-cipher">
+        <Form.Group as={Col} md={5}>
+          {enc.text ? (
+            <>
+              <Form.Control
+                id="enc-text-in"
+                as="textarea"
+                placeholder="Enter text to encrypt/decrypt..."
+                value={enc.textVal}
+                rows={2}
+                onChange={set('textVal')}
+                isInvalid={validation.textInput}
+              />
+              <Form.Control.Feedback type="invalid">No text input</Form.Control.Feedback>
+            </>
+          ) : (
+            <>
+              <Form.Control
+                as="select"
+                value={enc.inFile ? enc.inFile : '1'}
+                onChange={set('inFile')}
+                isInvalid={validation.fileInput}
+                disabled={enc.text}
+                custom
+              >
+                <option value="1" disabled hidden>
+                  Select...
+                </option>
+                {state.files.map((item) => (
+                  <option key={item.file.name}>{item.file.name}</option>
+                ))}
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">No file selected</Form.Control.Feedback>
+            </>
+          )}
+        </Form.Group>
+      </Form.Row>
+      <Form.Row>
+        <Form.Group as={Col} md={5} controlId="enc-cipher">
           <Form.Label className="mb-2">Cipher</Form.Label>
           <Form.Control as="select" value={enc.cipher} onChange={set('cipher')} custom>
             {CIPHERS.map((cipher) => (
@@ -228,26 +286,7 @@ function TabEncryption({ runCommand }) {
             ))}
           </Form.Control>
         </Form.Group>
-        <Form.Group as={Col} md={3} controlId="enc-file-in">
-          <Form.Label className="mb-2">Input file</Form.Label>
-          <Form.Control
-            as="select"
-            value={enc.inFile ? enc.inFile : '1'}
-            onChange={set('inFile')}
-            isInvalid={validation.fileInput}
-            disabled={enc.text}
-            custom
-          >
-            <option value="1" disabled hidden>
-              Select...
-            </option>
-            {state.files.map((item) => (
-              <option key={item.file.name}>{item.file.name}</option>
-            ))}
-          </Form.Control>
-          <Form.Control.Feedback type="invalid">No file selected</Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group as={Col} md={4}>
+        <Form.Group as={Col} md={5}>
           <Form.Check
             id="enc-file-out"
             type="checkbox"

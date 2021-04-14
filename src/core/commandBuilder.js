@@ -12,7 +12,7 @@ const buildEnc = (enc) => {
         command.push(`-${enc.cipher}`);
         break;
       case 'inFile':
-        if (!enc.text) command.push(`-in ${enc.inFile}`);
+        if (enc.in) command.push(`-in ${enc.inFile}`);
         else command.push('-in input');
         break;
       case 'outFile':
