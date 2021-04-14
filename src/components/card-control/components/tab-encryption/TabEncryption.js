@@ -123,7 +123,7 @@ function TabEncryption({ runCommand }) {
         setValidation((prev) => ({ ...prev, initVector: false }));
         break;
       case 'text':
-        setEnc((prev) => ({ ...prev, [key]: value, textVal: '', in: !value }));
+        setEnc((prev) => ({ ...prev, [key]: value, in: !value }));
         setValidation((prev) => ({
           ...prev,
           textInput: false,
