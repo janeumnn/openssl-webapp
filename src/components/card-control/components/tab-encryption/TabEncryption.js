@@ -37,6 +37,7 @@ function TabEncryption({ runCommand }) {
     d: false,
     cipher: CIPHERS[0],
     inFile: '',
+    out: false,
     outFile: '',
     k: true,
     kVal: '',
@@ -78,6 +79,10 @@ function TabEncryption({ runCommand }) {
       case 'inFile':
         setEnc((prev) => ({ ...prev, [key]: value }));
         setValidation((prev) => ({ ...prev, fileInput: false }));
+        break;
+      case 'out':
+        setEnc((prev) => ({ ...prev, [key]: value }));
+        setValidation((prev) => ({ ...prev, fileOutput: false }));
         break;
       case 'outFile':
         setEnc((prev) => ({ ...prev, [key]: value.replace(/\s/g, '') }));
@@ -130,7 +135,7 @@ function TabEncryption({ runCommand }) {
       setValidation((prev) => ({ ...prev, fileInput: true }));
       valid = false;
     }
-    if (!enc.text && !enc.outFile) {
+    if (enc.out && !enc.outFile) {
       setValidation((prev) => ({ ...prev, fileOutput: true }));
       valid = false;
     }
@@ -224,7 +229,7 @@ function TabEncryption({ runCommand }) {
           </Form.Control>
         </Form.Group>
         <Form.Group as={Col} md={3} controlId="enc-file-in">
-          <Form.Label className="mb-2">File</Form.Label>
+          <Form.Label className="mb-2">Input file</Form.Label>
           <Form.Control
             as="select"
             value={enc.inFile ? enc.inFile : '1'}
@@ -242,16 +247,25 @@ function TabEncryption({ runCommand }) {
           </Form.Control>
           <Form.Control.Feedback type="invalid">No file selected</Form.Control.Feedback>
         </Form.Group>
-        <Form.Group as={Col} md={4} controlId="enc-file-out">
-          <Form.Label className="mb-2">Output filename</Form.Label>
+        <Form.Group as={Col} md={4}>
+          <Form.Check
+            id="enc-file-out"
+            type="checkbox"
+            className="mb-2"
+            label="Output file"
+            checked={enc.out}
+            onChange={set('out')}
+            custom
+          />
           <InputGroup>
             <Form.Control
+              id="enc-file-out-name"
               as="input"
               placeholder="Filename..."
               value={enc.outFile}
               onChange={set('outFile')}
               isInvalid={validation.fileOutput}
-              disabled={enc.text}
+              disabled={!enc.out}
             />
             <InputGroup.Append>
               <ButtonGroup toggle>
@@ -261,7 +275,7 @@ function TabEncryption({ runCommand }) {
                   value="1"
                   checked={enc.a}
                   onChange={set('a')}
-                  disabled={enc.text}
+                  disabled={!enc.out}
                 >
                   Base64
                 </ToggleButton>
