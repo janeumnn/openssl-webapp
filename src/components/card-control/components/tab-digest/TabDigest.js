@@ -74,7 +74,7 @@ function TabDigest({ runCommand }) {
           </Form.Control>
         </Form.Group>
         <Form.Group as={Col} md={5} controlId="dgst-file-in">
-          <Form.Label className="mb-2">File</Form.Label>
+          <Form.Label className="mb-2">Input file</Form.Label>
           <Form.Control
             as="select"
             value={dgst.file ? dgst.file : '1'}
