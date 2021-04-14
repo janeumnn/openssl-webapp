@@ -139,9 +139,10 @@ function TabGenrsa({ runCommand }) {
     <Form onSubmit={handleSubmit}>
       <Form.Row>
         <Form.Group as={Col} md={5} controlId="genrsa-file-name">
-          <Form.Label className="mb-2">Output filename</Form.Label>
+          <Form.Label className="mb-2">Output file</Form.Label>
           <Form.Control
             as="input"
+            placeholder="Filename..."
             value={genrsa.outFile}
             onChange={set('outFile')}
             isInvalid={validation.fileOutput}
