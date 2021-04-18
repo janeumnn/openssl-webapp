@@ -169,7 +169,7 @@ function TabGenrsa({ runCommand }) {
             <Form.Group className="mb-md-0" as={Col} lg={'auto'} md={'auto'}>
               <Button
                 title={privateKey}
-                variant="outline-secondary"
+                variant="secondary"
                 onClick={showPrivateKey}
                 style={{ width: '170px' }}
               >
@@ -178,11 +178,7 @@ function TabGenrsa({ runCommand }) {
             </Form.Group>
             {!publicKey ? (
               <Form.Group className="mb-md-0" as={Col} lg={'auto'} md={'auto'}>
-                <Button
-                  variant="outline-secondary"
-                  onClick={generatePublicKey}
-                  style={{ width: '170px' }}
-                >
+                <Button variant="secondary" onClick={generatePublicKey} style={{ width: '170px' }}>
                   Generate public key
                 </Button>
               </Form.Group>
@@ -190,7 +186,7 @@ function TabGenrsa({ runCommand }) {
               <Form.Group className="mb-md-0" as={Col} lg={'auto'} md={'auto'}>
                 <Button
                   title={publicKey}
-                  variant="outline-secondary"
+                  variant="secondary"
                   onClick={showPublicKey}
                   style={{ width: '170px' }}
                 >
