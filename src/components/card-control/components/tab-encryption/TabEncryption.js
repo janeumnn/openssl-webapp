@@ -241,7 +241,7 @@ function TabEncryption({ runCommand }) {
         </Form.Group>
       </Form.Row>
       <Form.Row>
-        <Form.Group as={Col} md={5}>
+        <Form.Group as={Col} md={10}>
           {enc.text ? (
             <>
               <Form.Control
