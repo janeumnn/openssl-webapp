@@ -5,6 +5,7 @@ import {
   Col,
   Form,
   InputGroup,
+  Row,
   ToggleButton,
   ToggleButtonGroup,
 } from 'react-bootstrap';
@@ -187,58 +188,66 @@ function TabEncryption({ runCommand }) {
     <Form onSubmit={handleSubmit}>
       <Form.Label className="mb-3 font-weight-bold">Choose mode:</Form.Label>
       <Form.Row>
-        <Form.Group as={Col} xs={4} sm={3} md={2}>
-          <Form.Check
-            id="enc-encrypt"
-            type="radio"
-            label="Encryption"
-            className="text-nowrap"
-            checked={enc.e}
-            onChange={set('e')}
-            inline
-            custom
-          />
-        </Form.Group>
-        <Form.Group as={Col} xs={'auto'}>
-          <Form.Check
-            id="enc-decrypt"
-            type="radio"
-            label="Decryption"
-            className="text-nowrap"
-            checked={!enc.e}
-            onChange={set('d')}
-            inline
-            custom
-          />
-        </Form.Group>
+        <Col xs sm={10} md={7} lg={5} xl={4}>
+          <Row>
+            <Form.Group as={Col} xs={4} sm={4} md={4} lg={4} xl={4}>
+              <Form.Check
+                id="enc-encrypt"
+                type="radio"
+                label="Encryption"
+                className="text-nowrap"
+                checked={enc.e}
+                onChange={set('e')}
+                inline
+                custom
+              />
+            </Form.Group>
+            <Form.Group as={Col} xs={'auto'}>
+              <Form.Check
+                id="enc-decrypt"
+                type="radio"
+                label="Decryption"
+                className="text-nowrap"
+                checked={!enc.e}
+                onChange={set('d')}
+                inline
+                custom
+              />
+            </Form.Group>
+          </Row>
+        </Col>
       </Form.Row>
       <hr className="mt-0 mb-3" />
       <Form.Label className="mb-3 font-weight-bold">Options:</Form.Label>
       <Form.Row>
-        <Form.Group as={Col} xs={4} sm={3} md={2}>
-          <Form.Check
-            id="enc-text"
-            type="radio"
-            label="Text input"
-            className="text-nowrap"
-            checked={enc.text}
-            onChange={set('text')}
-            inline
-            custom
-          />
-        </Form.Group>
-        <Form.Group as={Col} xs={'auto'}>
-          <Form.Check
-            id="enc-file-in"
-            type="radio"
-            label="File input"
-            className="text-nowrap"
-            checked={!enc.text}
-            onChange={set('in')}
-            inline
-            custom
-          />
-        </Form.Group>
+        <Col xs sm={10} md={7} lg={5} xl={4}>
+          <Row>
+            <Form.Group as={Col} xs={4} sm={4} md={4} lg={4} xl={4}>
+              <Form.Check
+                id="enc-text"
+                type="radio"
+                label="Text input"
+                className="text-nowrap"
+                checked={enc.text}
+                onChange={set('text')}
+                inline
+                custom
+              />
+            </Form.Group>
+            <Form.Group as={Col} xs={'auto'}>
+              <Form.Check
+                id="enc-file-in"
+                type="radio"
+                label="File input"
+                className="text-nowrap"
+                checked={!enc.text}
+                onChange={set('in')}
+                inline
+                custom
+              />
+            </Form.Group>
+          </Row>
+        </Col>
       </Form.Row>
       <Form.Row>
         <Form.Group as={Col} md={10}>
