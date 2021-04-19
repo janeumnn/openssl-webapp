@@ -104,7 +104,7 @@ function TabFiles() {
   return (
     <>
       <Row>
-        <Col lg={7}>
+        <Col lg={10}>
           <label>Files</label>
           <InputGroup>
             <InputGroup.Prepend>
