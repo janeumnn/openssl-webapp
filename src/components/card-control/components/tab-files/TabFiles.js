@@ -18,17 +18,27 @@ function File({ item, showConfirmation }) {
   const file = useRef(item.file);
   return (
     <InputGroup className="mt-2 mb-2">
-      <Form.Control value={file.current.name} disabled></Form.Control>
-      <InputGroup.Append>
+      <InputGroup.Prepend>
+        <Button variant="outline-secondary" onClick={() => showConfirmation(file.current)}>
+          <i className="fas fa-trash"></i>
+        </Button>
         <Button
           variant="outline-secondary"
           onClick={() => downloadFile(file.current, file.current.name, null)}
         >
-          Download
+          <i className="fas fa-file-download"></i>
         </Button>
-        <Button variant="outline-secondary" onClick={() => showConfirmation(file.current)}>
-          <i className="fas fa-trash"></i>
-        </Button>
+      </InputGroup.Prepend>
+      <Form.Control value={file.current.name} disabled></Form.Control>
+      <InputGroup.Append>
+        <InputGroup.Text>
+          {new Intl.DateTimeFormat('en-GB', {
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+          }).format(item.file.lastModified)}
+        </InputGroup.Text>
       </InputGroup.Append>
     </InputGroup>
   );
@@ -120,6 +130,7 @@ function TabFiles() {
           </InputGroup>
           <Collapse in={openFiles}>
             <div>
+              <hr></hr>
               {state.files.map((item) => (
                 <File key={item.file.name} item={item} showConfirmation={handleShowModal}></File>
               ))}
