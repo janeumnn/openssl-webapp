@@ -5,6 +5,7 @@ import TabDigest from './components/tab-digest/TabDigest';
 import TabFiles from './components/tab-files/TabFiles';
 import { useEffect, useRef, useState } from 'react';
 import { useStore } from '../../contexts/store';
+import { useMediaQuery } from 'react-responsive';
 import './CardControl.css';
 
 function CardControl({ runCommand }) {
@@ -12,6 +13,8 @@ function CardControl({ runCommand }) {
   const [tabKey, setTabKey] = useState('');
   const [newFileAdded, setNewFileAdded] = useState(false);
   const lastIndex = useRef(0);
+
+  const isMedium = useMediaQuery({ query: '(max-width: 767px)' });
 
   useEffect(() => {
     const lastItem = state.files[state.files.length - 1];
@@ -29,7 +32,7 @@ function CardControl({ runCommand }) {
     <Tab.Container defaultActiveKey="encryption" onSelect={(k) => setTabKey(k)}>
       <Card className="mb-3">
         <Card.Header>
-          <Nav className="flex-column flex-md-row" variant="pills">
+          <Nav className="flex-column flex-md-row" variant={isMedium ? 'pills' : 'tabs'}>
             <Nav.Item>
               <Nav.Link eventKey="encryption">Encryption</Nav.Link>
             </Nav.Item>
