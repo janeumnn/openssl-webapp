@@ -1,24 +1,24 @@
 {
   "files": {
     "main.css": "/openssl-webapp/static/css/main.7b988cb4.chunk.css",
-    "main.js": "/openssl-webapp/static/js/main.e8376a1e.chunk.js",
-    "main.js.map": "/openssl-webapp/static/js/main.e8376a1e.chunk.js.map",
+    "main.js": "/openssl-webapp/static/js/main.84b3ddba.chunk.js",
+    "main.js.map": "/openssl-webapp/static/js/main.84b3ddba.chunk.js.map",
     "runtime-main.js": "/openssl-webapp/static/js/runtime-main.d698c5a8.js",
     "runtime-main.js.map": "/openssl-webapp/static/js/runtime-main.d698c5a8.js.map",
-    "static/css/2.fc4f1c4b.chunk.css": "/openssl-webapp/static/css/2.fc4f1c4b.chunk.css",
+    "static/css/2.090eb543.chunk.css": "/openssl-webapp/static/css/2.090eb543.chunk.css",
     "static/js/2.802f4b4c.chunk.js": "/openssl-webapp/static/js/2.802f4b4c.chunk.js",
     "static/js/2.802f4b4c.chunk.js.map": "/openssl-webapp/static/js/2.802f4b4c.chunk.js.map",
     "index.html": "/openssl-webapp/index.html",
-    "static/css/2.fc4f1c4b.chunk.css.map": "/openssl-webapp/static/css/2.fc4f1c4b.chunk.css.map",
+    "static/css/2.090eb543.chunk.css.map": "/openssl-webapp/static/css/2.090eb543.chunk.css.map",
     "static/css/main.7b988cb4.chunk.css.map": "/openssl-webapp/static/css/main.7b988cb4.chunk.css.map",
     "static/js/2.802f4b4c.chunk.js.LICENSE.txt": "/openssl-webapp/static/js/2.802f4b4c.chunk.js.LICENSE.txt",
-    "static/media/all.min.css": "/openssl-webapp/static/media/fa-solid-900.efbd5d20.eot"
+    "static/media/font-awesome.min.css": "/openssl-webapp/static/media/fontawesome-webfont.f691f37e.woff"
   },
   "entrypoints": [
     "static/js/runtime-main.d698c5a8.js",
-    "static/css/2.fc4f1c4b.chunk.css",
+    "static/css/2.090eb543.chunk.css",
     "static/js/2.802f4b4c.chunk.js",
     "static/css/main.7b988cb4.chunk.css",
-    "static/js/main.e8376a1e.chunk.js"
+    "static/js/main.84b3ddba.chunk.js"
   ]
 }
