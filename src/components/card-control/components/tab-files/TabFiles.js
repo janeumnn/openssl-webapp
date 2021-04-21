@@ -20,13 +20,13 @@ function File({ item, showConfirmation }) {
     <InputGroup className="mt-2 mb-2">
       <InputGroup.Prepend>
         <Button variant="outline-secondary" onClick={() => showConfirmation(file.current)}>
-          <i className="fas fa-trash"></i>
+          <i className="fa fa-trash"></i>
         </Button>
         <Button
           variant="outline-secondary"
           onClick={() => downloadFile(file.current, file.current.name, null)}
         >
-          <i className="fas fa-file-download"></i>
+          <i className="fa fa-download"></i>
         </Button>
       </InputGroup.Prepend>
       <Form.Control value={file.current.name} disabled></Form.Control>
@@ -110,7 +110,7 @@ function TabFiles() {
             <InputGroup.Prepend>
               <Button variant="secondary" onClick={() => setOpenFiles(!openFiles)}>
                 <i
-                  className="fas fa-chevron-down"
+                  className="fa fa-chevron-down"
                   style={{
                     transform: openFiles ? 'rotate(180deg)' : 'rotate(0)',
                     transition: 'all 0.2s linear',

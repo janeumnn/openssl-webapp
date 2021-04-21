@@ -7,7 +7,7 @@ import './index.css';
 
 if (process.env.REACT_APP_ENV !== 'cto') {
   require('bootstrap/dist/css/bootstrap.min.css');
-  require('@fortawesome/fontawesome-free/css/all.min.css');
+  require('font-awesome/css/font-awesome.min.css');
 }
 
 ReactDOM.render(
