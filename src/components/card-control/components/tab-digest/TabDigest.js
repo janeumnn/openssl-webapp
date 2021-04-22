@@ -5,7 +5,25 @@ import { buildDgst } from '../../../../core/commandBuilder';
 
 import './TabDigest.css';
 
-const ALGORITHMS = ['md5', 'sha256', 'sha512'];
+const ALGORITHMS = [
+  'blake2s256',
+  'blake2b512',
+  'md5',
+  'sha1',
+  'sha3-224',
+  'sha3-256',
+  'sha3-384',
+  'sha3-512',
+  'sha224',
+  'sha384',
+  'sha256',
+  'sha512',
+  'sha512-224',
+  'sha512-256',
+  'shake128',
+  'shake256',
+  'sm3',
+];
 
 function TabDigest({ runCommand }) {
   const { state, dispatch } = useStore();
