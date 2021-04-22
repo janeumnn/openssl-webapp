@@ -18,10 +18,14 @@ const CIPHERS = [
   'aes-256-cbc',
   'aes-192-cbc',
   'aes-128-cbc',
+  'aria-256-cbc',
+  'aria-192-cbc',
+  'aria-128-cbc',
   'camellia-256-cbc',
   'camellia-192-cbc',
   'camellia-128-cbc',
   'des3',
+  'sm4',
 ];
 
 function TabEncryption({ runCommand }) {
@@ -186,15 +190,17 @@ function TabEncryption({ runCommand }) {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Form.Label className="mb-3 font-weight-bold">Choose mode:</Form.Label>
       <Form.Row>
-        <Col xs sm={10} md={7} lg={5} xl={4}>
+        <Col xs={8} sm={10} md={7} lg={5} xl={4}>
           <Row>
-            <Form.Group as={Col} xs={4} sm={4} md={4} lg={4} xl={4}>
+            <Form.Label as={Col} xs={12} sm={3} className="mb-3">
+              Mode:
+            </Form.Label>
+            <Form.Group as={Col} xs={6} sm={4} md={4} lg={4} xl={4}>
               <Form.Check
                 id="enc-encrypt"
                 type="radio"
-                label="Encryption"
+                label="Encrypt"
                 className="text-nowrap"
                 checked={enc.e}
                 onChange={set('e')}
@@ -202,11 +208,11 @@ function TabEncryption({ runCommand }) {
                 custom
               />
             </Form.Group>
-            <Form.Group as={Col} xs={'auto'}>
+            <Form.Group as={Col} xs={6} sm={3}>
               <Form.Check
                 id="enc-decrypt"
                 type="radio"
-                label="Decryption"
+                label="Decrypt"
                 className="text-nowrap"
                 checked={!enc.e}
                 onChange={set('d')}
@@ -218,15 +224,18 @@ function TabEncryption({ runCommand }) {
         </Col>
       </Form.Row>
       <hr className="mt-0 mb-3" />
-      <Form.Label className="mb-3 font-weight-bold">Options:</Form.Label>
       <Form.Row>
-        <Col xs sm={10} md={7} lg={5} xl={4}>
+        <Col xs={8} sm={10} md={7} lg={5} xl={4}>
           <Row>
-            <Form.Group as={Col} xs={4} sm={4} md={4} lg={4} xl={4}>
+            <Form.Label as={Col} xs={12} sm={3} className="mb-3">
+              Input:
+            </Form.Label>
+
+            <Form.Group as={Col} xs={6} sm={4} md={4} lg={4} xl={4}>
               <Form.Check
                 id="enc-text"
                 type="radio"
-                label="Text input"
+                label="Text"
                 className="text-nowrap"
                 checked={enc.text}
                 onChange={set('text')}
@@ -234,11 +243,11 @@ function TabEncryption({ runCommand }) {
                 custom
               />
             </Form.Group>
-            <Form.Group as={Col} xs={'auto'}>
+            <Form.Group as={Col} xs={6} sm={3}>
               <Form.Check
                 id="enc-file-in"
                 type="radio"
-                label="File input"
+                label="File"
                 className="text-nowrap"
                 checked={!enc.text}
                 onChange={set('in')}
