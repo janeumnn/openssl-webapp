@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useStore } from '../../../../contexts/store';
 import {
   Badge,
@@ -9,7 +9,9 @@ import {
   FormFile,
   InputGroup,
   Modal,
+  OverlayTrigger,
   Row,
+  Tooltip,
 } from 'react-bootstrap';
 import { downloadFile } from '../../../../utils/downloadFile';
 import './TabFiles.css';
@@ -19,15 +21,28 @@ function File({ item, showConfirmation }) {
   return (
     <InputGroup className="mt-2 mb-2">
       <InputGroup.Prepend>
-        <Button variant="outline-secondary" onClick={() => showConfirmation(file.current)}>
-          <i className="fa fa-trash"></i>
-        </Button>
-        <Button
-          variant="outline-secondary"
-          onClick={() => downloadFile(file.current, file.current.name, null)}
+        <OverlayTrigger
+          delay={{ show: 600, hide: 0 }}
+          placement={'top'}
+          overlay={<Tooltip>Delete</Tooltip>}
         >
-          <i className="fa fa-download"></i>
-        </Button>
+          <Button variant="outline-secondary" onClick={() => showConfirmation(file.current)}>
+            <i className="fa fa-trash"></i>
+          </Button>
+        </OverlayTrigger>
+        <OverlayTrigger
+          delay={{ show: 600, hide: 0 }}
+          placement={'top'}
+          overlay={<Tooltip>Download</Tooltip>}
+        >
+          <Button
+            variant="outline-secondary"
+            onClick={() => downloadFile(file.current, file.current.name, null)}
+            data-text="Test"
+          >
+            <i className="fa fa-download"></i>
+          </Button>
+        </OverlayTrigger>
       </InputGroup.Prepend>
       <Form.Control value={file.current.name} disabled></Form.Control>
       <InputGroup.Append>
@@ -65,10 +80,15 @@ function ConfirmDeletion({ show, handleCancel, handleConfirmation }) {
 
 function TabFiles() {
   const { state, dispatch } = useStore();
-  const [openFiles, setOpenFiles] = useState(true);
+  const [openFiles, setOpenFiles] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   const fileToDelete = useRef(null);
+
+  useEffect(() => {
+    if (state.files.length) setOpenFiles(true);
+    if (!state.files.length) setOpenFiles(false);
+  }, [state.files]);
 
   const handleShowModal = (file) => {
     setShowModal(true);
@@ -101,6 +121,10 @@ function TabFiles() {
     event.target.value = null;
   };
 
+  const handleFileCollapse = () => {
+    if (state.files.length) setOpenFiles(!openFiles);
+  };
+
   return (
     <>
       <Row>
@@ -108,7 +132,7 @@ function TabFiles() {
           <label>Files</label>
           <InputGroup>
             <InputGroup.Prepend>
-              <Button variant="secondary" onClick={() => setOpenFiles(!openFiles)}>
+              <Button variant="secondary" onClick={handleFileCollapse}>
                 <i
                   className="fa fa-chevron-down"
                   style={{
