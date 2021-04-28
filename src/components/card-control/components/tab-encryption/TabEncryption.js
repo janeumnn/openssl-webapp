@@ -49,7 +49,7 @@ function TabEncryption({ runCommand }) {
     kVal: 'my_passphrase',
     kfile: false,
     kValFile: '',
-    pbkdf2: false,
+    pbkdf2: true,
     iv: false,
     ivVal: '',
     a: false,
@@ -139,6 +139,9 @@ function TabEncryption({ runCommand }) {
       case 'textVal':
         setEnc((prev) => ({ ...prev, [key]: value }));
         setValidation((prev) => ({ ...prev, textInput: false }));
+        break;
+      case 'pbkdf2':
+        setEnc((prev) => ({ ...prev, [key]: !enc.pbkdf2 }));
         break;
       default:
         setEnc((prev) => ({ ...prev, [key]: value }));
@@ -408,16 +411,36 @@ function TabEncryption({ runCommand }) {
         </Form.Group>
       </Form.Row>
       <Form.Row>
-        <Form.Group as={Col} md={2}>
-          <Form.Check
-            id="enc-pbkdf"
-            type="checkbox"
-            label="PBKDF2"
-            checked={enc.pbkdf2}
-            onChange={set('pbkdf2')}
-            custom
-          />
-        </Form.Group>
+        <Col md={5} lg={5}>
+          <Form.Row>
+            <Form.Group as={Col} xs={'auto'} className="mr-auto mb-0">
+              <Form.Label>Key derivation function:</Form.Label>
+            </Form.Group>
+            <Form.Group as={Col} xs={'auto'}>
+              <Form.Check
+                id="enc-kdf-default"
+                type="radio"
+                label="Default"
+                className="text-nowrap mr-5"
+                checked={!enc.pbkdf2}
+                onChange={set('pbkdf2')}
+                inline
+                custom
+              />
+
+              <Form.Check
+                id="enc-pbkdf"
+                type="radio"
+                label="PBKDF2"
+                className="text-nowrap mr-0"
+                checked={enc.pbkdf2}
+                onChange={set('pbkdf2')}
+                inline
+                custom
+              />
+            </Form.Group>
+          </Form.Row>
+        </Col>
       </Form.Row>
       <Button type="button" onClick={execute} disabled={state.isLoading}>
         Execute
