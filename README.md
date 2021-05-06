@@ -22,10 +22,27 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
+### `npm run predeploy`
+
+Builds the app for GitHub Pages.
+
+### `npm run deploy`
+
+Deploys the app on GitHub Pages.
+
+### `npm run build:cto-app`
+
+Builds the app to the `build` folder.\
+It bundles the app with an individual webpack config, so that it outputs only single files for the use in CrypTool Online.
+
 ### `npm run build:openssl`
 
 Runs the build script in the `openssl` folder and builds the OpenSSL command line in WebAssembly.\
 Requires `emscripten` environment!
+
+### `npm run format:openssl`
+
+Formats the emscripten glue code.
 
 ### `npm run eject`
 
