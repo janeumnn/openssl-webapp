@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OPENSSL_VERSION="openssl-3.0.0-alpha14"
+OPENSSL_VERSION="openssl-1.1.1k"
 OPENSSL_DIR=${OPENSSL_VERSION}
 OPENSSL_JS_PATH="../src/core/openssl.js"
 OPENSSL_WASM_PATH="../public/openssl.wasm"
@@ -56,6 +56,7 @@ emconfigure ./Configure \
   no-dtls \
   no-engine \
   no-dso \
+  linux-x32 \
   -static\
 
 make apps/progs.h
