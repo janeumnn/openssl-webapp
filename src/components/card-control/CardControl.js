@@ -37,10 +37,10 @@ function CardControl({ runCommand }) {
               <Nav.Link eventKey="encryption">Encryption</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="genrsa">RSA Keygen</Nav.Link>
+              <Nav.Link eventKey="genrsa">RSA key generation</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="digest">Digest</Nav.Link>
+              <Nav.Link eventKey="digest">Hashes</Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="files">Files{newFileAdded && '*'}</Nav.Link>
