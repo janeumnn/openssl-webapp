@@ -146,7 +146,6 @@ describe('symmetric encryption methods with an input text in a base64 format', (
     const command = new Command();
     command.run(`enc -e -a -aes-256-cbc -k 1234 -in file`, null, inputText);
     command.resultAsObservable.pipe(take(2)).subscribe((value) => {
-      console.log(value);
       if (value.stdout !== inputText) {
         command.run(`enc -d -a -aes-256-cbc -k 1234 -in file`, null, value.stdout);
       }

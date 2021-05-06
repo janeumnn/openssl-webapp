@@ -1,19 +1,31 @@
 import OpenSSL from './openssl';
 import { Subject } from 'rxjs';
 
+let instance = null;
 class Command {
   constructor() {
-    const baseUrl = window.CTO_Globals?.pluginRoot || window.location.href;
-    this.wasmModule = fetch(`${baseUrl}/openssl.wasm`)
-      .then((response) => response.arrayBuffer())
-      .then((bytes) => {
-        return WebAssembly.compile(bytes);
-      });
+    if (!instance) {
+      instance = this;
+    }
+
+    this.wasmModule = this.fetchWasmBinary();
     this.resultSubject = new Subject();
+
+    return instance;
   }
 
   get resultAsObservable() {
     return this.resultSubject.asObservable();
+  }
+
+  async fetchWasmBinary() {
+    const baseUrl = window.CTO_Globals?.pluginRoot || window.location.href;
+
+    return fetch(`${baseUrl}/openssl.wasm`)
+      .then((response) => response.arrayBuffer())
+      .then((bytes) => {
+        return WebAssembly.compile(bytes);
+      });
   }
 
   async getByteArray(file) {
