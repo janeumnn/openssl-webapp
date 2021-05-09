@@ -347,7 +347,7 @@ function TabEncryption({ runCommand }) {
       </Form.Row>
       <Form.Row>
         <Form.Group as={Col} md={5} lg={5} controlId="enc-passphrase">
-          <Form.Label className="mb-2">Passphrase</Form.Label>
+          <Form.Label className="mb-2">{enc.k ? 'Passphrase' : 'Passphrase origin'}</Form.Label>
           <InputGroup>
             {enc.k ? (
               <Form.Control
