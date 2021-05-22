@@ -6,9 +6,11 @@ import TabFiles from './components/tab-files/TabFiles';
 import { useEffect, useRef, useState } from 'react';
 import { useStore } from '../../contexts/store';
 import { useMediaQuery } from 'react-responsive';
+import { useTranslation } from 'react-i18next';
 import './CardControl.css';
 
 function CardControl({ runCommand }) {
+  const { t } = useTranslation('translation');
   const { state } = useStore();
   const [tabKey, setTabKey] = useState('');
   const [newFileAdded, setNewFileAdded] = useState(false);
@@ -34,16 +36,19 @@ function CardControl({ runCommand }) {
         <Card.Header>
           <Nav className="flex-column flex-md-row" variant={isMedium ? 'pills' : 'tabs'}>
             <Nav.Item>
-              <Nav.Link eventKey="encryption">Encryption</Nav.Link>
+              <Nav.Link eventKey="encryption">{t('tabEncryption.name')}</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="genrsa">RSA key generation</Nav.Link>
+              <Nav.Link eventKey="genrsa">{t('tabGenrsa.name')}</Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="digest">Hashes</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="files">Files{newFileAdded && '*'}</Nav.Link>
+              <Nav.Link eventKey="files">
+                {t('tabFiles.name')}
+                {newFileAdded && '*'}
+              </Nav.Link>
             </Nav.Item>
           </Nav>
         </Card.Header>

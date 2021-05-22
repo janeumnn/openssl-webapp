@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button, Col, Form } from 'react-bootstrap';
 import { useStore } from '../../../../contexts/store';
 import { buildDgst } from '../../../../core/commandBuilder';
+import { useTranslation } from 'react-i18next';
 
 import './TabDigest.css';
 
@@ -26,6 +27,7 @@ const ALGORITHMS = [
 ];
 
 function TabDigest({ runCommand }) {
+  const { t } = useTranslation('translation');
   const { state, dispatch } = useStore();
   const [validation, setValidation] = useState({
     fileInput: false,
@@ -84,7 +86,7 @@ function TabDigest({ runCommand }) {
     <Form onSubmit={handleSubmit}>
       <Form.Row>
         <Form.Group as={Col} md={5} controlId="dgst-algorithm">
-          <Form.Label className="mb-2">Hash function</Form.Label>
+          <Form.Label className="mb-2">{t('tabDigest.hashFunction')}</Form.Label>
           <Form.Control as="select" value={dgst.algorithm} onChange={set('algorithm')} custom>
             {ALGORITHMS.map((algorithm) => (
               <option key={algorithm}>{algorithm}</option>
@@ -92,7 +94,7 @@ function TabDigest({ runCommand }) {
           </Form.Control>
         </Form.Group>
         <Form.Group as={Col} md={5} controlId="dgst-file-in">
-          <Form.Label className="mb-2">Input file</Form.Label>
+          <Form.Label className="mb-2">{t('tabDigest.inputFile')}</Form.Label>
           <Form.Control
             as="select"
             value={dgst.file ? dgst.file : '1'}
@@ -101,17 +103,19 @@ function TabDigest({ runCommand }) {
             custom
           >
             <option value="1" disabled hidden>
-              Select...
+              {t('tabDigest.selectPlaceholder')}
             </option>
             {state.files.map((item) => (
               <option key={item.file.name}>{item.file.name}</option>
             ))}
           </Form.Control>
-          <Form.Control.Feedback type="invalid">No file selected</Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">
+            {t('validation.noFileSelected')}
+          </Form.Control.Feedback>
         </Form.Group>
       </Form.Row>
       <Button type="button" onClick={execute} disabled={state.isLoading}>
-        Execute
+        {t('general.execute')}
       </Button>
     </Form>
   );

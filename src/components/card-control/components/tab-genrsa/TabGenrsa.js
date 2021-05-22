@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Button, Col, Form } from 'react-bootstrap';
 import { useStore } from '../../../../contexts/store';
 import { buildGenrsa, buildRsa } from '../../../../core/commandBuilder';
+import { useTranslation } from 'react-i18next';
 
 import './TabGenrsa.css';
 
@@ -9,6 +10,7 @@ const NUMBITS = ['1024', '2048', '4096'];
 const FILENAME = 'my_rsa.pem';
 
 function TabGenrsa({ runCommand }) {
+  const { t } = useTranslation('translation');
   const { state, dispatch } = useStore();
   const [validation, setValidation] = useState({
     fileOutput: false,
@@ -139,18 +141,20 @@ function TabGenrsa({ runCommand }) {
     <Form onSubmit={handleSubmit}>
       <Form.Row>
         <Form.Group as={Col} md={5} controlId="genrsa-file-name">
-          <Form.Label className="mb-2">Output file</Form.Label>
+          <Form.Label className="mb-2">{t('tabGenrsa.outputFile')}</Form.Label>
           <Form.Control
             as="input"
-            placeholder="Filename..."
+            placeholder={t('tabGenrsa.filenamePlaceholder')}
             value={genrsa.outFile}
             onChange={set('outFile')}
             isInvalid={validation.fileOutput}
           />
-          <Form.Control.Feedback type="invalid">No text input</Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">
+            {t('validation.noTextInput')}
+          </Form.Control.Feedback>
         </Form.Group>
         <Form.Group as={Col} md={5} controlId="genrsa-numbits">
-          <Form.Label className="mb-2">Key length</Form.Label>
+          <Form.Label className="mb-2">{t('tabGenrsa.keyLength')}</Form.Label>
           <Form.Control as="select" value={genrsa.numbits} onChange={set('numbits')} custom>
             {NUMBITS.map((numbits) => (
               <option key={numbits} value={numbits}>{`${numbits}-bit`}</option>
@@ -161,7 +165,7 @@ function TabGenrsa({ runCommand }) {
       <Form.Row>
         <Form.Group className="mb-md-0" as={Col} lg={'auto'} md={'auto'}>
           <Button type="button" onClick={execute} disabled={state.isLoading}>
-            Execute
+            {t('general.execute')}
           </Button>
         </Form.Group>
         {privateKey && (
@@ -173,13 +177,13 @@ function TabGenrsa({ runCommand }) {
                 onClick={showPrivateKey}
                 style={{ width: '170px' }}
               >
-                Show private key
+                {t('tabGenrsa.showPrivateKey')}
               </Button>
             </Form.Group>
             {!publicKey ? (
               <Form.Group className="mb-md-0" as={Col} lg={'auto'} md={'auto'}>
                 <Button variant="secondary" onClick={generatePublicKey} style={{ width: '170px' }}>
-                  Generate public key
+                  {t('tabGenrsa.generatePublicKey')}
                 </Button>
               </Form.Group>
             ) : (
@@ -190,7 +194,7 @@ function TabGenrsa({ runCommand }) {
                   onClick={showPublicKey}
                   style={{ width: '170px' }}
                 >
-                  Show public key
+                  {t('tabGenrsa.showPublicKey')}
                 </Button>
               </Form.Group>
             )}
