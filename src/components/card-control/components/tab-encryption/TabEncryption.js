@@ -11,6 +11,7 @@ import {
 } from 'react-bootstrap';
 import { useStore } from '../../../../contexts/store';
 import { buildEnc } from '../../../../core/commandBuilder';
+import { useTranslation } from 'react-i18next';
 
 import './TabEncryption.css';
 
@@ -29,6 +30,7 @@ const CIPHERS = [
 ];
 
 function TabEncryption({ runCommand }) {
+  const { t } = useTranslation('translation');
   const { state, dispatch } = useStore();
   const [validation, setValidation] = useState({
     fileInput: false,
@@ -197,13 +199,13 @@ function TabEncryption({ runCommand }) {
         <Col xs={8} sm={10} md={7} lg={5} xl={4}>
           <Row>
             <Form.Label as={Col} xs={12} sm={3} className="mb-3">
-              Mode:
+              {t('tabEncryption.mode')}:
             </Form.Label>
             <Form.Group as={Col} xs={6} sm={4} md={4} lg={4} xl={4}>
               <Form.Check
                 id="enc-encrypt"
                 type="radio"
-                label="Encrypt"
+                label={t('tabEncryption.encrypt')}
                 className="text-nowrap"
                 checked={enc.e}
                 onChange={set('e')}
@@ -215,7 +217,7 @@ function TabEncryption({ runCommand }) {
               <Form.Check
                 id="enc-decrypt"
                 type="radio"
-                label="Decrypt"
+                label={t('tabEncryption.decrypt')}
                 className="text-nowrap"
                 checked={!enc.e}
                 onChange={set('d')}
@@ -231,9 +233,8 @@ function TabEncryption({ runCommand }) {
         <Col xs={8} sm={10} md={7} lg={5} xl={4}>
           <Row>
             <Form.Label as={Col} xs={12} sm={3} className="mb-3">
-              Input:
+              {t('tabEncryption.input')}:
             </Form.Label>
-
             <Form.Group as={Col} xs={6} sm={4} md={4} lg={4} xl={4}>
               <Form.Check
                 id="enc-text"
@@ -250,7 +251,7 @@ function TabEncryption({ runCommand }) {
               <Form.Check
                 id="enc-file-in"
                 type="radio"
-                label="File"
+                label={t('tabEncryption.file')}
                 className="text-nowrap"
                 checked={!enc.text}
                 onChange={set('in')}
@@ -268,13 +269,15 @@ function TabEncryption({ runCommand }) {
               <Form.Control
                 id="enc-text-in"
                 as="textarea"
-                placeholder="Enter text to encrypt/decrypt..."
+                placeholder={t('tabEncryption.enterTextPlaceholder')}
                 value={enc.textVal}
                 rows={2}
                 onChange={set('textVal')}
                 isInvalid={validation.textInput}
               />
-              <Form.Control.Feedback type="invalid">No text input</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                {t('validation.noTextInput')}
+              </Form.Control.Feedback>
             </>
           ) : (
             <>
@@ -287,20 +290,22 @@ function TabEncryption({ runCommand }) {
                 custom
               >
                 <option value="1" disabled hidden>
-                  Select...
+                  {t('tabEncryption.selectPlaceholder')}
                 </option>
                 {state.files.map((item) => (
                   <option key={item.file.name}>{item.file.name}</option>
                 ))}
               </Form.Control>
-              <Form.Control.Feedback type="invalid">No file selected</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                {t('validation.noFileSelected')}
+              </Form.Control.Feedback>
             </>
           )}
         </Form.Group>
       </Form.Row>
       <Form.Row>
         <Form.Group as={Col} md={5} controlId="enc-cipher">
-          <Form.Label className="mb-2">Cipher</Form.Label>
+          <Form.Label className="mb-2">{t('tabEncryption.cipher')}</Form.Label>
           <Form.Control as="select" value={enc.cipher} onChange={set('cipher')} custom>
             {CIPHERS.map((cipher) => (
               <option key={cipher}>{cipher}</option>
@@ -312,7 +317,7 @@ function TabEncryption({ runCommand }) {
             id="enc-file-out"
             type="checkbox"
             className="mb-2"
-            label="Output file"
+            label={t('tabEncryption.outputFile')}
             checked={enc.out}
             onChange={set('out')}
             custom
@@ -321,7 +326,7 @@ function TabEncryption({ runCommand }) {
             <Form.Control
               id="enc-file-out-name"
               as="input"
-              placeholder="Filename..."
+              placeholder={t('tabEncryption.filenamePlaceholder')}
               value={enc.outFile}
               onChange={set('outFile')}
               isInvalid={validation.fileOutput}
@@ -341,18 +346,22 @@ function TabEncryption({ runCommand }) {
                 </ToggleButton>
               </ButtonGroup>
             </InputGroup.Append>
-            <Form.Control.Feedback type="invalid">No filename specified</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              {t('validation.noFileNameSpecified')}
+            </Form.Control.Feedback>
           </InputGroup>
         </Form.Group>
       </Form.Row>
       <Form.Row>
         <Form.Group as={Col} md={5} lg={5} controlId="enc-passphrase">
-          <Form.Label className="mb-2">{enc.k ? 'Passphrase' : 'Passphrase origin'}</Form.Label>
+          <Form.Label className="mb-2">
+            {enc.k ? 'Passphrase' : t('tabEncryption.passphraseOrigin')}
+          </Form.Label>
           <InputGroup>
             {enc.k ? (
               <Form.Control
                 as="input"
-                placeholder="Input..."
+                placeholder={t('tabEncryption.inputPlaceHolder')}
                 value={enc.kVal}
                 onChange={set('kVal')}
                 isInvalid={validation.passphrase}
@@ -367,7 +376,7 @@ function TabEncryption({ runCommand }) {
                   custom
                 >
                   <option value="1" disabled hidden>
-                    Select...
+                    {t('tabEncryption.selectPlaceholder')}
                   </option>
                   {state.files.map((item) => (
                     <option key={item.file.name}>{item.file.name}</option>
@@ -381,11 +390,13 @@ function TabEncryption({ runCommand }) {
                   Text
                 </ToggleButton>
                 <ToggleButton variant="secondary" value="2" onChange={set('kfile')}>
-                  File
+                  {t('tabEncryption.file')}
                 </ToggleButton>
               </ToggleButtonGroup>
             </InputGroup.Append>
-            <Form.Control.Feedback type="invalid">No passphrase specified</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              {t('validation.noPassphraseSpecified')}
+            </Form.Control.Feedback>
           </InputGroup>
         </Form.Group>
         <Form.Group as={Col} md={5} lg={5}>
@@ -393,7 +404,7 @@ function TabEncryption({ runCommand }) {
             id="enc-initvector"
             type="checkbox"
             className="mb-2"
-            label="Initialization vector"
+            label={t('tabEncryption.initializationVector')}
             checked={enc.iv}
             onChange={set('iv')}
             custom
@@ -401,26 +412,28 @@ function TabEncryption({ runCommand }) {
           <Form.Control
             id="enc-initvector-in"
             as="input"
-            placeholder="Hex value..."
+            placeholder={t('tabEncryption.hexValue')}
             value={enc.ivVal}
             onChange={set('ivVal')}
             disabled={!enc.iv}
             isInvalid={validation.initVector}
           />
-          <Form.Control.Feedback type="invalid">No value specified</Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">
+            {t('validation.noValueSpecified')}
+          </Form.Control.Feedback>
         </Form.Group>
       </Form.Row>
       <Form.Row>
         <Col md={5} lg={5}>
           <Form.Row>
             <Form.Group as={Col} xs={'auto'} className="mr-auto mb-0">
-              <Form.Label>Key derivation function:</Form.Label>
+              <Form.Label>{t('tabEncryption.keyDerivationFunction')}</Form.Label>
             </Form.Group>
             <Form.Group as={Col} xs={'auto'}>
               <Form.Check
                 id="enc-kdf-default"
                 type="radio"
-                label="Default"
+                label={t('tabEncryption.default')}
                 className="text-nowrap mr-5"
                 checked={!enc.pbkdf2}
                 onChange={set('pbkdf2')}
@@ -443,7 +456,7 @@ function TabEncryption({ runCommand }) {
         </Col>
       </Form.Row>
       <Button type="button" onClick={execute} disabled={state.isLoading}>
-        Execute
+        {t('general.execute')}
       </Button>
     </Form>
   );
