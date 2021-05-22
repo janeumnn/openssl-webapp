@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
-import { Button, Col, Form } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
+import { Button, ButtonGroup, Col, Dropdown, Form } from 'react-bootstrap';
 import { useStore } from '../../../../contexts/store';
 import { buildGenrsa, buildRsa } from '../../../../core/commandBuilder';
 import { useTranslation } from 'react-i18next';
+import { downloadFile } from '../../../../utils/downloadFile';
 
 import './TabGenrsa.css';
 
@@ -21,36 +22,15 @@ function TabGenrsa({ runCommand }) {
     numbits: NUMBITS[1],
   });
 
-  const [rsa, setRsa] = useState({
-    pubin: false,
-    in: '',
-    pubout: false,
-    out: false,
-    outFile: '',
-  });
-
-  const isPrivateKey = useRef(false);
-  const isPublicKey = useRef(false);
   const [privateKey, setPrivateKey] = useState(null);
   const [publicKey, setPublicKey] = useState(null);
 
+  const [isPrivateKey, setIsPrivateKey] = useState(null);
+  const [isPublicKey, setIsPublicKey] = useState(null);
+
   useEffect(() => {
-    const hasPrivateKey = state.files?.find((item) => item.file.name === genrsa.outFile);
-    const hasPublicKey = state.files?.find((item) => item.file.name === rsa.outFile);
-
-    if (isPrivateKey.current) {
-      setPrivateKey(hasPrivateKey.file.name);
-      isPrivateKey.current = false;
-    } else if (!hasPrivateKey) {
-      setPrivateKey(null);
-    }
-
-    if (isPublicKey.current) {
-      setPublicKey(hasPublicKey.file.name);
-      isPublicKey.current = false;
-    } else if (!hasPublicKey) {
-      setPublicKey(null);
-    }
+    setIsPrivateKey(!!state.files?.find((item) => item.file.name === privateKey));
+    setIsPublicKey(!!state.files?.find((item) => item.file.name === publicKey));
   }, [state.files]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const set = (key) => (event) => {
@@ -77,11 +57,12 @@ function TabGenrsa({ runCommand }) {
 
   const execute = () => {
     if (checkValidation()) {
-      setPrivateKey(null);
+      setIsPrivateKey(false);
+      setIsPublicKey(false);
       setPublicKey(null);
-      isPrivateKey.current = true;
 
       const command = buildGenrsa(genrsa);
+      setPrivateKey(genrsa.outFile);
       dispatch({ type: 'SET_COMMAND', command: command });
       runCommand(command, 'genrsa');
     }
@@ -95,42 +76,48 @@ function TabGenrsa({ runCommand }) {
       out: true,
       outFile: privateKey.replace(/\.([^.]*)$/, '').concat('.pub'),
     };
-    const command = buildRsa(rsaArguments);
 
-    isPublicKey.current = true;
-    setRsa(rsaArguments);
+    const command = buildRsa(rsaArguments);
+    setPublicKey(rsaArguments.outFile);
     dispatch({ type: 'SET_COMMAND', command: command });
     runCommand(command, 'rsa');
   };
 
-  const showPrivateKey = () => {
+  const showKey = (key) => {
     const rsaArguments = {
-      pubin: false,
-      in: privateKey,
+      pubin: key === publicKey,
+      in: key,
       pubout: false,
       out: false,
       outFile: '',
+      text: false,
+      noout: false,
     };
     const command = buildRsa(rsaArguments);
 
-    setRsa(rsaArguments);
     dispatch({ type: 'SET_COMMAND', command: command });
     runCommand(command, 'rsa');
   };
 
-  const showPublicKey = () => {
+  const showKeyComponents = (key) => {
     const rsaArguments = {
-      pubin: true,
-      in: publicKey,
+      pubin: key === publicKey,
+      in: key,
       pubout: false,
       out: false,
       outFile: '',
+      text: true,
+      noout: true,
     };
     const command = buildRsa(rsaArguments);
 
-    setRsa(rsaArguments);
     dispatch({ type: 'SET_COMMAND', command: command });
     runCommand(command, 'rsa');
+  };
+
+  const downloadKey = (key) => {
+    const item = state.files?.find((item) => item.file.name === key);
+    downloadFile(item.file, item.file.name, null);
   };
 
   const handleSubmit = (event) => {
@@ -163,41 +150,53 @@ function TabGenrsa({ runCommand }) {
         </Form.Group>
       </Form.Row>
       <Form.Row>
-        <Form.Group className="mb-md-0" as={Col} lg={'auto'} md={'auto'}>
+        <Form.Group className="mb-md-0" as={Col} xs={'auto'}>
           <Button type="button" onClick={execute} disabled={state.isLoading}>
             {t('general.execute')}
           </Button>
         </Form.Group>
-        {privateKey && (
+        {isPrivateKey && (
           <>
-            <Form.Group className="mb-md-0" as={Col} lg={'auto'} md={'auto'}>
-              <Button
-                title={privateKey}
-                variant="secondary"
-                onClick={showPrivateKey}
-                style={{ width: '170px' }}
-              >
-                {t('tabGenrsa.showPrivateKey')}
-              </Button>
+            <Form.Group className="mb-md-0" as={Col} xs={'auto'}>
+              <Dropdown as={ButtonGroup}>
+                <Button onClick={() => showKey(privateKey)}>{t('tabGenrsa.privateKey')}</Button>
+                <Dropdown.Toggle split />
+                <Dropdown.Menu>
+                  <Dropdown.Header>{privateKey}</Dropdown.Header>
+                  <Dropdown.Item onClick={() => downloadKey(privateKey)}>
+                    {t('tabGenrsa.download')}
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={() => showKeyComponents(privateKey)}>
+                    {t('tabGenrsa.information')}
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </Form.Group>
-            {!publicKey ? (
-              <Form.Group className="mb-md-0" as={Col} lg={'auto'} md={'auto'}>
-                <Button variant="secondary" onClick={generatePublicKey} style={{ width: '170px' }}>
-                  {t('tabGenrsa.generatePublicKey')}
+            <Form.Group className="mb-md-0" as={Col} xs={'auto'}>
+              <Dropdown as={ButtonGroup}>
+                <Button onClick={() => showKey(publicKey)} disabled={!publicKey}>
+                  {t('tabGenrsa.publicKey')}
                 </Button>
-              </Form.Group>
-            ) : (
-              <Form.Group className="mb-md-0" as={Col} lg={'auto'} md={'auto'}>
-                <Button
-                  title={publicKey}
-                  variant="secondary"
-                  onClick={showPublicKey}
-                  style={{ width: '170px' }}
-                >
-                  {t('tabGenrsa.showPublicKey')}
-                </Button>
-              </Form.Group>
-            )}
+                <Dropdown.Toggle split />
+                <Dropdown.Menu>
+                  {!isPublicKey ? (
+                    <Dropdown.Item onClick={generatePublicKey}>
+                      {t('tabGenrsa.generate')}
+                    </Dropdown.Item>
+                  ) : (
+                    <>
+                      <Dropdown.Header>{publicKey}</Dropdown.Header>
+                      <Dropdown.Item onClick={() => downloadKey(publicKey)}>
+                        {t('tabGenrsa.download')}
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={() => showKeyComponents(publicKey)}>
+                        {t('tabGenrsa.information')}
+                      </Dropdown.Item>
+                    </>
+                  )}
+                </Dropdown.Menu>
+              </Dropdown>
+            </Form.Group>
           </>
         )}
       </Form.Row>
