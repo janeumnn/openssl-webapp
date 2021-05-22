@@ -14,9 +14,11 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 import { downloadFile } from '../../../../utils/downloadFile';
+import { useTranslation } from 'react-i18next';
 import './TabFiles.css';
 
 function File({ item, showConfirmation }) {
+  const { t } = useTranslation('translation');
   const file = useRef(item.file);
   return (
     <InputGroup className="mt-2 mb-2">
@@ -24,7 +26,7 @@ function File({ item, showConfirmation }) {
         <OverlayTrigger
           delay={{ show: 600, hide: 0 }}
           placement={'top'}
-          overlay={<Tooltip>Delete</Tooltip>}
+          overlay={<Tooltip>{t('tabFiles.delete')}</Tooltip>}
         >
           <Button variant="outline-secondary" onClick={() => showConfirmation(file.current)}>
             <i className="fa fa-trash"></i>
@@ -33,7 +35,7 @@ function File({ item, showConfirmation }) {
         <OverlayTrigger
           delay={{ show: 600, hide: 0 }}
           placement={'top'}
-          overlay={<Tooltip>Download</Tooltip>}
+          overlay={<Tooltip>{t('tabFiles.download')}</Tooltip>}
         >
           <Button
             variant="outline-secondary"
@@ -60,18 +62,19 @@ function File({ item, showConfirmation }) {
 }
 
 function ConfirmDeletion({ show, handleCancel, handleConfirmation }) {
+  const { t } = useTranslation('translation');
   return (
     <Modal show={show} onHide={handleCancel}>
       <Modal.Header closeButton>
-        <Modal.Title>Delete file</Modal.Title>
+        <Modal.Title>{t('deleteModal.headline')}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>Do you really want to delete this file?</Modal.Body>
+      <Modal.Body>{t('deleteModal.text')}</Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleCancel}>
-          Cancel
+          {t('deleteModal.cancel')}
         </Button>
         <Button variant="primary" onClick={handleConfirmation}>
-          Yes
+          {t('deleteModal.yes')}
         </Button>
       </Modal.Footer>
     </Modal>
@@ -79,6 +82,7 @@ function ConfirmDeletion({ show, handleCancel, handleConfirmation }) {
 }
 
 function TabFiles() {
+  const { t } = useTranslation('translation');
   const { state, dispatch } = useStore();
   const [openFiles, setOpenFiles] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -129,7 +133,7 @@ function TabFiles() {
     <>
       <Row>
         <Col lg={10}>
-          <label>Files</label>
+          <label>{t('tabFiles.files')}</label>
           <InputGroup>
             <InputGroup.Prepend>
               <Button variant="secondary" onClick={handleFileCollapse}>
@@ -145,7 +149,7 @@ function TabFiles() {
             <FormFile custom>
               <FormFile.Input onChange={handleFileInputChange} multiple />
               <FormFile.Label data-browse="Browse...">
-                Select files...{' '}
+                {t('tabFiles.selectFilesPlaceholder')}{' '}
                 <Badge pill variant="secondary">
                   {state.files.length || false}
                 </Badge>
