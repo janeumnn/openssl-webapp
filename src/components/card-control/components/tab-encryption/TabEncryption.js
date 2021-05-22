@@ -196,7 +196,7 @@ function TabEncryption({ runCommand }) {
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Row>
-        <Col xs={8} sm={10} md={7} lg={5} xl={4}>
+        <Col xs={12} sm={12} md={8} lg={6} xl={5}>
           <Row>
             <Form.Label as={Col} xs={12} sm={3} className="mb-3">
               {t('tabEncryption.mode')}:
@@ -230,7 +230,7 @@ function TabEncryption({ runCommand }) {
       </Form.Row>
       <hr className="mt-0 mb-3" />
       <Form.Row>
-        <Col xs={8} sm={10} md={7} lg={5} xl={4}>
+        <Col xs={12} sm={12} md={8} lg={6} xl={5}>
           <Row>
             <Form.Label as={Col} xs={12} sm={3} className="mb-3">
               {t('tabEncryption.input')}:
@@ -426,7 +426,7 @@ function TabEncryption({ runCommand }) {
       <Form.Row>
         <Col md={5} lg={5}>
           <Form.Row>
-            <Form.Group as={Col} xs={'auto'} className="mr-auto mb-0">
+            <Form.Group as={Col} xs={12} className="mr-auto mb-0">
               <Form.Label>{t('tabEncryption.keyDerivationFunction')}</Form.Label>
             </Form.Group>
             <Form.Group as={Col} xs={'auto'}>
