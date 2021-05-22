@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './components/app/App';
 import { StoreProvider } from './contexts/store';
 import { Container } from 'react-bootstrap';
+import './i18n';
 import './index.css';
 
 if (process.env.REACT_APP_ENV !== 'cto') {
