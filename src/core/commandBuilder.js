@@ -85,6 +85,12 @@ const buildRsa = (rsa) => {
       case 'outFile':
         if (rsa.out) command.push(rsa.outFile);
         break;
+      case 'text':
+        if (rsa.text) command.push('-text');
+        break;
+      case 'noout':
+        if (rsa.noout) command.push('-noout');
+        break;
       default:
         break;
     }
