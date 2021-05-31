@@ -19,7 +19,7 @@ function App() {
   const runCommand = async (args, commandType = '', text = '') => {
     const files = state.files.map((item) => item.file);
     dispatch({ type: 'SET_LOADING', isLoading: true });
-    await delay(50);
+    await delay(125);
 
     switch (commandType) {
       case 'enc':
