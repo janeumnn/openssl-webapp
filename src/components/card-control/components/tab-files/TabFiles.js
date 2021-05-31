@@ -25,6 +25,7 @@ function File({ item, showConfirmation }) {
       <InputGroup.Prepend>
         <OverlayTrigger
           delay={{ show: 600, hide: 0 }}
+          trigger="hover"
           placement={'top'}
           overlay={<Tooltip>{t('tabFiles.delete')}</Tooltip>}
         >
@@ -34,6 +35,7 @@ function File({ item, showConfirmation }) {
         </OverlayTrigger>
         <OverlayTrigger
           delay={{ show: 600, hide: 0 }}
+          trigger="hover"
           placement={'top'}
           overlay={<Tooltip>{t('tabFiles.download')}</Tooltip>}
         >
