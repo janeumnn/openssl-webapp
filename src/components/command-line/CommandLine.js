@@ -14,7 +14,7 @@ function CommandLine({ runCommand, result }) {
 
   const addToCommandHistory = (command) => {
     if (commandHistory.current.commands.findIndex((x) => x === command) === -1)
-      commandHistory.current.commands.unshift(command);
+      commandHistory.current.commands.unshift(command.trim());
     if (commandHistory.current.length > 10) commandHistory.current.commands.pop();
   };
 
