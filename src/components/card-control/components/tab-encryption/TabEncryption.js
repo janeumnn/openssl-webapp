@@ -16,16 +16,26 @@ import { useTranslation } from 'react-i18next';
 import './TabEncryption.css';
 
 const CIPHERS = [
-  'aes-256-cbc',
-  'aes-192-cbc',
   'aes-128-cbc',
-  'aria-256-cbc',
-  'aria-192-cbc',
+  'aes-192-cbc',
+  'aes-256-cbc',
   'aria-128-cbc',
-  'camellia-256-cbc',
-  'camellia-192-cbc',
+  'aria-192-cbc',
+  'aria-256-cbc',
+  'bf',
+  'cast-cbc',
+  'cast5-cbc',
   'camellia-128-cbc',
+  'camellia-192-cbc',
+  'camellia-256-cbc',
+  'des',
+  'des-ede',
+  'des-ede3',
   'des3',
+  'desx',
+  'rc2',
+  'rc4',
+  'seed',
   'sm4',
 ];
 
