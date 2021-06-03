@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
-OPENSSL_VERSION="openssl-3.0.0-alpha9"
+OPENSSL_VERSION="openssl-1.1.1k"
 OPENSSL_DIR=${OPENSSL_VERSION}
-OPENSSL_JS_PATH="../src/openssl.js"
+OPENSSL_JS_PATH="../src/core/openssl.js"
 OPENSSL_WASM_PATH="../public/openssl.wasm"
 
 if [ -d ${OPENSSL_DIR} ]; then
@@ -13,8 +13,8 @@ if [ -f ${OPENSSL_JS_PATH} ]; then
   rm -rf ${OPENSSL_JS_PATH}
 fi
 
-if [ -f ${OPENSSL_WASM} ]; then
-  rm -rf ${OPENSSL_WASM}
+if [ -f ${OPENSSL_WASM_PATH} ]; then
+  rm -rf ${OPENSSL_WASM_PATH}
 fi
 
 if [ ! -f ${OPENSSL_VERSION}.tar.gz ]; then
@@ -27,27 +27,45 @@ cd ${OPENSSL_DIR} || exit 1
 
 export CC=emcc
 export CXX=emcc
-export LDFLAGS="\
+
+LDFLAGS="\
   -s ENVIRONMENT='web'\
   -s FILESYSTEM=1\
   -s MODULARIZE=1\
   -s EXPORT_NAME=OpenSSL\
-  -s EXTRA_EXPORTED_RUNTIME_METHODS=\"['run', 'callMain', 'FS']\"\
+  -s EXTRA_EXPORTED_RUNTIME_METHODS=\"['callMain', 'FS']\"\
   -s INVOKE_RUN=0\
+  -s EXIT_RUNTIME=1\
   -s EXPORT_ES6=1\
-  -s USE_ES6_IMPORT_META=0"
+  -s USE_ES6_IMPORT_META=0\
+  -s ALLOW_MEMORY_GROWTH=1"
+# -s WASM_BIGINT=1  Disabled due to tests
 
-emconfigure ./Configure no-hw no-shared no-asm no-threads -static
+if [[ $1 == "debug" ]]; then
+  LDFLAGS="$LDFLAGS -s ASSERTIONS=1" # For logging purposes.
+fi
+
+export LDFLAGS
+
+emconfigure ./Configure \
+  no-hw \
+  no-shared \
+  no-asm \
+  no-threads \
+  no-ssl3 \
+  no-dtls \
+  no-engine \
+  no-dso \
+  linux-x32 \
+  -static\
 
 make apps/progs.h
 
 sed -i 's/$(CROSS_COMPILE)//' Makefile
 
-emmake make -j 8 build_generated libssl.a libcrypto.a apps/openssl
+emmake make -j 16 build_generated libssl.a libcrypto.a apps/openssl
 
 mv apps/openssl apps/openssl.js
 sed -i.old '1s;^;\/* eslint-disable *\/;' apps/openssl.js
-sed -i.old "s|openssl.wasm|/openssl.wasm|" apps/openssl.js
-sed -i.old "s|wasmBinaryFile=locateFile(wasmBinaryFile)||" apps/openssl.js
-cp apps/openssl.js ../../src/
+cp apps/openssl.js ../../src/core/
 cp apps/openssl.wasm ../../public/

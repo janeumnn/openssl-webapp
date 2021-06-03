@@ -1,0 +1,61 @@
+{
+  "general": {
+    "execute": "Ausführen"
+  },
+  "validation": {
+    "noTextInput": "Keine Texteingabe",
+    "noFileSelected": "Keine Datei ausgewählt",
+    "noFileNameSpecified": "Kein Dateiname angegeben",
+    "noPassphraseSpecified": "Keine Passphrase angegeben",
+    "noValueSpecified": "Kein Wert angegeben"
+  },
+  "tabEncryption": {
+    "name": "Verschlüsselung",
+    "mode": "Modus",
+    "encrypt": "Verschlüsseln",
+    "decrypt": "Entschlüsseln",
+    "input": "Eingabe",
+    "file": "Datei",
+    "cipher": "Chiffre",
+    "outputFile": "Ausgabedatei",
+    "passphraseOrigin": "Herkunft der Passphrase",
+    "initializationVector": "Inititalisierungsvektor",
+    "keyDerivationFunction": "Schlüsselableitungsfunktion",
+    "default": "Standard",
+    "filenamePlaceholder": "Dateiname...",
+    "enterTextPlaceholder": "Text zum Verschlüsseln/Entschlüsseln eingeben...",
+    "selectPlaceholder": "Wähle...",
+    "inputPlaceHolder": "Eingabe...",
+    "hexValue": "Hex-Wert..."
+  },
+  "tabGenrsa": {
+    "name": "RSA Schlüsselgenerierung",
+    "outputFile": "Ausgabedatei",
+    "keyLength": "Schlüssellänge",
+    "filenamePlaceholder": "Dateiname...",
+    "download": "Herunterladen",
+    "information": "Informationen",
+    "generate": "Erzeugen",
+    "privateKey": "Privater Schlüssel",
+    "publicKey": "Öffentlicher Schlüssel"
+  },
+  "tabDigest": {
+    "name": "Hashes",
+    "hashFunction": "Hash-Funktion",
+    "inputFile": "Eingabedatei",
+    "selectPlaceholder": "Wähle..."
+  },
+  "tabFiles": {
+    "name": "Dateien",
+    "files": "Dateien",
+    "download": "Herunterladen",
+    "delete": "Löschen",
+    "selectFilesPlaceholder": "Wähle Dateien..."
+  },
+  "deleteModal": {
+    "headline": "Datei löschen",
+    "text": "Wollen Sie diese Datei wirklich löschen?",
+    "cancel": "Abbrechen",
+    "yes": "Ja"
+  }
+}
