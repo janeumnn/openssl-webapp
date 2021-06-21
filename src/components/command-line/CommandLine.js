@@ -20,6 +20,10 @@ function CommandLine({ runCommand, result }) {
     if (commandHistory.current.length > 10) commandHistory.current.commands.pop();
   };
 
+  const isBeforeExeceution = () => {
+    return !state.command && !commandHistory.current.commands.length;
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if (input.current.value.replace(/\s/g, '')) {
@@ -75,7 +79,7 @@ function CommandLine({ runCommand, result }) {
           </div>
         ) : (
           <>
-            {!commandHistory.current.commands.length && (
+            {isBeforeExeceution() && (
               <>
                 <span className="mb-3">
                   <Trans
