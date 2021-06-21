@@ -14,7 +14,7 @@
     "text": "Moderne Krypto-Methoden als GUI basierend auf OpenSSL. Sie können die Methoden über die GUI-Steuerelemente oder über die angezeigte OpenSSL-Kommandozeile ausführen. Die Kommandozeilenargumente entsprechen immer den ausgewählten GUI-Steuerelementen."
   },
   "tabEncryption": {
-    "name": "Verschlüsselung",
+    "name": "Symmetrische Verschlüsselung",
     "mode": "Modus",
     "encrypt": "Verschlüsseln",
     "decrypt": "Entschlüsseln",

@@ -14,7 +14,7 @@
     "text": "Modern crypto methods in a GUI using OpenSSL. You can execute the methods via the GUI controls or via the shown OpenSSL command line. The command line arguments are always in sync with the selected GUI controls."
   },
   "tabEncryption": {
-    "name": "Encryption",
+    "name": "Symmetric encryption",
     "mode": "Mode",
     "encrypt": "Encrypt",
     "decrypt": "Decrypt",
