@@ -1,9 +1,11 @@
 import React, { useRef, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useStore } from '../../contexts/store';
 
 import './CommandLine.css';
 
 function CommandLine({ runCommand, result }) {
+  const { t } = useTranslation('translation');
   const { state, dispatch } = useStore();
   const [command, setCommand] = useState('');
   const input = useRef();
@@ -73,6 +75,23 @@ function CommandLine({ runCommand, result }) {
           </div>
         ) : (
           <>
+            {!commandHistory.current.commands.length && (
+              <>
+                <span className="mb-3">
+                  <Trans
+                    i18nKey="commandLine.infoText"
+                    components={{ bold: <strong /> }}
+                    values={{ version: process.env.REACT_APP_OPENSSL_VERSION }}
+                  ></Trans>
+                </span>
+                <span className="mb-3">{t('commandLine.usage')}</span>
+                <span>{t('commandLine.moreInfo')}</span>
+                <ul>
+                  <li>{t('commandLine.availableCommands')}</li>
+                  <li>{t('commandLine.versionInfo')}</li>
+                </ul>
+              </>
+            )}
             {result.stderr && <p>{`${result.stderr}\n`}</p>}
             {result.stdout && <p>{result.stdout}</p>}
           </>

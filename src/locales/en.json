@@ -56,6 +56,13 @@
     "delete": "Delete",
     "selectFilesPlaceholder": "Select files..."
   },
+  "commandLine": {
+    "infoText": "Based on <bold>OpenSSL</bold> v{{ version }}",
+    "usage": "Usage: command [ options ] [ arguments ]",
+    "moreInfo": "More info:",
+    "availableCommands": "Available commands: 'help'",
+    "versionInfo": "Build information: 'version -a'"
+  },
   "deleteModal": {
     "headline": "Delete file",
     "text": "Do you really want to delete this file?",
