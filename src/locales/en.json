@@ -9,6 +9,10 @@
     "noPassphraseSpecified": "No passphrase specified",
     "noValueSpecified": "No value specified"
   },
+  "cardDescription": {
+    "title": "Welcome!",
+    "text": "Modern crypto methods in a GUI using OpenSSL. You can execute the methods via the GUI controls or via the shown OpenSSL command line. The command line arguments are always in sync with the selected GUI controls."
+  },
   "tabEncryption": {
     "name": "Encryption",
     "mode": "Mode",
