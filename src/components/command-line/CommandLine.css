@@ -17,6 +17,15 @@
   width: 100%;
 }
 
+.CommandLine-output > span,
+.CommandLine-output li {
+  color: white;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5rem;
+  white-space: pre-wrap;
+}
+
 .CommandLine-output > p {
   color: white;
   font-family: 'Roboto Mono', monospace;
