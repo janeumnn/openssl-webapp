@@ -34,7 +34,7 @@
   },
   "tabGenrsa": {
     "name": "RSA key generation",
-    "outputFile": "Output File",
+    "outputFile": "Output file",
     "keyLength": "Key length",
     "filenamePlaceholder": "Filename...",
     "download": "Download",
