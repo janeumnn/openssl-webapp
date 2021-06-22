@@ -52,6 +52,7 @@ function File({ item, showConfirmation }) {
       <InputGroup.Append>
         <InputGroup.Text>
           {new Intl.DateTimeFormat('en-GB', {
+            year: 'numeric',
             month: 'numeric',
             day: 'numeric',
             hour: 'numeric',
