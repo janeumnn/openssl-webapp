@@ -77,6 +77,7 @@ class Command {
       file: null,
     };
 
+    let charIndex = 0;
     const wasmModule = this.wasmModule;
     const moduleObj = {
       thisProgram: 'openssl',
@@ -86,6 +87,18 @@ class Command {
         });
         return {};
       },
+      stdin: inputText
+        ? function () {
+            if (charIndex < text.length) {
+              let code = text.charCodeAt(charIndex);
+              ++charIndex;
+              return code;
+            }
+            return null;
+          }
+        : function () {
+            return undefined;
+          },
       print: function (line) {
         output.stdout += line + '\n';
       },
@@ -96,9 +109,6 @@ class Command {
 
     OpenSSL(moduleObj)
       .then((instance) => {
-        if (inputText) {
-          instance['FS'].writeFile(this.getFileInParameter(argsArray), text);
-        }
         if (inputFiles) {
           writeFiles.forEach((file) => {
             instance['FS'].writeFile(file.name, file.buffer);

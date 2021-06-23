@@ -13,7 +13,6 @@ const buildEnc = (enc) => {
         break;
       case 'inFile':
         if (enc.in) command.push(`-in ${enc.inFile}`);
-        else command.push('-in input');
         break;
       case 'outFile':
         if (enc.out) command.push(`-out ${enc.outFile}`);
