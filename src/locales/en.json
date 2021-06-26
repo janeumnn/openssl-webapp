@@ -47,7 +47,12 @@
     "name": "Hashes",
     "hashFunction": "Hash function",
     "inputFile": "Input file",
-    "selectPlaceholder": "Select..."
+    "selectPlaceholder": "Select...",
+    "filenamePlaceholder": "Filename...",
+    "enterTextPlaceholder": "Enter text to hash...",
+    "input": "Input",
+    "file": "File",
+    "outputFile": "Output file"
   },
   "tabFiles": {
     "name": "Files",

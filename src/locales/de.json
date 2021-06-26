@@ -47,7 +47,12 @@
     "name": "Hashes",
     "hashFunction": "Hash-Funktion",
     "inputFile": "Eingabedatei",
-    "selectPlaceholder": "Wähle..."
+    "selectPlaceholder": "Wähle...",
+    "filenamePlaceholder": "Dateiname...",
+    "enterTextPlaceholder": "Texteingabe zur Berechnung des Hash-Wertes...",
+    "input": "Eingabe",
+    "file": "Datei",
+    "outputFile": "Ausgabedatei"
   },
   "tabFiles": {
     "name": "Dateien",

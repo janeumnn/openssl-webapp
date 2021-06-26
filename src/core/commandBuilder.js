@@ -104,8 +104,11 @@ const buildDgst = (dgst) => {
       case 'algorithm':
         command.push(`-${dgst.algorithm}`);
         break;
+      case 'out':
+        if (dgst.out) command.push(`-out ${dgst.outFile}`);
+        break;
       case 'file':
-        command.push(dgst.file);
+        if (dgst.file) command.push(dgst.fileVal);
         break;
       default:
         break;
