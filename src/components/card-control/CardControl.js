@@ -39,10 +39,10 @@ function CardControl({ runCommand }) {
               <Nav.Link eventKey="encryption">{t('tabEncryption.name')}</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="genrsa">{t('tabGenrsa.name')}</Nav.Link>
+              <Nav.Link eventKey="digest">Hashes</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="digest">Hashes</Nav.Link>
+              <Nav.Link eventKey="genrsa">{t('tabGenrsa.name')}</Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="files">

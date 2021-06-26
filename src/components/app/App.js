@@ -53,7 +53,7 @@ function App() {
         await command.run(args, files, null);
         break;
       case 'dgst':
-        await command.run(args, files, null);
+        await command.run(args, files, text);
         break;
       default:
         await command.run(args, files);
