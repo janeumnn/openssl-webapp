@@ -192,10 +192,11 @@ function TabEncryption({ runCommand }) {
 
   const execute = () => {
     if (checkValidation()) {
-      const text = enc.text ? enc.textVal : '';
+      const text =
+        enc.d && enc.text && !enc.textVal.endsWith('\n') ? enc.textVal.concat('\n') : enc.textVal;
       const command = buildEnc(enc);
       dispatch({ type: 'SET_COMMAND', command: command });
-      runCommand(command, 'enc', text);
+      runCommand(command, 'enc', text || '');
     }
   };
 
@@ -434,36 +435,32 @@ function TabEncryption({ runCommand }) {
         </Form.Group>
       </Form.Row>
       <Form.Row>
-        <Col md={5} lg={5}>
-          <Form.Row>
-            <Form.Group as={Col} xs={12} className="mr-auto mb-0">
-              <Form.Label>{t('tabEncryption.keyDerivationFunction')}</Form.Label>
-            </Form.Group>
-            <Form.Group as={Col} xs={'auto'}>
-              <Form.Check
-                id="enc-kdf-default"
-                type="radio"
-                label={t('tabEncryption.default')}
-                className="text-nowrap mr-5"
-                checked={!enc.pbkdf2}
-                onChange={set('pbkdf2')}
-                inline
-                custom
-              />
+        <Form.Group as={Col} xs={'auto'} className="mr-4 mb-0">
+          <Form.Label>{t('tabEncryption.keyDerivationFunction')}:</Form.Label>
+        </Form.Group>
+        <Form.Group as={Col} xs={'auto'}>
+          <Form.Check
+            id="enc-kdf-default"
+            type="radio"
+            label={t('tabEncryption.default')}
+            className="text-nowrap mr-5"
+            checked={!enc.pbkdf2}
+            onChange={set('pbkdf2')}
+            inline
+            custom
+          />
 
-              <Form.Check
-                id="enc-pbkdf"
-                type="radio"
-                label="PBKDF2"
-                className="text-nowrap mr-0"
-                checked={enc.pbkdf2}
-                onChange={set('pbkdf2')}
-                inline
-                custom
-              />
-            </Form.Group>
-          </Form.Row>
-        </Col>
+          <Form.Check
+            id="enc-pbkdf"
+            type="radio"
+            label="PBKDF2"
+            className="text-nowrap mr-0"
+            checked={enc.pbkdf2}
+            onChange={set('pbkdf2')}
+            inline
+            custom
+          />
+        </Form.Group>
       </Form.Row>
       <Button type="button" onClick={execute} disabled={state.isLoading}>
         {t('general.execute')}
