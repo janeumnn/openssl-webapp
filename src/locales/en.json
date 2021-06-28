@@ -9,8 +9,12 @@
     "noPassphraseSpecified": "No passphrase specified",
     "noValueSpecified": "No value specified"
   },
+  "cardDescription": {
+    "title": "Welcome!",
+    "text": "Modern crypto methods in a GUI using OpenSSL. You can execute the methods via the GUI controls or via the shown OpenSSL command line. The command line arguments are always in sync with the selected GUI controls."
+  },
   "tabEncryption": {
-    "name": "Encryption",
+    "name": "Symmetric encryption",
     "mode": "Mode",
     "encrypt": "Encrypt",
     "decrypt": "Decrypt",
@@ -30,7 +34,7 @@
   },
   "tabGenrsa": {
     "name": "RSA key generation",
-    "outputFile": "Output File",
+    "outputFile": "Output file",
     "keyLength": "Key length",
     "filenamePlaceholder": "Filename...",
     "download": "Download",
@@ -43,7 +47,12 @@
     "name": "Hashes",
     "hashFunction": "Hash function",
     "inputFile": "Input file",
-    "selectPlaceholder": "Select..."
+    "selectPlaceholder": "Select...",
+    "filenamePlaceholder": "Filename...",
+    "enterTextPlaceholder": "Enter text to hash...",
+    "input": "Input",
+    "file": "File",
+    "outputFile": "Output file"
   },
   "tabFiles": {
     "name": "Files",
@@ -51,6 +60,13 @@
     "download": "Download",
     "delete": "Delete",
     "selectFilesPlaceholder": "Select files..."
+  },
+  "commandLine": {
+    "infoText": "Based on <bold>OpenSSL</bold> v{{ version }}",
+    "usage": "Usage: command [ options ] [ arguments ]",
+    "moreInfo": "More info:",
+    "availableCommands": "Available commands: 'help'",
+    "versionInfo": "Build information: 'version -a'"
   },
   "deleteModal": {
     "headline": "Delete file",

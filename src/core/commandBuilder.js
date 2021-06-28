@@ -13,7 +13,6 @@ const buildEnc = (enc) => {
         break;
       case 'inFile':
         if (enc.in) command.push(`-in ${enc.inFile}`);
-        else command.push('-in input');
         break;
       case 'outFile':
         if (enc.out) command.push(`-out ${enc.outFile}`);
@@ -105,8 +104,11 @@ const buildDgst = (dgst) => {
       case 'algorithm':
         command.push(`-${dgst.algorithm}`);
         break;
+      case 'out':
+        if (dgst.out) command.push(`-out ${dgst.outFile}`);
+        break;
       case 'file':
-        command.push(dgst.file);
+        if (dgst.file) command.push(dgst.fileVal);
         break;
       default:
         break;

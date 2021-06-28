@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { Card } from 'react-bootstrap';
 import CardControl from '../card-control/CardControl';
 import CommandLine from '../../components/command-line/CommandLine';
 import Command from '../../core/command';
 import { useStore } from '../../contexts/store';
+import { useTranslation } from 'react-i18next';
 
 import './App.css';
 
@@ -12,9 +14,28 @@ const delay = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
+function CardDescription({ close }) {
+  const { t } = useTranslation('translation');
+
+  return (
+    <Card className="mb-3">
+      <Card.Header className="bg-transparent border-bottom-0">
+        <button type="button" className="close no-after" onClick={close}>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </Card.Header>
+      <Card.Body className="mt-n5">
+        <Card.Title>{t('cardDescription.title')}</Card.Title>
+        <Card.Text>{t('cardDescription.text')}</Card.Text>
+      </Card.Body>
+    </Card>
+  );
+}
+
 function App() {
   const { state, dispatch } = useStore();
   const [output, setOutput] = useState({ stdout: '', stderr: '', file: null });
+  const [showDescription, setShowDescription] = useState(true);
 
   const runCommand = async (args, commandType = '', text = '') => {
     const files = state.files.map((item) => item.file);
@@ -32,7 +53,7 @@ function App() {
         await command.run(args, files, null);
         break;
       case 'dgst':
-        await command.run(args, files, null);
+        await command.run(args, files, text);
         break;
       default:
         await command.run(args, files);
@@ -58,6 +79,9 @@ function App() {
 
   return (
     <div className="App">
+      {showDescription && (
+        <CardDescription close={() => setShowDescription(false)}></CardDescription>
+      )}
       <CardControl runCommand={runCommand}></CardControl>
       <CommandLine
         runCommand={runCommand}

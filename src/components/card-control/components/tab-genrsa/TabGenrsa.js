@@ -28,6 +28,8 @@ function TabGenrsa({ runCommand }) {
   const [isPrivateKey, setIsPrivateKey] = useState(null);
   const [isPublicKey, setIsPublicKey] = useState(null);
 
+  const [disableInput, setDisableInput] = useState(false);
+
   useEffect(() => {
     setIsPrivateKey(!!state.files?.find((item) => item.file.name === privateKey));
     setIsPublicKey(!!state.files?.find((item) => item.file.name === publicKey));
@@ -135,6 +137,7 @@ function TabGenrsa({ runCommand }) {
             value={genrsa.outFile}
             onChange={set('outFile')}
             isInvalid={validation.fileOutput}
+            disabled={disableInput}
           />
           <Form.Control.Feedback type="invalid">
             {t('validation.noTextInput')}
@@ -142,7 +145,13 @@ function TabGenrsa({ runCommand }) {
         </Form.Group>
         <Form.Group as={Col} md={5} controlId="genrsa-numbits">
           <Form.Label className="mb-2">{t('tabGenrsa.keyLength')}</Form.Label>
-          <Form.Control as="select" value={genrsa.numbits} onChange={set('numbits')} custom>
+          <Form.Control
+            as="select"
+            value={genrsa.numbits}
+            onChange={set('numbits')}
+            disabled={disableInput}
+            custom
+          >
             {NUMBITS.map((numbits) => (
               <option key={numbits} value={numbits}>{`${numbits}-bit`}</option>
             ))}
@@ -158,7 +167,7 @@ function TabGenrsa({ runCommand }) {
         {isPrivateKey && (
           <>
             <Form.Group className="mb-md-0" as={Col} xs={'auto'}>
-              <Dropdown as={ButtonGroup}>
+              <Dropdown as={ButtonGroup} onToggle={() => setDisableInput((prev) => !prev)}>
                 <Button onClick={() => showKey(privateKey)}>{t('tabGenrsa.privateKey')}</Button>
                 <Dropdown.Toggle split />
                 <Dropdown.Menu>
@@ -173,7 +182,7 @@ function TabGenrsa({ runCommand }) {
               </Dropdown>
             </Form.Group>
             <Form.Group className="mb-md-0" as={Col} xs={'auto'}>
-              <Dropdown as={ButtonGroup}>
+              <Dropdown as={ButtonGroup} onToggle={() => setDisableInput((prev) => !prev)}>
                 <Button onClick={() => showKey(publicKey)} disabled={!publicKey}>
                   {t('tabGenrsa.publicKey')}
                 </Button>

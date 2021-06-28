@@ -9,8 +9,12 @@
     "noPassphraseSpecified": "Keine Passphrase angegeben",
     "noValueSpecified": "Kein Wert angegeben"
   },
+  "cardDescription": {
+    "title": "Willkommen!",
+    "text": "Moderne Krypto-Methoden als GUI basierend auf OpenSSL. Sie können die Methoden über die GUI-Steuerelemente oder über die angezeigte OpenSSL-Kommandozeile ausführen. Die Kommandozeilenargumente entsprechen immer den ausgewählten GUI-Steuerelementen."
+  },
   "tabEncryption": {
-    "name": "Verschlüsselung",
+    "name": "Symmetrische Verschlüsselung",
     "mode": "Modus",
     "encrypt": "Verschlüsseln",
     "decrypt": "Entschlüsseln",
@@ -43,7 +47,12 @@
     "name": "Hashes",
     "hashFunction": "Hash-Funktion",
     "inputFile": "Eingabedatei",
-    "selectPlaceholder": "Wähle..."
+    "selectPlaceholder": "Wähle...",
+    "filenamePlaceholder": "Dateiname...",
+    "enterTextPlaceholder": "Texteingabe zur Berechnung des Hash-Wertes...",
+    "input": "Eingabe",
+    "file": "Datei",
+    "outputFile": "Ausgabedatei"
   },
   "tabFiles": {
     "name": "Dateien",
@@ -51,6 +60,13 @@
     "download": "Herunterladen",
     "delete": "Löschen",
     "selectFilesPlaceholder": "Wähle Dateien..."
+  },
+  "commandLine": {
+    "infoText": "Basierend auf <bold>OpenSSL</bold> v{{ version }}",
+    "usage": "Verwendung: Kommando [ Optionen ] [ Argumente ]",
+    "moreInfo": "Mehr Infos:",
+    "availableCommands": "Verfügbare Kommandos: 'help'",
+    "versionInfo": "Build-Informationen: 'version -a'"
   },
   "deleteModal": {
     "headline": "Datei löschen",
