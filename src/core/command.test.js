@@ -30,7 +30,7 @@ describe('test if result observable emits values', () => {
 
   test('result has a text', (done) => {
     const command = new Command();
-    command.run('enc -base64 -in file', null, inputText);
+    command.run('enc -base64', null, inputText);
     command.resultAsObservable.pipe(take(1)).subscribe((value) => {
       expect(value.stdout).toBeTruthy();
       done();
@@ -144,10 +144,10 @@ describe('symmetric encryption methods with an input file', () => {
 describe('symmetric encryption methods with an input text in a base64 format', () => {
   test('aes-256-cbc encryption and decryption', (done) => {
     const command = new Command();
-    command.run(`enc -e -a -aes-256-cbc -k 1234 -in file`, null, inputText);
+    command.run(`enc -e -a -aes-256-cbc -k 1234`, null, inputText);
     command.resultAsObservable.pipe(take(2)).subscribe((value) => {
       if (value.stdout !== inputText) {
-        command.run(`enc -d -a -aes-256-cbc -k 1234 -in file`, null, value.stdout);
+        command.run(`enc -d -a -aes-256-cbc -k 1234`, null, value.stdout);
       }
       if (value.stdout === inputText) {
         expect(value.stdout).toEqual(inputText);
@@ -158,10 +158,10 @@ describe('symmetric encryption methods with an input text in a base64 format', (
 
   test('camellia-256-cbc encryption and decryption', (done) => {
     const command = new Command();
-    command.run(`enc -e -a -camellia-256-cbc -k 1234 -in file`, null, inputText);
+    command.run(`enc -e -a -camellia-256-cbc -k 1234`, null, inputText);
     command.resultAsObservable.pipe(take(2)).subscribe((value) => {
       if (value.stdout !== inputText) {
-        command.run(`enc -d -a -camellia-256-cbc -k 1234 -in file`, null, value.stdout);
+        command.run(`enc -d -a -camellia-256-cbc -k 1234`, null, value.stdout);
       }
       if (value.stdout === inputText) {
         expect(value.stdout).toEqual(inputText);
@@ -172,10 +172,10 @@ describe('symmetric encryption methods with an input text in a base64 format', (
 
   test('des3 encryption and decryption', (done) => {
     const command = new Command();
-    command.run(`enc -e -a -des3 -k 1234 -in file`, null, inputText);
+    command.run(`enc -e -a -des3 -k 1234`, null, inputText);
     command.resultAsObservable.pipe(take(2)).subscribe((value) => {
       if (value.stdout !== inputText) {
-        command.run(`enc -d -a -des3 -k 1234 -in file`, null, value.stdout);
+        command.run(`enc -d -a -des3 -k 1234`, null, value.stdout);
       }
       if (value.stdout === inputText) {
         expect(value.stdout).toEqual(inputText);
@@ -186,10 +186,10 @@ describe('symmetric encryption methods with an input text in a base64 format', (
 
   test('des-ede3-cbc encryption and decryption', (done) => {
     const command = new Command();
-    command.run(`enc -e -a -des-ede3-cbc -k 1234 -in file`, null, inputText);
+    command.run(`enc -e -a -des-ede3-cbc -k 1234`, null, inputText);
     command.resultAsObservable.pipe(take(2)).subscribe((value) => {
       if (value.stdout !== inputText) {
-        command.run(`enc -d -a -des-ede3-cbc -k 1234 -in file`, null, value.stdout);
+        command.run(`enc -d -a -des-ede3-cbc -k 1234`, null, value.stdout);
       }
       if (value.stdout === inputText) {
         expect(value.stdout).toEqual(inputText);
