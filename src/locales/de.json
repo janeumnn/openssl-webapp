@@ -32,7 +32,7 @@
     "hexValue": "Hex-Wert..."
   },
   "tabGenrsa": {
-    "name": "RSA Schlüsselgenerierung",
+    "name": "RSA-Schlüsselgenerierung",
     "outputFile": "Ausgabedatei",
     "keyLength": "Schlüssellänge",
     "filenamePlaceholder": "Dateiname...",
