@@ -50,9 +50,18 @@ class Command {
    * @param {string} text Command text to process
    */
   async run(args, files = null, text = '') {
+    const wasmModule = this.wasmModule;
     let inputText = false;
     let inputFiles = false;
     let writeFiles = [];
+    let charIndex = 0;
+    let error = null;
+
+    let output = {
+      stdout: '',
+      stderr: '',
+      file: null,
+    };
 
     const argsArray = this.convertArgsToArray(args);
 
@@ -62,7 +71,7 @@ class Command {
     if (text && Object.prototype.toString.call(text) === '[object String]') {
       inputText = true;
     }
-    if (files && Object.prototype.toString.call(files) === '[object Array]') {
+    if (files && files.length && Object.prototype.toString.call(files) === '[object Array]') {
       inputFiles = true;
       const filteredFiles = this.filterInputFiles(argsArray, files);
       for (const file of filteredFiles) {
@@ -71,14 +80,6 @@ class Command {
       }
     }
 
-    let output = {
-      stdout: '',
-      stderr: '',
-      file: null,
-    };
-
-    let charIndex = 0;
-    const wasmModule = this.wasmModule;
     const moduleObj = {
       thisProgram: 'openssl',
       instantiateWasm: function (imports, successCallback) {
@@ -97,6 +98,7 @@ class Command {
             return null;
           }
         : function () {
+            error = new Error('Standard stream (stdin) not available!');
             return undefined;
           },
       print: function (line) {
@@ -125,8 +127,13 @@ class Command {
             type: 'application/octet-stream',
           });
         }
+
+        if (error) throw error;
       })
-      .catch((error) => (output.stderr = `${error.name}: ${error.message}`))
+      .catch((error) => {
+        output.stdout = '';
+        output.stderr = `${error.name}: ${error.message}`;
+      })
       .finally(() => this.resultSubject.next(output));
   }
 

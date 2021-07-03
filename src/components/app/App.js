@@ -25,8 +25,7 @@ function CardDescription({ close }) {
         </button>
       </Card.Header>
       <Card.Body className="mt-n5">
-        <Card.Title>{t('cardDescription.title')}</Card.Title>
-        <Card.Text>{t('cardDescription.text')}</Card.Text>
+        <Card.Text className="mr-4">{t('cardDescription.text')}</Card.Text>
       </Card.Body>
     </Card>
   );
