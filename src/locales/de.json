@@ -30,7 +30,8 @@
     "enterTextPlaceholder": "Text zum Verschlüsseln/Entschlüsseln eingeben...",
     "selectPlaceholder": "Wähle...",
     "inputPlaceHolder": "Eingabe...",
-    "hexValue": "Hex-Wert..."
+    "hexValue": "Hex-Wert...",
+    "noSalt": "Kein Salt verwenden"
   },
   "tabGenrsa": {
     "name": "RSA-Schlüsselgenerierung",
