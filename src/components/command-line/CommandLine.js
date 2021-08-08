@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useStore } from '../../contexts/store';
 
@@ -13,6 +13,12 @@ function CommandLine({ runCommand, result }) {
     selectedIndex: -1,
     commands: [],
   });
+
+  useEffect(() => {
+    if (state.command) {
+      addToCommandHistory(state.command);
+    }
+  }, [state.command]);
 
   const addToCommandHistory = (command) => {
     const position = commandHistory.current.commands.findIndex((x) => x === command);
@@ -33,8 +39,8 @@ function CommandLine({ runCommand, result }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (input.current.value.replace(/\s/g, '')) {
-      addToCommandHistory(input.current.value);
+
+    if (input.current.value) {
       dispatch({ type: 'SET_COMMAND', command: input.current.value });
       runCommand(input.current.value);
       setCommand('');
@@ -79,7 +85,7 @@ function CommandLine({ runCommand, result }) {
   return (
     <div className="CommandLine">
       <div className="CommandLine-output">
-        {state.command && <p className="CommandLine-command">{`OpenSSL> ${state.command}`}</p>}
+        {state.command && <p className="CommandLine-command">{`$ ${state.command}`}</p>}
         {state.isLoading ? (
           <div className="CommandLine-loader">
             <div className="spinner-border text-light" role="status"></div>
@@ -95,7 +101,9 @@ function CommandLine({ runCommand, result }) {
                     values={{ version: process.env.REACT_APP_OPENSSL_VERSION }}
                   ></Trans>
                 </span>
-                <span className="mb-3">{t('commandLine.usage')}</span>
+                <span className="mb-3">
+                  <Trans i18nKey="commandLine.usage" components={{ bold: <strong /> }}></Trans>
+                </span>
                 <span>{t('commandLine.moreInfo')}</span>
                 <ul>
                   <li>{t('commandLine.availableCommands')}</li>
@@ -110,7 +118,7 @@ function CommandLine({ runCommand, result }) {
       </div>
       <form onSubmit={handleSubmit}>
         <div className="CommandLine-input">
-          <label>OpenSSL&gt;</label>
+          <label>$</label>
           <input
             ref={input}
             type="text"

@@ -105,10 +105,9 @@ function TabDigest({ runCommand }) {
 
   const execute = () => {
     if (checkValidation()) {
-      const text = dgst.text ? dgst.textVal : '';
       const command = buildDgst(dgst);
       dispatch({ type: 'SET_COMMAND', command: command });
-      runCommand(command, 'dgst', text);
+      runCommand(command, 'dgst');
     }
   };
 
