@@ -35,6 +35,9 @@ const buildEnc = (enc) => {
       case 'pbkdf2':
         if (enc.pbkdf2) command.push('-pbkdf2');
         break;
+      case 'nosalt':
+        if (enc.nosalt) command.push('-nosalt');
+        break;
       case 'iv':
         if (enc.iv) command.push('-iv');
         break;

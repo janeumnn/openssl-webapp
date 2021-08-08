@@ -62,6 +62,7 @@ function TabEncryption({ runCommand }) {
     kfile: false,
     kValFile: '',
     pbkdf2: true,
+    nosalt: false,
     iv: false,
     ivVal: '',
     a: false,
@@ -154,6 +155,9 @@ function TabEncryption({ runCommand }) {
         break;
       case 'pbkdf2':
         setEnc((prev) => ({ ...prev, [key]: !enc.pbkdf2 }));
+        break;
+      case 'nosalt':
+        setEnc((prev) => ({ ...prev, [key]: value }));
         break;
       default:
         setEnc((prev) => ({ ...prev, [key]: value }));
@@ -452,9 +456,20 @@ function TabEncryption({ runCommand }) {
             id="enc-pbkdf"
             type="radio"
             label="PBKDF2"
-            className="text-nowrap mr-0"
+            className="text-nowrap mr-5"
             checked={enc.pbkdf2}
             onChange={set('pbkdf2')}
+            inline
+            custom
+          />
+
+          <Form.Check
+            id="enc-salt"
+            type="checkbox"
+            label={t('tabEncryption.noSalt')}
+            className="text-nowrap mr-0"
+            checked={enc.nosalt}
+            onChange={set('nosalt')}
             inline
             custom
           />

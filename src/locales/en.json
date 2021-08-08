@@ -30,7 +30,8 @@
     "enterTextPlaceholder": "Enter text to encrypt/decrypt...",
     "selectPlaceholder": "Select...",
     "inputPlaceHolder": "Input...",
-    "hexValue": "Hex value..."
+    "hexValue": "Hex value...",
+    "noSalt": "No salt"
   },
   "tabGenrsa": {
     "name": "RSA key generation",
