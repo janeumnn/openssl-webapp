@@ -1,6 +1,7 @@
 {
   "general": {
-    "execute": "Execute"
+    "execute": "Execute",
+    "unknownCommand": "Unknown command!"
   },
   "validation": {
     "noTextInput": "No text input",
@@ -62,10 +63,10 @@
   },
   "commandLine": {
     "infoText": "Based on <bold>OpenSSL</bold> v{{ version }}",
-    "usage": "Usage: command [ options ] [ arguments ]",
+    "usage": "Usage: <bold>openssl</bold> command [ options ] [ arguments ]",
     "moreInfo": "More info:",
-    "availableCommands": "Available commands: 'help'",
-    "versionInfo": "Build information: 'version -a'"
+    "availableCommands": "Available commands: 'openssl help'",
+    "versionInfo": "Build information: 'openssl version -a'"
   },
   "deleteModal": {
     "headline": "Delete file",

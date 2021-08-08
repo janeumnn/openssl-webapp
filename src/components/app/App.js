@@ -5,6 +5,7 @@ import CommandLine from '../../components/command-line/CommandLine';
 import Command from '../../core/command';
 import { useStore } from '../../contexts/store';
 import { useTranslation } from 'react-i18next';
+import { commandPipe } from '../../core/commandPipe';
 
 import './App.css';
 
@@ -35,28 +36,54 @@ function App() {
   const { state, dispatch } = useStore();
   const [output, setOutput] = useState({ stdout: '', stderr: '', file: null });
   const [showDescription, setShowDescription] = useState(true);
+  const { t } = useTranslation('translation');
 
-  const runCommand = async (args, commandType = '', text = '') => {
+  const runCommand = async (commandInput, commandType = '') => {
     const files = state.files.map((item) => item.file);
     dispatch({ type: 'SET_LOADING', isLoading: true });
     await delay(125);
 
-    switch (commandType) {
-      case 'enc':
-        await command.run(args, files, text);
-        break;
-      case 'genrsa':
-        await command.run(args, null, null);
-        break;
-      case 'rsa':
-        await command.run(args, files, null);
-        break;
-      case 'dgst':
-        await command.run(args, files, text);
-        break;
-      default:
-        await command.run(args, files);
-        break;
+    let pipe = commandPipe(commandInput);
+
+    if (Object.keys(pipe).length === 1 && Object.keys(pipe).includes('echo')) {
+      dispatch({ type: 'SET_LOADING', isLoading: false });
+      setOutput({ stdout: pipe.echo, stderr: '', file: null });
+      return;
+    }
+
+    if (
+      Object.keys(pipe).length === 2 &&
+      Object.keys(pipe).includes('echo') &&
+      !Object.keys(pipe).includes('openssl')
+    ) {
+      dispatch({ type: 'SET_LOADING', isLoading: false });
+      setOutput({ stdout: '', stderr: t('general.unknownCommand'), file: null });
+      return;
+    }
+
+    if (Object.keys(pipe).includes('openssl')) {
+      if (!pipe.openssl) pipe.openssl = 'help';
+      switch (commandType) {
+        case 'enc':
+          await command.run(pipe.openssl, files, pipe.echo ?? '');
+          break;
+        case 'genrsa':
+          await command.run(pipe.openssl, null, null);
+          break;
+        case 'rsa':
+          await command.run(pipe.openssl, files, null);
+          break;
+        case 'dgst':
+          await command.run(pipe.openssl, files, pipe.echo ?? '');
+          break;
+        default:
+          await command.run(pipe.openssl, files, pipe.echo ?? '');
+          break;
+      }
+    } else {
+      dispatch({ type: 'SET_LOADING', isLoading: false });
+      setOutput({ stdout: '', stderr: t('general.unknownCommand'), file: null });
+      return;
     }
   };
 

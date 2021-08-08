@@ -70,6 +70,9 @@ class Command {
     }
     if (text && Object.prototype.toString.call(text) === '[object String]') {
       inputText = true;
+      text = !text.endsWith('\\n')
+        ? text.split('\\n').join('\n').concat('\n')
+        : text.split('\\n').join('\n');
     }
     if (files && files.length && Object.prototype.toString.call(files) === '[object Array]') {
       inputFiles = true;

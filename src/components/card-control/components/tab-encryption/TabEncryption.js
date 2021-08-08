@@ -192,11 +192,9 @@ function TabEncryption({ runCommand }) {
 
   const execute = () => {
     if (checkValidation()) {
-      const text =
-        enc.d && enc.text && !enc.textVal.endsWith('\n') ? enc.textVal.concat('\n') : enc.textVal;
       const command = buildEnc(enc);
       dispatch({ type: 'SET_COMMAND', command: command });
-      runCommand(command, 'enc', text || '');
+      runCommand(command, 'enc');
     }
   };
 
