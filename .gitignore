@@ -18,6 +18,9 @@
 # Optional eslint cache
 .eslintcache
 
+# ide
+/.vscode
+
 # misc
 .DS_Store
 .env.local
