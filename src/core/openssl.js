@@ -14,6 +14,266 @@ var OpenSSL = (function () {
       readyPromiseResolve = resolve;
       readyPromiseReject = reject;
     });
+    if (!Module.expectedDataFileDownloads) {
+      Module.expectedDataFileDownloads = 0;
+    }
+    Module.expectedDataFileDownloads++;
+    (function () {
+      var loadPackage = function (metadata) {
+        function runWithFS() {
+          Module['FS_createPath']('/', 'usr', true, true);
+          Module['FS_createPath']('/usr', 'local', true, true);
+          Module['FS_createPath']('/usr/local', 'ssl', true, true);
+          var fileData0 = [];
+          fileData0.push.apply(fileData0, [
+            32,
+            32,
+            32,
+            111,
+            112,
+            101,
+            110,
+            115,
+            115,
+            108,
+            95,
+            99,
+            111,
+            110,
+            102,
+            32,
+            61,
+            32,
+            111,
+            112,
+            101,
+            110,
+            115,
+            115,
+            108,
+            95,
+            105,
+            110,
+            105,
+            116,
+            10,
+            32,
+            32,
+            32,
+            10,
+            32,
+            32,
+            32,
+            91,
+            111,
+            112,
+            101,
+            110,
+            115,
+            115,
+            108,
+            95,
+            105,
+            110,
+            105,
+            116,
+            93,
+            10,
+            32,
+            32,
+            32,
+            112,
+            114,
+            111,
+            118,
+            105,
+            100,
+            101,
+            114,
+            115,
+            32,
+            61,
+            32,
+            112,
+            114,
+            111,
+            118,
+            105,
+            100,
+            101,
+            114,
+            95,
+            115,
+            101,
+            99,
+            116,
+            10,
+            32,
+            32,
+            32,
+            10,
+            32,
+            32,
+            32,
+            91,
+            112,
+            114,
+            111,
+            118,
+            105,
+            100,
+            101,
+            114,
+            95,
+            115,
+            101,
+            99,
+            116,
+            93,
+            10,
+            32,
+            32,
+            32,
+            100,
+            101,
+            102,
+            97,
+            117,
+            108,
+            116,
+            32,
+            61,
+            32,
+            100,
+            101,
+            102,
+            97,
+            117,
+            108,
+            116,
+            95,
+            115,
+            101,
+            99,
+            116,
+            10,
+            32,
+            32,
+            32,
+            108,
+            101,
+            103,
+            97,
+            99,
+            121,
+            32,
+            61,
+            32,
+            108,
+            101,
+            103,
+            97,
+            99,
+            121,
+            95,
+            115,
+            101,
+            99,
+            116,
+            10,
+            32,
+            32,
+            32,
+            10,
+            32,
+            32,
+            32,
+            91,
+            100,
+            101,
+            102,
+            97,
+            117,
+            108,
+            116,
+            95,
+            115,
+            101,
+            99,
+            116,
+            93,
+            10,
+            32,
+            32,
+            32,
+            97,
+            99,
+            116,
+            105,
+            118,
+            97,
+            116,
+            101,
+            32,
+            61,
+            32,
+            49,
+            10,
+            32,
+            32,
+            32,
+            10,
+            32,
+            32,
+            32,
+            91,
+            108,
+            101,
+            103,
+            97,
+            99,
+            121,
+            95,
+            115,
+            101,
+            99,
+            116,
+            93,
+            10,
+            32,
+            32,
+            32,
+            97,
+            99,
+            116,
+            105,
+            118,
+            97,
+            116,
+            101,
+            32,
+            61,
+            32,
+            49,
+          ]);
+          Module['FS_createDataFile'](
+            '/usr/local/ssl',
+            'openssl.cnf',
+            fileData0,
+            true,
+            true,
+            false
+          );
+        }
+        if (Module['calledRun']) {
+          runWithFS();
+        } else {
+          if (!Module['preRun']) Module['preRun'] = [];
+          Module['preRun'].push(runWithFS);
+        }
+      };
+      loadPackage({ files: [] });
+    })();
     var moduleOverrides = {};
     var key;
     for (key in Module) {
@@ -395,7 +655,7 @@ var OpenSSL = (function () {
         Module['asm'] = exports;
         wasmMemory = Module['asm']['ka'];
         updateGlobalBufferAndViews(wasmMemory.buffer);
-        wasmTable = Module['asm']['na'];
+        wasmTable = Module['asm']['ma'];
         removeRunDependency('wasm-instantiate');
       }
       addRunDependency('wasm-instantiate');
@@ -5383,6 +5643,12 @@ var OpenSSL = (function () {
     });
     FS.FSNode = FSNode;
     FS.staticInit();
+    Module['FS_createPath'] = FS.createPath;
+    Module['FS_createDataFile'] = FS.createDataFile;
+    Module['FS_createPreloadedFile'] = FS.createPreloadedFile;
+    Module['FS_createLazyFile'] = FS.createLazyFile;
+    Module['FS_createDevice'] = FS.createDevice;
+    Module['FS_unlink'] = FS.unlink;
     function intArrayFromString(stringy, dontAddNull, length) {
       var len = length > 0 ? length : lengthBytesUTF8(stringy) + 1;
       var u8array = new Array(len);
@@ -5391,70 +5657,70 @@ var OpenSSL = (function () {
       return u8array;
     }
     var asmLibraryArg = {
-      M: ___gmtime_r,
-      ba: ___sys__newselect,
-      A: ___sys_accept4,
-      W: ___sys_access,
-      D: ___sys_bind,
-      ea: ___sys_chmod,
-      C: ___sys_connect,
-      V: ___sys_dup,
+      L: ___gmtime_r,
+      aa: ___sys__newselect,
+      z: ___sys_accept4,
+      V: ___sys_access,
+      C: ___sys_bind,
+      da: ___sys_chmod,
+      B: ___sys_connect,
+      U: ___sys_dup,
       h: ___sys_fcntl64,
-      ca: ___sys_fstat64,
-      aa: ___sys_getdents64,
-      Z: ___sys_getegid32,
-      X: ___sys_geteuid32,
-      P: ___sys_getgid32,
+      ba: ___sys_fstat64,
+      $: ___sys_getdents64,
+      Y: ___sys_getegid32,
+      W: ___sys_geteuid32,
+      O: ___sys_getgid32,
       g: ___sys_getpid,
-      z: ___sys_getsockname,
-      x: ___sys_getsockopt,
-      S: ___sys_getuid32,
-      m: ___sys_ioctl,
-      B: ___sys_listen,
-      da: ___sys_lstat64,
-      O: ___sys_munmap,
-      p: ___sys_open,
-      U: ___sys_pipe,
-      Y: ___sys_readlink,
-      N: ___sys_rename,
-      y: ___sys_sendto,
-      T: ___sys_setpgid,
-      w: ___sys_setsockopt,
-      E: ___sys_shutdown,
-      k: ___sys_socket,
-      n: ___sys_stat64,
-      R: ___sys_symlink,
-      Q: ___sys_unlink,
-      fa: ___sys_wait4,
-      o: __exit,
+      y: ___sys_getsockname,
+      v: ___sys_getsockopt,
+      R: ___sys_getuid32,
+      o: ___sys_ioctl,
+      A: ___sys_listen,
+      ca: ___sys_lstat64,
+      N: ___sys_munmap,
+      q: ___sys_open,
+      T: ___sys_pipe,
+      X: ___sys_readlink,
+      M: ___sys_rename,
+      w: ___sys_sendto,
+      S: ___sys_setpgid,
+      u: ___sys_setsockopt,
+      D: ___sys_shutdown,
+      l: ___sys_socket,
+      p: ___sys_stat64,
+      Q: ___sys_symlink,
+      P: ___sys_unlink,
+      ea: ___sys_wait4,
+      k: __exit,
       ha: _abort,
       a: _alarm,
       ga: _atexit,
-      q: _clock_gettime,
-      F: _emscripten_memcpy_big,
-      G: _emscripten_resize_heap,
-      L: _emscripten_thread_sleep,
-      J: _environ_get,
-      K: _environ_sizes_get,
-      d: _exit,
+      fa: _clock_gettime,
+      E: _emscripten_memcpy_big,
+      F: _emscripten_resize_heap,
+      K: _emscripten_thread_sleep,
+      I: _environ_get,
+      J: _environ_sizes_get,
+      e: _exit,
       i: _fd_close,
-      H: _fd_fdstat_get,
-      l: _fd_read,
-      v: _fd_seek,
+      G: _fd_fdstat_get,
+      m: _fd_read,
+      t: _fd_seek,
       j: _fd_write,
-      s: _fork,
+      n: _fork,
       r: _gai_strerror,
       ia: _getaddrinfo,
       ja: _getnameinfo,
       f: _gettimeofday,
-      $: _gmtime_r,
-      I: _kill,
+      _: _gmtime_r,
+      s: _kill,
       b: _sigaction,
-      e: _signal,
-      _: _strftime,
-      t: _sysconf,
+      d: _signal,
+      Z: _strftime,
+      x: _sysconf,
       c: _time,
-      u: _times,
+      H: _times,
     };
     var asm = createWasm();
     var ___wasm_call_ctors = (Module['___wasm_call_ctors'] = function () {
@@ -5464,28 +5730,28 @@ var OpenSSL = (function () {
       );
     });
     var _memset = (Module['_memset'] = function () {
-      return (_memset = Module['_memset'] = Module['asm']['ma']).apply(null, arguments);
+      return (_memset = Module['_memset'] = Module['asm']['na']).apply(null, arguments);
+    });
+    var _main = (Module['_main'] = function () {
+      return (_main = Module['_main'] = Module['asm']['oa']).apply(null, arguments);
     });
     var ___errno_location = (Module['___errno_location'] = function () {
-      return (___errno_location = Module['___errno_location'] = Module['asm']['oa']).apply(
+      return (___errno_location = Module['___errno_location'] = Module['asm']['pa']).apply(
         null,
         arguments
       );
     });
-    var _main = (Module['_main'] = function () {
-      return (_main = Module['_main'] = Module['asm']['pa']).apply(null, arguments);
-    });
     var _fflush = (Module['_fflush'] = function () {
       return (_fflush = Module['_fflush'] = Module['asm']['qa']).apply(null, arguments);
     });
-    var _free = (Module['_free'] = function () {
-      return (_free = Module['_free'] = Module['asm']['ra']).apply(null, arguments);
-    });
     var _ntohs = (Module['_ntohs'] = function () {
-      return (_ntohs = Module['_ntohs'] = Module['asm']['sa']).apply(null, arguments);
+      return (_ntohs = Module['_ntohs'] = Module['asm']['ra']).apply(null, arguments);
     });
     var _malloc = (Module['_malloc'] = function () {
-      return (_malloc = Module['_malloc'] = Module['asm']['ta']).apply(null, arguments);
+      return (_malloc = Module['_malloc'] = Module['asm']['sa']).apply(null, arguments);
+    });
+    var _free = (Module['_free'] = function () {
+      return (_free = Module['_free'] = Module['asm']['ta']).apply(null, arguments);
     });
     var _htons = (Module['_htons'] = function () {
       return (_htons = Module['_htons'] = Module['asm']['ua']).apply(null, arguments);
@@ -5496,6 +5762,14 @@ var OpenSSL = (function () {
     var stackAlloc = (Module['stackAlloc'] = function () {
       return (stackAlloc = Module['stackAlloc'] = Module['asm']['wa']).apply(null, arguments);
     });
+    Module['addRunDependency'] = addRunDependency;
+    Module['removeRunDependency'] = removeRunDependency;
+    Module['FS_createPath'] = FS.createPath;
+    Module['FS_createDataFile'] = FS.createDataFile;
+    Module['FS_createPreloadedFile'] = FS.createPreloadedFile;
+    Module['FS_createLazyFile'] = FS.createLazyFile;
+    Module['FS_createDevice'] = FS.createDevice;
+    Module['FS_unlink'] = FS.unlink;
     Module['callMain'] = callMain;
     Module['FS'] = FS;
     var calledRun;

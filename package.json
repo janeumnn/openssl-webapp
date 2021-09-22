@@ -34,7 +34,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "build:cto-app": "env-cmd -f .env.cto react-app-rewired build",
-    "build:openssl": "cd openssl && ./build.sh ${ARG} && npm run format:openssl",
+    "build:openssl": "cd openssl && ./build.sh ${ARG} && npm run copy:openssl",
+    "copy:openssl": "./importWasmBuild.sh && npm run format:openssl",
     "format:openssl": "prettier --write src/core/openssl.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
