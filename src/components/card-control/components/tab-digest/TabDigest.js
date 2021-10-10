@@ -39,7 +39,7 @@ function TabDigest({ runCommand }) {
     out: false,
     outFile: '',
     text: true,
-    textVal: '',
+    textVal: t('tabDigest.inputExampleText'),
     file: false,
     fileVal: '',
   });
