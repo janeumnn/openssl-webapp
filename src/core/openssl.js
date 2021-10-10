@@ -14,6 +14,36 @@ var OpenSSL = (function () {
       readyPromiseResolve = resolve;
       readyPromiseReject = reject;
     });
+    if (!Module.expectedDataFileDownloads) {
+      Module.expectedDataFileDownloads = 0;
+    }
+    Module.expectedDataFileDownloads++;
+    (function () {
+      var loadPackage = function (metadata) {
+        function runWithFS() {
+          Module['FS_createPath']('/', 'usr', true, true);
+          Module['FS_createPath']('/usr', 'local', true, true);
+          Module['FS_createPath']('/usr/local', 'ssl', true, true);
+          var fileData0 =
+            'ICAgb3BlbnNzbF9jb25mID0gb3BlbnNzbF9pbml0CiAgIAogICBbb3BlbnNzbF9pbml0XQogICBwcm92aWRlcnMgPSBwcm92aWRlcl9zZWN0CiAgIAogICBbcHJvdmlkZXJfc2VjdF0KICAgZGVmYXVsdCA9IGRlZmF1bHRfc2VjdAogICBsZWdhY3kgPSBsZWdhY3lfc2VjdAogICAKICAgW2RlZmF1bHRfc2VjdF0KICAgYWN0aXZhdGUgPSAxCiAgIAogICBbbGVnYWN5X3NlY3RdCiAgIGFjdGl2YXRlID0gMQ==';
+          Module['FS_createDataFile'](
+            '/usr/local/ssl',
+            'openssl.cnf',
+            decodeBase64(fileData0),
+            true,
+            true,
+            false
+          );
+        }
+        if (Module['calledRun']) {
+          runWithFS();
+        } else {
+          if (!Module['preRun']) Module['preRun'] = [];
+          Module['preRun'].push(runWithFS);
+        }
+      };
+      loadPackage({ files: [] });
+    })();
     var moduleOverrides = {};
     var key;
     for (key in Module) {
@@ -47,7 +77,10 @@ var OpenSSL = (function () {
         scriptDirectory = _scriptDir;
       }
       if (scriptDirectory.indexOf('blob:') !== 0) {
-        scriptDirectory = scriptDirectory.substr(0, scriptDirectory.lastIndexOf('/') + 1);
+        scriptDirectory = scriptDirectory.substr(
+          0,
+          scriptDirectory.replace(/[?#].*/, '').lastIndexOf('/') + 1
+        );
       } else {
         scriptDirectory = '';
       }
@@ -98,11 +131,6 @@ var OpenSSL = (function () {
     if (Module['arguments']) arguments_ = Module['arguments'];
     if (Module['thisProgram']) thisProgram = Module['thisProgram'];
     if (Module['quit']) quit_ = Module['quit'];
-    var STACK_ALIGN = 16;
-    function alignMemory(size, factor) {
-      if (!factor) factor = STACK_ALIGN;
-      return Math.ceil(size / factor) * factor;
-    }
     var wasmBinary;
     if (Module['wasmBinary']) wasmBinary = Module['wasmBinary'];
     var noExitRuntime = Module['noExitRuntime'] || false;
@@ -253,11 +281,10 @@ var OpenSSL = (function () {
     var __ATPOSTRUN__ = [];
     var runtimeInitialized = false;
     var runtimeExited = false;
-    __ATINIT__.push({
-      func: function () {
-        ___wasm_call_ctors();
-      },
-    });
+    var runtimeKeepaliveCounter = 0;
+    function keepRuntimeAlive() {
+      return noExitRuntime || runtimeKeepaliveCounter > 0;
+    }
     function preRun() {
       if (Module['preRun']) {
         if (typeof Module['preRun'] == 'function') Module['preRun'] = [Module['preRun']];
@@ -270,13 +297,13 @@ var OpenSSL = (function () {
     function initRuntime() {
       runtimeInitialized = true;
       if (!Module['noFSInit'] && !FS.init.initialized) FS.init();
+      FS.ignorePermissions = false;
       TTY.init();
       SOCKFS.root = FS.mount(SOCKFS, {}, null);
       PIPEFS.root = FS.mount(PIPEFS, {}, null);
       callRuntimeCallbacks(__ATINIT__);
     }
     function preMain() {
-      FS.ignorePermissions = false;
       callRuntimeCallbacks(__ATMAIN__);
     }
     function exitRuntime() {
@@ -296,6 +323,9 @@ var OpenSSL = (function () {
     }
     function addOnPreRun(cb) {
       __ATPRERUN__.unshift(cb);
+    }
+    function addOnInit(cb) {
+      __ATINIT__.unshift(cb);
     }
     function addOnPostRun(cb) {
       __ATPOSTRUN__.unshift(cb);
@@ -332,26 +362,26 @@ var OpenSSL = (function () {
     Module['preloadedImages'] = {};
     Module['preloadedAudios'] = {};
     function abort(what) {
-      if (Module['onAbort']) {
-        Module['onAbort'](what);
+      {
+        if (Module['onAbort']) {
+          Module['onAbort'](what);
+        }
       }
-      what += '';
+      what = 'Aborted(' + what + ')';
       err(what);
       ABORT = true;
       EXITSTATUS = 1;
-      what = 'abort(' + what + '). Build with -s ASSERTIONS=1 for more info.';
+      what += '. Build with -s ASSERTIONS=1 for more info.';
       var e = new WebAssembly.RuntimeError(what);
       readyPromiseReject(e);
       throw e;
     }
-    function hasPrefix(str, prefix) {
-      return String.prototype.startsWith ? str.startsWith(prefix) : str.indexOf(prefix) === 0;
-    }
     var dataURIPrefix = 'data:application/octet-stream;base64,';
     function isDataURI(filename) {
-      return hasPrefix(filename, dataURIPrefix);
+      return filename.startsWith(dataURIPrefix);
     }
-    var wasmBinaryFile = 'openssl.wasm';
+    var wasmBinaryFile;
+    wasmBinaryFile = 'openssl.wasm';
     if (!isDataURI(wasmBinaryFile)) {
       wasmBinaryFile = locateFile(wasmBinaryFile);
     }
@@ -393,19 +423,23 @@ var OpenSSL = (function () {
       function receiveInstance(instance, module) {
         var exports = instance.exports;
         Module['asm'] = exports;
-        wasmMemory = Module['asm']['ka'];
+        wasmMemory = Module['asm']['ia'];
         updateGlobalBufferAndViews(wasmMemory.buffer);
-        wasmTable = Module['asm']['na'];
+        wasmTable = Module['asm']['ka'];
+        addOnInit(Module['asm']['ja']);
         removeRunDependency('wasm-instantiate');
       }
       addRunDependency('wasm-instantiate');
-      function receiveInstantiatedSource(output) {
-        receiveInstance(output['instance']);
+      function receiveInstantiationResult(result) {
+        receiveInstance(result['instance']);
       }
       function instantiateArrayBuffer(receiver) {
         return getBinaryPromise()
           .then(function (binary) {
             return WebAssembly.instantiate(binary, info);
+          })
+          .then(function (instance) {
+            return instance;
           })
           .then(receiver, function (reason) {
             err('failed to asynchronously prepare wasm: ' + reason);
@@ -421,14 +455,14 @@ var OpenSSL = (function () {
         ) {
           return fetch(wasmBinaryFile, { credentials: 'same-origin' }).then(function (response) {
             var result = WebAssembly.instantiateStreaming(response, info);
-            return result.then(receiveInstantiatedSource, function (reason) {
+            return result.then(receiveInstantiationResult, function (reason) {
               err('wasm streaming compile failed: ' + reason);
               err('falling back to ArrayBuffer instantiation');
-              return instantiateArrayBuffer(receiveInstantiatedSource);
+              return instantiateArrayBuffer(receiveInstantiationResult);
             });
           });
         } else {
-          return instantiateArrayBuffer(receiveInstantiatedSource);
+          return instantiateArrayBuffer(receiveInstantiationResult);
         }
       }
       if (Module['instantiateWasm']) {
@@ -463,6 +497,15 @@ var OpenSSL = (function () {
           func(callback.arg === undefined ? null : callback.arg);
         }
       }
+    }
+    function handleException(e) {
+      if (e instanceof ExitStatus || e == 'unwind') {
+        return EXITSTATUS;
+      }
+      quit_(1, e);
+    }
+    function ___call_sighandler(fp, sig) {
+      wasmTable.get(fp)(sig);
     }
     function _gmtime_r(time, tmPtr) {
       var date = new Date(HEAP32[time >> 2] * 1e3);
@@ -744,10 +787,17 @@ var OpenSSL = (function () {
         },
       },
     };
+    function zeroMemory(address, size) {
+      HEAPU8.fill(0, address, address + size);
+    }
+    function alignMemory(size, alignment) {
+      return Math.ceil(size / alignment) * alignment;
+    }
     function mmapAlloc(size) {
-      var alignedSize = alignMemory(size, 16384);
-      var ptr = _malloc(alignedSize);
-      while (size < alignedSize) HEAP8[ptr + size++] = 0;
+      size = alignMemory(size, 65536);
+      var ptr = _memalign(65536, size);
+      if (!ptr) return 0;
+      zeroMemory(ptr, size);
       return ptr;
     }
     var MEMFS = {
@@ -1056,6 +1106,25 @@ var OpenSSL = (function () {
         },
       },
     };
+    function asyncLoad(url, onload, onerror, noRunDep) {
+      var dep = !noRunDep ? getUniqueRunDependency('al ' + url) : '';
+      readAsync(
+        url,
+        function (arrayBuffer) {
+          assert(arrayBuffer, 'Loading data file "' + url + '" failed (no arrayBuffer).');
+          onload(new Uint8Array(arrayBuffer));
+          if (dep) removeRunDependency(dep);
+        },
+        function (event) {
+          if (onerror) {
+            onerror();
+          } else {
+            throw 'Loading data file "' + url + '" failed.';
+          }
+        }
+      );
+      if (dep) addRunDependency(dep);
+    }
     var FS = {
       root: null,
       mounts: [],
@@ -1066,8 +1135,6 @@ var OpenSSL = (function () {
       currentPath: '/',
       initialized: false,
       ignorePermissions: true,
-      trackingDelegate: {},
-      tracking: { openFlags: { READ: 1, WRITE: 2 } },
       ErrnoError: null,
       genericErrors: {},
       filesystems: null,
@@ -1227,11 +1294,11 @@ var OpenSSL = (function () {
         if (FS.ignorePermissions) {
           return 0;
         }
-        if (perms.indexOf('r') !== -1 && !(node.mode & 292)) {
+        if (perms.includes('r') && !(node.mode & 292)) {
           return 2;
-        } else if (perms.indexOf('w') !== -1 && !(node.mode & 146)) {
+        } else if (perms.includes('w') && !(node.mode & 146)) {
           return 2;
-        } else if (perms.indexOf('x') !== -1 && !(node.mode & 73)) {
+        } else if (perms.includes('x') && !(node.mode & 73)) {
           return 2;
         }
         return 0;
@@ -1461,7 +1528,7 @@ var OpenSSL = (function () {
           var current = FS.nameTable[hash];
           while (current) {
             var next = current.name_next;
-            if (mounts.indexOf(current.mount) !== -1) {
+            if (mounts.includes(current.mount)) {
               FS.destroyNode(current);
             }
             current = next;
@@ -1595,20 +1662,6 @@ var OpenSSL = (function () {
             throw new FS.ErrnoError(errCode);
           }
         }
-        try {
-          if (FS.trackingDelegate['willMovePath']) {
-            FS.trackingDelegate['willMovePath'](old_path, new_path);
-          }
-        } catch (e) {
-          err(
-            "FS.trackingDelegate['willMovePath']('" +
-              old_path +
-              "', '" +
-              new_path +
-              "') threw an exception: " +
-              e.message
-          );
-        }
         FS.hashRemoveNode(old_node);
         try {
           old_dir.node_ops.rename(old_node, new_dir, new_name);
@@ -1616,19 +1669,6 @@ var OpenSSL = (function () {
           throw e;
         } finally {
           FS.hashAddNode(old_node);
-        }
-        try {
-          if (FS.trackingDelegate['onMovePath'])
-            FS.trackingDelegate['onMovePath'](old_path, new_path);
-        } catch (e) {
-          err(
-            "FS.trackingDelegate['onMovePath']('" +
-              old_path +
-              "', '" +
-              new_path +
-              "') threw an exception: " +
-              e.message
-          );
         }
       },
       rmdir: function (path) {
@@ -1646,24 +1686,8 @@ var OpenSSL = (function () {
         if (FS.isMountpoint(node)) {
           throw new FS.ErrnoError(10);
         }
-        try {
-          if (FS.trackingDelegate['willDeletePath']) {
-            FS.trackingDelegate['willDeletePath'](path);
-          }
-        } catch (e) {
-          err(
-            "FS.trackingDelegate['willDeletePath']('" + path + "') threw an exception: " + e.message
-          );
-        }
         parent.node_ops.rmdir(parent, name);
         FS.destroyNode(node);
-        try {
-          if (FS.trackingDelegate['onDeletePath']) FS.trackingDelegate['onDeletePath'](path);
-        } catch (e) {
-          err(
-            "FS.trackingDelegate['onDeletePath']('" + path + "') threw an exception: " + e.message
-          );
-        }
       },
       readdir: function (path) {
         var lookup = FS.lookupPath(path, { follow: true });
@@ -1688,24 +1712,8 @@ var OpenSSL = (function () {
         if (FS.isMountpoint(node)) {
           throw new FS.ErrnoError(10);
         }
-        try {
-          if (FS.trackingDelegate['willDeletePath']) {
-            FS.trackingDelegate['willDeletePath'](path);
-          }
-        } catch (e) {
-          err(
-            "FS.trackingDelegate['willDeletePath']('" + path + "') threw an exception: " + e.message
-          );
-        }
         parent.node_ops.unlink(parent, name);
         FS.destroyNode(node);
-        try {
-          if (FS.trackingDelegate['onDeletePath']) FS.trackingDelegate['onDeletePath'](path);
-        } catch (e) {
-          err(
-            "FS.trackingDelegate['onDeletePath']('" + path + "') threw an exception: " + e.message
-          );
-        }
       },
       readlink: function (path) {
         var lookup = FS.lookupPath(path);
@@ -1894,27 +1902,7 @@ var OpenSSL = (function () {
           if (!FS.readFiles) FS.readFiles = {};
           if (!(path in FS.readFiles)) {
             FS.readFiles[path] = 1;
-            err('FS.trackingDelegate error on read file: ' + path);
           }
-        }
-        try {
-          if (FS.trackingDelegate['onOpenFile']) {
-            var trackingFlags = 0;
-            if ((flags & 2097155) !== 1) {
-              trackingFlags |= FS.tracking.openFlags.READ;
-            }
-            if ((flags & 2097155) !== 0) {
-              trackingFlags |= FS.tracking.openFlags.WRITE;
-            }
-            FS.trackingDelegate['onOpenFile'](path, trackingFlags);
-          }
-        } catch (e) {
-          err(
-            "FS.trackingDelegate['onOpenFile']('" +
-              path +
-              "', flags) threw an exception: " +
-              e.message
-          );
         }
         return stream;
       },
@@ -2011,17 +1999,6 @@ var OpenSSL = (function () {
           canOwn
         );
         if (!seeking) stream.position += bytesWritten;
-        try {
-          if (stream.path && FS.trackingDelegate['onWriteToFile'])
-            FS.trackingDelegate['onWriteToFile'](stream.path);
-        } catch (e) {
-          err(
-            "FS.trackingDelegate['onWriteToFile']('" +
-              stream.path +
-              "') threw an exception: " +
-              e.message
-          );
-        }
         return bytesWritten;
       },
       allocate: function (stream, offset, length) {
@@ -2579,7 +2556,7 @@ var OpenSSL = (function () {
         }
         addRunDependency(dep);
         if (typeof url == 'string') {
-          Browser.asyncLoad(
+          asyncLoad(
             url,
             function (byteArray) {
               processData(byteArray);
@@ -2934,129 +2911,6 @@ var OpenSSL = (function () {
         return -e.errno;
       }
     }
-    var ERRNO_CODES = {
-      EPERM: 63,
-      ENOENT: 44,
-      ESRCH: 71,
-      EINTR: 27,
-      EIO: 29,
-      ENXIO: 60,
-      E2BIG: 1,
-      ENOEXEC: 45,
-      EBADF: 8,
-      ECHILD: 12,
-      EAGAIN: 6,
-      EWOULDBLOCK: 6,
-      ENOMEM: 48,
-      EACCES: 2,
-      EFAULT: 21,
-      ENOTBLK: 105,
-      EBUSY: 10,
-      EEXIST: 20,
-      EXDEV: 75,
-      ENODEV: 43,
-      ENOTDIR: 54,
-      EISDIR: 31,
-      EINVAL: 28,
-      ENFILE: 41,
-      EMFILE: 33,
-      ENOTTY: 59,
-      ETXTBSY: 74,
-      EFBIG: 22,
-      ENOSPC: 51,
-      ESPIPE: 70,
-      EROFS: 69,
-      EMLINK: 34,
-      EPIPE: 64,
-      EDOM: 18,
-      ERANGE: 68,
-      ENOMSG: 49,
-      EIDRM: 24,
-      ECHRNG: 106,
-      EL2NSYNC: 156,
-      EL3HLT: 107,
-      EL3RST: 108,
-      ELNRNG: 109,
-      EUNATCH: 110,
-      ENOCSI: 111,
-      EL2HLT: 112,
-      EDEADLK: 16,
-      ENOLCK: 46,
-      EBADE: 113,
-      EBADR: 114,
-      EXFULL: 115,
-      ENOANO: 104,
-      EBADRQC: 103,
-      EBADSLT: 102,
-      EDEADLOCK: 16,
-      EBFONT: 101,
-      ENOSTR: 100,
-      ENODATA: 116,
-      ETIME: 117,
-      ENOSR: 118,
-      ENONET: 119,
-      ENOPKG: 120,
-      EREMOTE: 121,
-      ENOLINK: 47,
-      EADV: 122,
-      ESRMNT: 123,
-      ECOMM: 124,
-      EPROTO: 65,
-      EMULTIHOP: 36,
-      EDOTDOT: 125,
-      EBADMSG: 9,
-      ENOTUNIQ: 126,
-      EBADFD: 127,
-      EREMCHG: 128,
-      ELIBACC: 129,
-      ELIBBAD: 130,
-      ELIBSCN: 131,
-      ELIBMAX: 132,
-      ELIBEXEC: 133,
-      ENOSYS: 52,
-      ENOTEMPTY: 55,
-      ENAMETOOLONG: 37,
-      ELOOP: 32,
-      EOPNOTSUPP: 138,
-      EPFNOSUPPORT: 139,
-      ECONNRESET: 15,
-      ENOBUFS: 42,
-      EAFNOSUPPORT: 5,
-      EPROTOTYPE: 67,
-      ENOTSOCK: 57,
-      ENOPROTOOPT: 50,
-      ESHUTDOWN: 140,
-      ECONNREFUSED: 14,
-      EADDRINUSE: 3,
-      ECONNABORTED: 13,
-      ENETUNREACH: 40,
-      ENETDOWN: 38,
-      ETIMEDOUT: 73,
-      EHOSTDOWN: 142,
-      EHOSTUNREACH: 23,
-      EINPROGRESS: 26,
-      EALREADY: 7,
-      EDESTADDRREQ: 17,
-      EMSGSIZE: 35,
-      EPROTONOSUPPORT: 66,
-      ESOCKTNOSUPPORT: 137,
-      EADDRNOTAVAIL: 4,
-      ENETRESET: 39,
-      EISCONN: 30,
-      ENOTCONN: 53,
-      ETOOMANYREFS: 141,
-      EUSERS: 136,
-      EDQUOT: 19,
-      ESTALE: 72,
-      ENOTSUP: 138,
-      ENOMEDIUM: 148,
-      EILSEQ: 25,
-      EOVERFLOW: 61,
-      ECANCELED: 11,
-      ENOTRECOVERABLE: 56,
-      EOWNERDEAD: 62,
-      ESTRPIPE: 135,
-    };
     var SOCKFS = {
       mount: function (mount) {
         Module['websocket'] =
@@ -3200,7 +3054,7 @@ var OpenSSL = (function () {
               ws = new WebSocketConstructor(url, opts);
               ws.binaryType = 'arraybuffer';
             } catch (e) {
-              throw new FS.ErrnoError(ERRNO_CODES.EHOSTUNREACH);
+              throw new FS.ErrnoError(23);
             }
           }
           var peer = { addr: addr, port: port, socket: ws, dgram_send_queue: [] };
@@ -3294,7 +3148,7 @@ var OpenSSL = (function () {
               Module['websocket'].emit('close', sock.stream.fd);
             });
             peer.socket.on('error', function (error) {
-              sock.error = ERRNO_CODES.ECONNREFUSED;
+              sock.error = 14;
               Module['websocket'].emit('error', [
                 sock.stream.fd,
                 sock.error,
@@ -3310,7 +3164,7 @@ var OpenSSL = (function () {
               handleMessage(event.data);
             };
             peer.socket.onerror = function (error) {
-              sock.error = ERRNO_CODES.ECONNREFUSED;
+              sock.error = 14;
               Module['websocket'].emit('error', [
                 sock.stream.fd,
                 sock.error,
@@ -3357,7 +3211,7 @@ var OpenSSL = (function () {
               HEAP32[arg >> 2] = bytes;
               return 0;
             default:
-              return ERRNO_CODES.EINVAL;
+              return 28;
           }
         },
         close: function (sock) {
@@ -3379,7 +3233,7 @@ var OpenSSL = (function () {
         },
         bind: function (sock, addr, port) {
           if (typeof sock.saddr !== 'undefined' || typeof sock.sport !== 'undefined') {
-            throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+            throw new FS.ErrnoError(28);
           }
           sock.saddr = addr;
           sock.sport = port;
@@ -3392,37 +3246,37 @@ var OpenSSL = (function () {
               sock.sock_ops.listen(sock, 0);
             } catch (e) {
               if (!(e instanceof FS.ErrnoError)) throw e;
-              if (e.errno !== ERRNO_CODES.EOPNOTSUPP) throw e;
+              if (e.errno !== 138) throw e;
             }
           }
         },
         connect: function (sock, addr, port) {
           if (sock.server) {
-            throw new FS.ErrnoError(ERRNO_CODES.EOPNOTSUPP);
+            throw new FS.ErrnoError(138);
           }
           if (typeof sock.daddr !== 'undefined' && typeof sock.dport !== 'undefined') {
             var dest = SOCKFS.websocket_sock_ops.getPeer(sock, sock.daddr, sock.dport);
             if (dest) {
               if (dest.socket.readyState === dest.socket.CONNECTING) {
-                throw new FS.ErrnoError(ERRNO_CODES.EALREADY);
+                throw new FS.ErrnoError(7);
               } else {
-                throw new FS.ErrnoError(ERRNO_CODES.EISCONN);
+                throw new FS.ErrnoError(30);
               }
             }
           }
           var peer = SOCKFS.websocket_sock_ops.createPeer(sock, addr, port);
           sock.daddr = peer.addr;
           sock.dport = peer.port;
-          throw new FS.ErrnoError(ERRNO_CODES.EINPROGRESS);
+          throw new FS.ErrnoError(26);
         },
         listen: function (sock, backlog) {
           if (!ENVIRONMENT_IS_NODE) {
-            throw new FS.ErrnoError(ERRNO_CODES.EOPNOTSUPP);
+            throw new FS.ErrnoError(138);
           }
         },
         accept: function (listensock) {
           if (!listensock.server) {
-            throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+            throw new FS.ErrnoError(28);
           }
           var newsock = listensock.pending.shift();
           newsock.stream.flags = listensock.stream.flags;
@@ -3432,7 +3286,7 @@ var OpenSSL = (function () {
           var addr, port;
           if (peer) {
             if (sock.daddr === undefined || sock.dport === undefined) {
-              throw new FS.ErrnoError(ERRNO_CODES.ENOTCONN);
+              throw new FS.ErrnoError(53);
             }
             addr = sock.daddr;
             port = sock.dport;
@@ -3449,7 +3303,7 @@ var OpenSSL = (function () {
               port = sock.dport;
             }
             if (addr === undefined || port === undefined) {
-              throw new FS.ErrnoError(ERRNO_CODES.EDESTADDRREQ);
+              throw new FS.ErrnoError(17);
             }
           } else {
             addr = sock.daddr;
@@ -3462,9 +3316,9 @@ var OpenSSL = (function () {
               dest.socket.readyState === dest.socket.CLOSING ||
               dest.socket.readyState === dest.socket.CLOSED
             ) {
-              throw new FS.ErrnoError(ERRNO_CODES.ENOTCONN);
+              throw new FS.ErrnoError(53);
             } else if (dest.socket.readyState === dest.socket.CONNECTING) {
-              throw new FS.ErrnoError(ERRNO_CODES.EAGAIN);
+              throw new FS.ErrnoError(6);
             }
           }
           if (ArrayBuffer.isView(buffer)) {
@@ -3490,29 +3344,29 @@ var OpenSSL = (function () {
             dest.socket.send(data);
             return length;
           } catch (e) {
-            throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+            throw new FS.ErrnoError(28);
           }
         },
         recvmsg: function (sock, length) {
           if (sock.type === 1 && sock.server) {
-            throw new FS.ErrnoError(ERRNO_CODES.ENOTCONN);
+            throw new FS.ErrnoError(53);
           }
           var queued = sock.recv_queue.shift();
           if (!queued) {
             if (sock.type === 1) {
               var dest = SOCKFS.websocket_sock_ops.getPeer(sock, sock.daddr, sock.dport);
               if (!dest) {
-                throw new FS.ErrnoError(ERRNO_CODES.ENOTCONN);
+                throw new FS.ErrnoError(53);
               } else if (
                 dest.socket.readyState === dest.socket.CLOSING ||
                 dest.socket.readyState === dest.socket.CLOSED
               ) {
                 return null;
               } else {
-                throw new FS.ErrnoError(ERRNO_CODES.EAGAIN);
+                throw new FS.ErrnoError(6);
               }
             } else {
-              throw new FS.ErrnoError(ERRNO_CODES.EAGAIN);
+              throw new FS.ErrnoError(6);
             }
           }
           var queuedLength = queued.data.byteLength || queued.data.length;
@@ -3542,7 +3396,7 @@ var OpenSSL = (function () {
       HEAP32[___errno_location() >> 2] = value;
       return value;
     }
-    function __inet_pton4_raw(str) {
+    function inetPton4(str) {
       var b = str.split('.');
       for (var i = 0; i < 4; i++) {
         var tmp = Number(b[i]);
@@ -3554,7 +3408,7 @@ var OpenSSL = (function () {
     function jstoi_q(str) {
       return parseInt(str);
     }
-    function __inet_pton6_raw(str) {
+    function inetPton6(str) {
       var words;
       var w, offset, z;
       var valid6regx = /^((?=.*::)(?!.*::.+::)(::)?([\dA-F]{1,4}:(:|\b)|){5}|([\dA-F]{1,4}:){6})((([\dA-F]{1,4}((?!\3)::|:\b|$))|(?!\2\3)){2}|(((2[0-4]|1\d|[1-9])?\d|25[0-5])\.?\b){4})$/i;
@@ -3565,7 +3419,7 @@ var OpenSSL = (function () {
       if (str === '::') {
         return [0, 0, 0, 0, 0, 0, 0, 0];
       }
-      if (str.indexOf('::') === 0) {
+      if (str.startsWith('::')) {
         str = str.replace('::', 'Z:');
       } else {
         str = str.replace('::', ':Z:');
@@ -3607,27 +3461,18 @@ var OpenSSL = (function () {
     function writeSockaddr(sa, family, addr, port, addrlen) {
       switch (family) {
         case 2:
-          addr = __inet_pton4_raw(addr);
+          addr = inetPton4(addr);
+          zeroMemory(sa, 16);
           if (addrlen) {
             HEAP32[addrlen >> 2] = 16;
           }
           HEAP16[sa >> 1] = family;
           HEAP32[(sa + 4) >> 2] = addr;
           HEAP16[(sa + 2) >> 1] = _htons(port);
-          (tempI64 = [
-            0 >>> 0,
-            ((tempDouble = 0),
-            +Math.abs(tempDouble) >= 1
-              ? tempDouble > 0
-                ? (Math.min(+Math.floor(tempDouble / 4294967296), 4294967295) | 0) >>> 0
-                : ~~+Math.ceil((tempDouble - +(~~tempDouble >>> 0)) / 4294967296) >>> 0
-              : 0),
-          ]),
-            (HEAP32[(sa + 8) >> 2] = tempI64[0]),
-            (HEAP32[(sa + 12) >> 2] = tempI64[1]);
           break;
         case 10:
-          addr = __inet_pton6_raw(addr);
+          addr = inetPton6(addr);
+          zeroMemory(sa, 28);
           if (addrlen) {
             HEAP32[addrlen >> 2] = 28;
           }
@@ -3637,8 +3482,6 @@ var OpenSSL = (function () {
           HEAP32[(sa + 16) >> 2] = addr[2];
           HEAP32[(sa + 20) >> 2] = addr[3];
           HEAP16[(sa + 2) >> 1] = _htons(port);
-          HEAP32[(sa + 4) >> 2] = 0;
-          HEAP32[(sa + 24) >> 2] = 0;
           break;
         default:
           return 5;
@@ -3648,11 +3491,11 @@ var OpenSSL = (function () {
     var DNS = {
       address_map: { id: 1, addrs: {}, names: {} },
       lookup_name: function (name) {
-        var res = __inet_pton4_raw(name);
+        var res = inetPton4(name);
         if (res !== null) {
           return name;
         }
-        res = __inet_pton6_raw(name);
+        res = inetPton6(name);
         if (res !== null) {
           return name;
         }
@@ -3703,7 +3546,7 @@ var OpenSSL = (function () {
         return -e.errno;
       }
     }
-    function __inet_ntop4_raw(addr) {
+    function inetNtop4(addr) {
       return (
         (addr & 255) +
         '.' +
@@ -3714,7 +3557,7 @@ var OpenSSL = (function () {
         ((addr >> 24) & 255)
       );
     }
-    function __inet_ntop6_raw(ints) {
+    function inetNtop6(ints) {
       var str = '';
       var word = 0;
       var longest = 0;
@@ -3741,7 +3584,7 @@ var OpenSSL = (function () {
         }
       }
       if (hasipv4) {
-        v4part = __inet_ntop4_raw(parts[6] | (parts[7] << 16));
+        v4part = inetNtop4(parts[6] | (parts[7] << 16));
         if (parts[5] === -1) {
           str = '::ffff:';
           str += v4part;
@@ -3793,7 +3636,7 @@ var OpenSSL = (function () {
             return { errno: 28 };
           }
           addr = HEAP32[(sa + 4) >> 2];
-          addr = __inet_ntop4_raw(addr);
+          addr = inetNtop4(addr);
           break;
         case 10:
           if (salen !== 28) {
@@ -3805,7 +3648,7 @@ var OpenSSL = (function () {
             HEAP32[(sa + 16) >> 2],
             HEAP32[(sa + 20) >> 2],
           ];
-          addr = __inet_ntop6_raw(addr);
+          addr = inetNtop6(addr);
           break;
         default:
           return { errno: 5 };
@@ -4098,11 +3941,10 @@ var OpenSSL = (function () {
       }
     }
     function syscallMunmap(addr, len) {
-      if ((addr | 0) === -1 || len === 0) {
+      var info = SYSCALLS.mappings[addr];
+      if (len === 0 || !info) {
         return -28;
       }
-      var info = SYSCALLS.mappings[addr];
-      if (!info) return 0;
       if (len === info.len) {
         var stream = FS.getStream(info.fd);
         if (stream) {
@@ -4144,7 +3986,7 @@ var OpenSSL = (function () {
         return FS.createNode(null, '/', 16384 | 511, 0);
       },
       createPipe: function () {
-        var pipe = { buckets: [] };
+        var pipe = { buckets: [], refcnt: 2 };
         pipe.buckets.push({
           buffer: new Uint8Array(PIPEFS.BUCKET_BUFFER_SIZE),
           offset: 0,
@@ -4192,10 +4034,10 @@ var OpenSSL = (function () {
           return 0;
         },
         ioctl: function (stream, request, varargs) {
-          return ERRNO_CODES.EINVAL;
+          return 28;
         },
         fsync: function (stream) {
-          return ERRNO_CODES.EINVAL;
+          return 28;
         },
         read: function (stream, buffer, offset, length, position) {
           var pipe = stream.node.pipe;
@@ -4210,7 +4052,7 @@ var OpenSSL = (function () {
             return 0;
           }
           if (currentLength == 0) {
-            throw new FS.ErrnoError(ERRNO_CODES.EAGAIN);
+            throw new FS.ErrnoError(6);
           }
           var toRead = Math.min(currentLength, length);
           var totalRead = toRead;
@@ -4299,7 +4141,10 @@ var OpenSSL = (function () {
         },
         close: function (stream) {
           var pipe = stream.node.pipe;
-          pipe.buckets = null;
+          pipe.refcnt--;
+          if (pipe.refcnt === 0) {
+            pipe.buckets = null;
+          }
         },
       },
       nextname: function () {
@@ -4418,27 +4263,44 @@ var OpenSSL = (function () {
         return -e.errno;
       }
     }
-    function ___sys_wait4(pid, wstart, options, rusage) {
-      try {
-        abort('cannot wait on child processes');
-      } catch (e) {
-        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-        return -e.errno;
-      }
+    var ___sys_wait4 = function () {
+      return -52;
+    };
+    function _abort() {
+      abort('');
     }
     function _exit(status) {
       exit(status);
     }
-    function __exit(a0) {
-      return _exit(a0);
+    function maybeExit() {
+      if (!keepRuntimeAlive()) {
+        try {
+          _exit(EXITSTATUS);
+        } catch (e) {
+          handleException(e);
+        }
+      }
     }
-    function _abort() {
-      abort();
+    function callUserCallback(func, synchronous) {
+      if (ABORT) {
+        return;
+      }
+      if (synchronous) {
+        func();
+        return;
+      }
+      try {
+        func();
+        maybeExit();
+      } catch (e) {
+        handleException(e);
+      }
     }
-    var __sigalrm_handler = 0;
     function _alarm(seconds) {
       setTimeout(function () {
-        if (__sigalrm_handler) wasmTable.get(__sigalrm_handler)(0);
+        callUserCallback(function () {
+          _raise(14);
+        });
       }, seconds * 1e3);
     }
     function _atexit(func, arg) {
@@ -4463,11 +4325,11 @@ var OpenSSL = (function () {
       HEAP32[(tp + 4) >> 2] = ((now % 1e3) * 1e3 * 1e3) | 0;
       return 0;
     }
+    function _emscripten_get_heap_max() {
+      return 2147483648;
+    }
     function _emscripten_memcpy_big(dest, src, num) {
       HEAPU8.copyWithin(dest, src, src + num);
-    }
-    function _emscripten_get_heap_size() {
-      return HEAPU8.length;
     }
     function emscripten_realloc_buffer(size) {
       try {
@@ -4477,7 +4339,8 @@ var OpenSSL = (function () {
       } catch (e) {}
     }
     function _emscripten_resize_heap(requestedSize) {
-      var oldSize = _emscripten_get_heap_size();
+      var oldSize = HEAPU8.length;
+      requestedSize = requestedSize >>> 0;
       var maxHeapSize = 2147483648;
       if (requestedSize > maxHeapSize) {
         return false;
@@ -4521,7 +4384,8 @@ var OpenSSL = (function () {
           _: getExecutableName(),
         };
         for (var x in ENV) {
-          env[x] = ENV[x];
+          if (ENV[x] === undefined) delete env[x];
+          else env[x] = ENV[x];
         }
         var strings = [];
         for (var x in env) {
@@ -4532,34 +4396,24 @@ var OpenSSL = (function () {
       return getEnvStrings.strings;
     }
     function _environ_get(__environ, environ_buf) {
-      try {
-        var bufSize = 0;
-        getEnvStrings().forEach(function (string, i) {
-          var ptr = environ_buf + bufSize;
-          HEAP32[(__environ + i * 4) >> 2] = ptr;
-          writeAsciiToMemory(string, ptr);
-          bufSize += string.length + 1;
-        });
-        return 0;
-      } catch (e) {
-        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-        return e.errno;
-      }
+      var bufSize = 0;
+      getEnvStrings().forEach(function (string, i) {
+        var ptr = environ_buf + bufSize;
+        HEAP32[(__environ + i * 4) >> 2] = ptr;
+        writeAsciiToMemory(string, ptr);
+        bufSize += string.length + 1;
+      });
+      return 0;
     }
     function _environ_sizes_get(penviron_count, penviron_buf_size) {
-      try {
-        var strings = getEnvStrings();
-        HEAP32[penviron_count >> 2] = strings.length;
-        var bufSize = 0;
-        strings.forEach(function (string) {
-          bufSize += string.length + 1;
-        });
-        HEAP32[penviron_buf_size >> 2] = bufSize;
-        return 0;
-      } catch (e) {
-        if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-        return e.errno;
-      }
+      var strings = getEnvStrings();
+      HEAP32[penviron_count >> 2] = strings.length;
+      var bufSize = 0;
+      strings.forEach(function (string) {
+        bufSize += string.length + 1;
+      });
+      HEAP32[penviron_buf_size >> 2] = bufSize;
+      return 0;
     }
     function _fd_close(fd) {
       try {
@@ -4633,7 +4487,7 @@ var OpenSSL = (function () {
       }
     }
     function _fork() {
-      setErrNo(6);
+      setErrNo(52);
       return -1;
     }
     var GAI_ERRNO_MESSAGES = {};
@@ -4676,7 +4530,7 @@ var OpenSSL = (function () {
         var sa, salen, ai;
         var errno;
         salen = family === 10 ? 28 : 16;
-        addr = family === 10 ? __inet_ntop6_raw(addr) : __inet_ntop4_raw(addr);
+        addr = family === 10 ? inetNtop6(addr) : inetNtop4(addr);
         sa = _malloc(salen);
         errno = writeSockaddr(sa, family, addr, port);
         assert(!errno);
@@ -4756,7 +4610,7 @@ var OpenSSL = (function () {
         return 0;
       }
       node = UTF8ToString(node);
-      addr = __inet_pton4_raw(node);
+      addr = inetPton4(node);
       if (addr !== null) {
         if (family === 0 || family === 2) {
           family = 2;
@@ -4767,7 +4621,7 @@ var OpenSSL = (function () {
           return -2;
         }
       } else {
-        addr = __inet_pton6_raw(node);
+        addr = inetPton6(node);
         if (addr !== null) {
           if (family === 0 || family === 10) {
             family = 10;
@@ -4785,7 +4639,7 @@ var OpenSSL = (function () {
         return -2;
       }
       node = DNS.lookup_name(node);
-      addr = __inet_pton4_raw(node);
+      addr = inetPton4(node);
       if (family === 0) {
         family = 2;
       } else if (family === 10) {
@@ -4835,19 +4689,8 @@ var OpenSSL = (function () {
       HEAP32[(ptr + 4) >> 2] = ((now % 1e3) * 1e3) | 0;
       return 0;
     }
-    function _kill(pid, sig) {
-      setErrNo(ERRNO_CODES.EPERM);
-      return -1;
-    }
-    function _sigaction(signum, act, oldact) {
-      return 0;
-    }
-    function _signal(sig, func) {
-      if (sig == 14) {
-        __sigalrm_handler = func;
-      } else {
-      }
-      return 0;
+    function _proc_exit(code) {
+      procExit(code);
     }
     function __isLeapYear(year) {
       return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
@@ -5154,7 +4997,7 @@ var OpenSSL = (function () {
         },
       };
       for (var rule in EXPANSION_RULES_2) {
-        if (pattern.indexOf(rule) >= 0) {
+        if (pattern.includes(rule)) {
           pattern = pattern.replace(new RegExp(rule, 'g'), EXPANSION_RULES_2[rule](date));
         }
       }
@@ -5165,165 +5008,6 @@ var OpenSSL = (function () {
       writeArrayToMemory(bytes, s);
       return bytes.length - 1;
     }
-    function _sysconf(name) {
-      switch (name) {
-        case 30:
-          return 16384;
-        case 85:
-          var maxHeapSize = 2147483648;
-          return maxHeapSize / 16384;
-        case 132:
-        case 133:
-        case 12:
-        case 137:
-        case 138:
-        case 15:
-        case 235:
-        case 16:
-        case 17:
-        case 18:
-        case 19:
-        case 20:
-        case 149:
-        case 13:
-        case 10:
-        case 236:
-        case 153:
-        case 9:
-        case 21:
-        case 22:
-        case 159:
-        case 154:
-        case 14:
-        case 77:
-        case 78:
-        case 139:
-        case 82:
-        case 68:
-        case 67:
-        case 164:
-        case 11:
-        case 29:
-        case 47:
-        case 48:
-        case 95:
-        case 52:
-        case 51:
-        case 46:
-          return 200809;
-        case 27:
-        case 246:
-        case 127:
-        case 128:
-        case 23:
-        case 24:
-        case 160:
-        case 161:
-        case 181:
-        case 182:
-        case 242:
-        case 183:
-        case 184:
-        case 243:
-        case 244:
-        case 245:
-        case 165:
-        case 178:
-        case 179:
-        case 49:
-        case 50:
-        case 168:
-        case 169:
-        case 175:
-        case 170:
-        case 171:
-        case 172:
-        case 97:
-        case 76:
-        case 32:
-        case 173:
-        case 35:
-        case 80:
-        case 81:
-        case 79:
-          return -1;
-        case 176:
-        case 177:
-        case 7:
-        case 155:
-        case 8:
-        case 157:
-        case 125:
-        case 126:
-        case 92:
-        case 93:
-        case 129:
-        case 130:
-        case 131:
-        case 94:
-        case 91:
-          return 1;
-        case 74:
-        case 60:
-        case 69:
-        case 70:
-        case 4:
-          return 1024;
-        case 31:
-        case 42:
-        case 72:
-          return 32;
-        case 87:
-        case 26:
-        case 33:
-          return 2147483647;
-        case 34:
-        case 1:
-          return 47839;
-        case 38:
-        case 36:
-          return 99;
-        case 43:
-        case 37:
-          return 2048;
-        case 0:
-          return 2097152;
-        case 3:
-          return 65536;
-        case 28:
-          return 32768;
-        case 44:
-          return 32767;
-        case 75:
-          return 16384;
-        case 39:
-          return 1e3;
-        case 89:
-          return 700;
-        case 71:
-          return 256;
-        case 40:
-          return 255;
-        case 2:
-          return 100;
-        case 180:
-          return 64;
-        case 25:
-          return 20;
-        case 5:
-          return 16;
-        case 6:
-          return 6;
-        case 73:
-          return 4;
-        case 84: {
-          if (typeof navigator === 'object') return navigator['hardwareConcurrency'] || 1;
-          return 1;
-        }
-      }
-      setErrNo(28);
-      return -1;
-    }
     function _time(ptr) {
       var ret = (Date.now() / 1e3) | 0;
       if (ptr) {
@@ -5333,7 +5017,7 @@ var OpenSSL = (function () {
     }
     function _times(buffer) {
       if (buffer !== 0) {
-        _memset(buffer, 0, 16);
+        zeroMemory(buffer, 16);
       }
       return 0;
     }
@@ -5383,6 +5067,12 @@ var OpenSSL = (function () {
     });
     FS.FSNode = FSNode;
     FS.staticInit();
+    Module['FS_createPath'] = FS.createPath;
+    Module['FS_createDataFile'] = FS.createDataFile;
+    Module['FS_createPreloadedFile'] = FS.createPreloadedFile;
+    Module['FS_createLazyFile'] = FS.createLazyFile;
+    Module['FS_createDevice'] = FS.createDevice;
+    Module['FS_unlink'] = FS.unlink;
     function intArrayFromString(stringy, dontAddNull, length) {
       var len = length > 0 ? length : lengthBytesUTF8(stringy) + 1;
       var u8array = new Array(len);
@@ -5390,112 +5080,149 @@ var OpenSSL = (function () {
       if (dontAddNull) u8array.length = numBytesWritten;
       return u8array;
     }
+    var decodeBase64 =
+      typeof atob === 'function'
+        ? atob
+        : function (input) {
+            var keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+            var output = '';
+            var chr1, chr2, chr3;
+            var enc1, enc2, enc3, enc4;
+            var i = 0;
+            input = input.replace(/[^A-Za-z0-9\+\/\=]/g, '');
+            do {
+              enc1 = keyStr.indexOf(input.charAt(i++));
+              enc2 = keyStr.indexOf(input.charAt(i++));
+              enc3 = keyStr.indexOf(input.charAt(i++));
+              enc4 = keyStr.indexOf(input.charAt(i++));
+              chr1 = (enc1 << 2) | (enc2 >> 4);
+              chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+              chr3 = ((enc3 & 3) << 6) | enc4;
+              output = output + String.fromCharCode(chr1);
+              if (enc3 !== 64) {
+                output = output + String.fromCharCode(chr2);
+              }
+              if (enc4 !== 64) {
+                output = output + String.fromCharCode(chr3);
+              }
+            } while (i < input.length);
+            return output;
+          };
     var asmLibraryArg = {
-      M: ___gmtime_r,
-      ba: ___sys__newselect,
-      A: ___sys_accept4,
-      W: ___sys_access,
-      D: ___sys_bind,
-      ea: ___sys_chmod,
-      C: ___sys_connect,
+      E: ___call_sighandler,
+      K: ___gmtime_r,
+      R: ___sys__newselect,
+      x: ___sys_accept4,
+      T: ___sys_access,
+      A: ___sys_bind,
+      fa: ___sys_chmod,
+      z: ___sys_connect,
       V: ___sys_dup,
-      h: ___sys_fcntl64,
-      ca: ___sys_fstat64,
-      aa: ___sys_getdents64,
-      Z: ___sys_getegid32,
-      X: ___sys_geteuid32,
-      P: ___sys_getgid32,
-      g: ___sys_getpid,
-      z: ___sys_getsockname,
-      x: ___sys_getsockopt,
-      S: ___sys_getuid32,
-      m: ___sys_ioctl,
-      B: ___sys_listen,
-      da: ___sys_lstat64,
-      O: ___sys_munmap,
-      p: ___sys_open,
-      U: ___sys_pipe,
-      Y: ___sys_readlink,
-      N: ___sys_rename,
-      y: ___sys_sendto,
-      T: ___sys_setpgid,
-      w: ___sys_setsockopt,
-      E: ___sys_shutdown,
-      k: ___sys_socket,
-      n: ___sys_stat64,
-      R: ___sys_symlink,
-      Q: ___sys_unlink,
-      fa: ___sys_wait4,
-      o: __exit,
-      ha: _abort,
-      a: _alarm,
-      ga: _atexit,
-      q: _clock_gettime,
-      F: _emscripten_memcpy_big,
-      G: _emscripten_resize_heap,
-      L: _emscripten_thread_sleep,
-      J: _environ_get,
-      K: _environ_sizes_get,
-      d: _exit,
-      i: _fd_close,
-      H: _fd_fdstat_get,
-      l: _fd_read,
-      v: _fd_seek,
-      j: _fd_write,
-      s: _fork,
-      r: _gai_strerror,
-      ia: _getaddrinfo,
-      ja: _getnameinfo,
-      f: _gettimeofday,
-      $: _gmtime_r,
-      I: _kill,
-      b: _sigaction,
-      e: _signal,
-      _: _strftime,
-      t: _sysconf,
-      c: _time,
-      u: _times,
+      f: ___sys_fcntl64,
+      da: ___sys_fstat64,
+      M: ___sys_getdents64,
+      ba: ___sys_getegid32,
+      U: ___sys_geteuid32,
+      W: ___sys_getgid32,
+      e: ___sys_getpid,
+      w: ___sys_getsockname,
+      u: ___sys_getsockopt,
+      aa: ___sys_getuid32,
+      l: ___sys_ioctl,
+      y: ___sys_listen,
+      ea: ___sys_lstat64,
+      L: ___sys_munmap,
+      n: ___sys_open,
+      Y: ___sys_pipe,
+      X: ___sys_readlink,
+      ca: ___sys_rename,
+      v: ___sys_sendto,
+      Z: ___sys_setpgid,
+      s: ___sys_setsockopt,
+      B: ___sys_shutdown,
+      j: ___sys_socket,
+      o: ___sys_stat64,
+      _: ___sys_symlink,
+      $: ___sys_unlink,
+      O: ___sys_wait4,
+      p: _abort,
+      b: _alarm,
+      ha: _atexit,
+      ga: _clock_gettime,
+      S: _emscripten_get_heap_max,
+      C: _emscripten_memcpy_big,
+      D: _emscripten_resize_heap,
+      J: _emscripten_thread_sleep,
+      H: _environ_get,
+      I: _environ_sizes_get,
+      c: _exit,
+      g: _fd_close,
+      F: _fd_fdstat_get,
+      m: _fd_read,
+      r: _fd_seek,
+      h: _fd_write,
+      k: _fork,
+      i: _gai_strerror,
+      q: _getaddrinfo,
+      t: _getnameinfo,
+      d: _gettimeofday,
+      Q: _gmtime_r,
+      G: _proc_exit,
+      P: _strftime,
+      a: _time,
+      N: _times,
     };
     var asm = createWasm();
     var ___wasm_call_ctors = (Module['___wasm_call_ctors'] = function () {
-      return (___wasm_call_ctors = Module['___wasm_call_ctors'] = Module['asm']['la']).apply(
-        null,
-        arguments
-      );
-    });
-    var _memset = (Module['_memset'] = function () {
-      return (_memset = Module['_memset'] = Module['asm']['ma']).apply(null, arguments);
-    });
-    var ___errno_location = (Module['___errno_location'] = function () {
-      return (___errno_location = Module['___errno_location'] = Module['asm']['oa']).apply(
+      return (___wasm_call_ctors = Module['___wasm_call_ctors'] = Module['asm']['ja']).apply(
         null,
         arguments
       );
     });
     var _main = (Module['_main'] = function () {
-      return (_main = Module['_main'] = Module['asm']['pa']).apply(null, arguments);
+      return (_main = Module['_main'] = Module['asm']['la']).apply(null, arguments);
+    });
+    var ___errno_location = (Module['___errno_location'] = function () {
+      return (___errno_location = Module['___errno_location'] = Module['asm']['ma']).apply(
+        null,
+        arguments
+      );
     });
     var _fflush = (Module['_fflush'] = function () {
-      return (_fflush = Module['_fflush'] = Module['asm']['qa']).apply(null, arguments);
-    });
-    var _free = (Module['_free'] = function () {
-      return (_free = Module['_free'] = Module['asm']['ra']).apply(null, arguments);
+      return (_fflush = Module['_fflush'] = Module['asm']['na']).apply(null, arguments);
     });
     var _ntohs = (Module['_ntohs'] = function () {
-      return (_ntohs = Module['_ntohs'] = Module['asm']['sa']).apply(null, arguments);
+      return (_ntohs = Module['_ntohs'] = Module['asm']['oa']).apply(null, arguments);
     });
     var _malloc = (Module['_malloc'] = function () {
-      return (_malloc = Module['_malloc'] = Module['asm']['ta']).apply(null, arguments);
+      return (_malloc = Module['_malloc'] = Module['asm']['pa']).apply(null, arguments);
+    });
+    var _free = (Module['_free'] = function () {
+      return (_free = Module['_free'] = Module['asm']['qa']).apply(null, arguments);
     });
     var _htons = (Module['_htons'] = function () {
-      return (_htons = Module['_htons'] = Module['asm']['ua']).apply(null, arguments);
+      return (_htons = Module['_htons'] = Module['asm']['ra']).apply(null, arguments);
     });
     var _htonl = (Module['_htonl'] = function () {
-      return (_htonl = Module['_htonl'] = Module['asm']['va']).apply(null, arguments);
+      return (_htonl = Module['_htonl'] = Module['asm']['sa']).apply(null, arguments);
+    });
+    var _raise = (Module['_raise'] = function () {
+      return (_raise = Module['_raise'] = Module['asm']['ta']).apply(null, arguments);
     });
     var stackAlloc = (Module['stackAlloc'] = function () {
-      return (stackAlloc = Module['stackAlloc'] = Module['asm']['wa']).apply(null, arguments);
+      return (stackAlloc = Module['stackAlloc'] = Module['asm']['ua']).apply(null, arguments);
     });
+    var _memalign = (Module['_memalign'] = function () {
+      return (_memalign = Module['_memalign'] = Module['asm']['va']).apply(null, arguments);
+    });
+    Module['addRunDependency'] = addRunDependency;
+    Module['removeRunDependency'] = removeRunDependency;
+    Module['FS_createPath'] = FS.createPath;
+    Module['FS_createDataFile'] = FS.createDataFile;
+    Module['FS_createPreloadedFile'] = FS.createPreloadedFile;
+    Module['FS_createLazyFile'] = FS.createLazyFile;
+    Module['FS_createDevice'] = FS.createDevice;
+    Module['FS_unlink'] = FS.unlink;
     Module['callMain'] = callMain;
     Module['FS'] = FS;
     var calledRun;
@@ -5522,20 +5249,9 @@ var OpenSSL = (function () {
       try {
         var ret = entryFunction(argc, argv);
         exit(ret, true);
+        return ret;
       } catch (e) {
-        if (e instanceof ExitStatus) {
-          return;
-        } else if (e == 'unwind') {
-          noExitRuntime = true;
-          return;
-        } else {
-          var toLog = e;
-          if (e && typeof e === 'object' && e.stack) {
-            toLog = [e, e.stack];
-          }
-          err('exception thrown: ' + toLog);
-          quit_(1, e);
-        }
+        return handleException(e);
       } finally {
         calledMain = true;
       }
@@ -5575,17 +5291,20 @@ var OpenSSL = (function () {
     }
     Module['run'] = run;
     function exit(status, implicit) {
-      if (implicit && noExitRuntime && status === 0) {
-        return;
-      }
-      if (noExitRuntime) {
+      EXITSTATUS = status;
+      if (keepRuntimeAlive()) {
       } else {
-        EXITSTATUS = status;
         exitRuntime();
-        if (Module['onExit']) Module['onExit'](status);
+      }
+      procExit(status);
+    }
+    function procExit(code) {
+      EXITSTATUS = code;
+      if (!keepRuntimeAlive()) {
+        if (Module['onExit']) Module['onExit'](code);
         ABORT = true;
       }
-      quit_(status, new ExitStatus(status));
+      quit_(code, new ExitStatus(code));
     }
     if (Module['preInit']) {
       if (typeof Module['preInit'] == 'function') Module['preInit'] = [Module['preInit']];
