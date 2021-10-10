@@ -14,9 +14,13 @@
 # openssl source
 /openssl/*
 !/openssl/build.sh
+!/openssl/openssl.cnf
 
 # Optional eslint cache
 .eslintcache
+
+# ide
+/.vscode
 
 # misc
 .DS_Store

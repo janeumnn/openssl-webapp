@@ -62,11 +62,12 @@ function TabEncryption({ runCommand }) {
     kfile: false,
     kValFile: '',
     pbkdf2: true,
+    nosalt: false,
     iv: false,
     ivVal: '',
     a: false,
     text: true,
-    textVal: 'Lorem ipsum dolor sit amet',
+    textVal: t('tabEncryption.inputExampleText'),
   });
 
   useEffect(() => {
@@ -155,6 +156,9 @@ function TabEncryption({ runCommand }) {
       case 'pbkdf2':
         setEnc((prev) => ({ ...prev, [key]: !enc.pbkdf2 }));
         break;
+      case 'nosalt':
+        setEnc((prev) => ({ ...prev, [key]: value }));
+        break;
       default:
         setEnc((prev) => ({ ...prev, [key]: value }));
         break;
@@ -192,11 +196,9 @@ function TabEncryption({ runCommand }) {
 
   const execute = () => {
     if (checkValidation()) {
-      const text =
-        enc.d && enc.text && !enc.textVal.endsWith('\n') ? enc.textVal.concat('\n') : enc.textVal;
       const command = buildEnc(enc);
       dispatch({ type: 'SET_COMMAND', command: command });
-      runCommand(command, 'enc', text || '');
+      runCommand(command, 'enc');
     }
   };
 
@@ -454,9 +456,20 @@ function TabEncryption({ runCommand }) {
             id="enc-pbkdf"
             type="radio"
             label="PBKDF2"
-            className="text-nowrap mr-0"
+            className="text-nowrap mr-5"
             checked={enc.pbkdf2}
             onChange={set('pbkdf2')}
+            inline
+            custom
+          />
+
+          <Form.Check
+            id="enc-salt"
+            type="checkbox"
+            label={t('tabEncryption.noSalt')}
+            className="text-nowrap mr-0"
+            checked={enc.nosalt}
+            onChange={set('nosalt')}
             inline
             custom
           />

@@ -1,7 +1,10 @@
 const buildEnc = (enc) => {
-  const command = ['enc'];
+  const command = ['openssl', 'enc'];
   for (const key of Object.keys(enc)) {
     switch (key) {
+      case 'text':
+        if (enc.text) command.unshift(`echo ${enc.textVal.split('\n').join('\\n')} |`);
+        break;
       case 'e':
         if (enc.e) command.push('-e');
         break;
@@ -32,6 +35,9 @@ const buildEnc = (enc) => {
       case 'pbkdf2':
         if (enc.pbkdf2) command.push('-pbkdf2');
         break;
+      case 'nosalt':
+        if (enc.nosalt) command.push('-nosalt');
+        break;
       case 'iv':
         if (enc.iv) command.push('-iv');
         break;
@@ -49,7 +55,7 @@ const buildEnc = (enc) => {
 };
 
 const buildGenrsa = (genrsa) => {
-  const command = ['genrsa'];
+  const command = ['openssl', 'genrsa'];
   for (const key of Object.keys(genrsa)) {
     switch (key) {
       case 'outFile':
@@ -66,7 +72,7 @@ const buildGenrsa = (genrsa) => {
 };
 
 const buildRsa = (rsa) => {
-  const command = ['rsa'];
+  const command = ['openssl', 'rsa'];
   for (const key of Object.keys(rsa)) {
     switch (key) {
       case 'pubin':
@@ -98,9 +104,12 @@ const buildRsa = (rsa) => {
 };
 
 const buildDgst = (dgst) => {
-  const command = ['dgst'];
+  const command = ['openssl', 'dgst'];
   for (const key of Object.keys(dgst)) {
     switch (key) {
+      case 'text':
+        if (dgst.text) command.unshift(`echo ${dgst.textVal.split('\n').join('\\n')} |`);
+        break;
       case 'algorithm':
         command.push(`-${dgst.algorithm}`);
         break;

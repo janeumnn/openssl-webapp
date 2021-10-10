@@ -1,6 +1,7 @@
 {
   "general": {
-    "execute": "Ausführen"
+    "execute": "Ausführen",
+    "unknownCommand": "Unbekannter Befehl!"
   },
   "validation": {
     "noTextInput": "Keine Texteingabe",
@@ -10,7 +11,7 @@
     "noValueSpecified": "Kein Wert angegeben"
   },
   "cardDescription": {
-    "text": "Moderne Krypto-Methoden als GUI basierend auf OpenSSL. Sie können die Methoden über die GUI-Steuerelemente oder über die angezeigte OpenSSL-Kommandozeile ausführen. Die Kommandozeilenargumente entsprechen immer den ausgewählten GUI-Steuerelementen."
+    "text": "Diese grafische Benutzeroberfläche bietet eine Reihe von modernen, angewandten Krypto-Methoden, die von OpenSSL unterstützt werden. Die Methoden können über die GUI-Steuerelemente oder über die OpenSSL-Kommandozeilenschnittstelle (CLI) in der unteren Hälfte ausgeführt werden. Wenn eine Methode über die GUI ausgeführt wird, zeigt die CLI die entsprechenden OpenSSL-Befehlsargumente der ausgewählten GUI-Steuerelemente."
   },
   "tabEncryption": {
     "name": "Symmetrische Verschlüsselung",
@@ -29,10 +30,12 @@
     "enterTextPlaceholder": "Text zum Verschlüsseln/Entschlüsseln eingeben...",
     "selectPlaceholder": "Wähle...",
     "inputPlaceHolder": "Eingabe...",
-    "hexValue": "Hex-Wert..."
+    "hexValue": "Hex-Wert...",
+    "noSalt": "Kein Salt verwenden",
+    "inputExampleText": "Stanleys Expeditionszug quer durch Afrika wird von jedermann bewundert."
   },
   "tabGenrsa": {
-    "name": "RSA Schlüsselgenerierung",
+    "name": "RSA-Schlüsselgenerierung",
     "outputFile": "Ausgabedatei",
     "keyLength": "Schlüssellänge",
     "filenamePlaceholder": "Dateiname...",
@@ -51,7 +54,8 @@
     "enterTextPlaceholder": "Texteingabe zur Berechnung des Hash-Wertes...",
     "input": "Eingabe",
     "file": "Datei",
-    "outputFile": "Ausgabedatei"
+    "outputFile": "Ausgabedatei",
+    "inputExampleText": "Stanleys Expeditionszug quer durch Afrika wird von jedermann bewundert."
   },
   "tabFiles": {
     "name": "Dateien",
@@ -62,10 +66,10 @@
   },
   "commandLine": {
     "infoText": "Basierend auf <bold>OpenSSL</bold> v{{ version }}",
-    "usage": "Verwendung: Kommando [ Optionen ] [ Argumente ]",
+    "usage": "Verwendung: <bold>openssl</bold> Kommando [ Optionen ] [ Argumente ]",
     "moreInfo": "Mehr Infos:",
-    "availableCommands": "Verfügbare Kommandos: 'help'",
-    "versionInfo": "Build-Informationen: 'version -a'"
+    "availableCommands": "Verfügbare Kommandos: 'openssl help'",
+    "versionInfo": "Build-Informationen: 'openssl version -a'"
   },
   "deleteModal": {
     "headline": "Datei löschen",

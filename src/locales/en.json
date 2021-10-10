@@ -1,6 +1,7 @@
 {
   "general": {
-    "execute": "Execute"
+    "execute": "Execute",
+    "unknownCommand": "Unknown command!"
   },
   "validation": {
     "noTextInput": "No text input",
@@ -10,7 +11,7 @@
     "noValueSpecified": "No value specified"
   },
   "cardDescription": {
-    "text": "Modern crypto methods in a GUI using OpenSSL. You can execute the methods via the GUI controls or via the shown OpenSSL command line. The command line arguments are always in sync with the selected GUI controls."
+    "text": "This GUI offers a bunch of modern, applied crypto methods served by OpenSSL. The methods can be executed via the GUI controls or via the OpenSSL command line interface (CLI) at the bottom. If a method is executed with the GUI, the OpenSSL arguments in the CLI show the according arguments of the selected GUI controls."
   },
   "tabEncryption": {
     "name": "Symmetric encryption",
@@ -29,7 +30,9 @@
     "enterTextPlaceholder": "Enter text to encrypt/decrypt...",
     "selectPlaceholder": "Select...",
     "inputPlaceHolder": "Input...",
-    "hexValue": "Hex value..."
+    "hexValue": "Hex value...",
+    "noSalt": "No salt",
+    "inputExampleText": "The quick brown fox jumps over the lazy dog."
   },
   "tabGenrsa": {
     "name": "RSA key generation",
@@ -51,7 +54,8 @@
     "enterTextPlaceholder": "Enter text to hash...",
     "input": "Input",
     "file": "File",
-    "outputFile": "Output file"
+    "outputFile": "Output file",
+    "inputExampleText": "The quick brown fox jumps over the lazy dog."
   },
   "tabFiles": {
     "name": "Files",
@@ -62,10 +66,10 @@
   },
   "commandLine": {
     "infoText": "Based on <bold>OpenSSL</bold> v{{ version }}",
-    "usage": "Usage: command [ options ] [ arguments ]",
+    "usage": "Usage: <bold>openssl</bold> command [ options ] [ arguments ]",
     "moreInfo": "More info:",
-    "availableCommands": "Available commands: 'help'",
-    "versionInfo": "Build information: 'version -a'"
+    "availableCommands": "Available commands: 'openssl help'",
+    "versionInfo": "Build information: 'openssl version -a'"
   },
   "deleteModal": {
     "headline": "Delete file",
