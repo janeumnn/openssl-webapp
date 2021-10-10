@@ -31,7 +31,8 @@
     "selectPlaceholder": "Select...",
     "inputPlaceHolder": "Input...",
     "hexValue": "Hex value...",
-    "noSalt": "No salt"
+    "noSalt": "No salt",
+    "inputExampleText": "The quick brown fox jumps over the lazy dog."
   },
   "tabGenrsa": {
     "name": "RSA key generation",
@@ -53,7 +54,8 @@
     "enterTextPlaceholder": "Enter text to hash...",
     "input": "Input",
     "file": "File",
-    "outputFile": "Output file"
+    "outputFile": "Output file",
+    "inputExampleText": "The quick brown fox jumps over the lazy dog."
   },
   "tabFiles": {
     "name": "Files",

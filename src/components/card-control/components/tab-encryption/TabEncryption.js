@@ -67,7 +67,7 @@ function TabEncryption({ runCommand }) {
     ivVal: '',
     a: false,
     text: true,
-    textVal: 'Lorem ipsum dolor sit amet',
+    textVal: t('tabEncryption.inputExampleText'),
   });
 
   useEffect(() => {

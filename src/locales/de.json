@@ -31,7 +31,8 @@
     "selectPlaceholder": "Wähle...",
     "inputPlaceHolder": "Eingabe...",
     "hexValue": "Hex-Wert...",
-    "noSalt": "Kein Salt verwenden"
+    "noSalt": "Kein Salt verwenden",
+    "inputExampleText": "Stanleys Expeditionszug quer durch Afrika wird von jedermann bewundert."
   },
   "tabGenrsa": {
     "name": "RSA-Schlüsselgenerierung",
@@ -53,7 +54,8 @@
     "enterTextPlaceholder": "Texteingabe zur Berechnung des Hash-Wertes...",
     "input": "Eingabe",
     "file": "Datei",
-    "outputFile": "Ausgabedatei"
+    "outputFile": "Ausgabedatei",
+    "inputExampleText": "Stanleys Expeditionszug quer durch Afrika wird von jedermann bewundert."
   },
   "tabFiles": {
     "name": "Dateien",
