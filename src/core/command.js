@@ -130,6 +130,41 @@ class Command {
     }
   }
 
+  async getCiphers() {
+    const instance = await this.getWasmInstance();
+    instance.callMain(['enc', '-list']);
+    const blacklist = [
+      'des3-wrap',
+      'aes128-wrap',
+      'id-aes128-wrap',
+      'aes192-wrap',
+      'id-aes192-wrap',
+      'aes256-wrap',
+      'id-aes256-wrap',
+      'id-smime-alg-CMS3DESwrap',
+    ];
+
+    return instance.customOutput.stdout
+      .split('\n')
+      .slice(1)
+      .map((x) => x.split(' ').filter((y) => y))
+      .reduce((a, b) => a.concat(b), [])
+      .map((x) => x.substring(1))
+      .filter((x) => !blacklist.includes(x));
+  }
+
+  async getDigests() {
+    const instance = await this.getWasmInstance();
+    instance.callMain(['dgst', '-list']);
+
+    return instance.customOutput.stdout
+      .split('\n')
+      .slice(1)
+      .map((x) => x.split(' ').filter((y) => y))
+      .reduce((a, b) => a.concat(b), [])
+      .map((x) => x.substring(1));
+  }
+
   convertArgsToArray(args) {
     return args.split(/[\s]{1,}/g).filter(Boolean);
   }
