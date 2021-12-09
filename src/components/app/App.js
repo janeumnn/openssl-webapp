@@ -90,12 +90,12 @@ function App() {
   const getAvailableCiphers = useCallback(async () => {
     const ciphers = await command.getCiphers();
     dispatch({ type: 'SET_AVAILABLE_CIPHERS', ciphers: ciphers });
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getAvailableDigests = useCallback(async () => {
     const digests = await command.getDigests();
     dispatch({ type: 'SET_AVAILABLE_DIGEST', digests: digests });
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     getAvailableCiphers();
