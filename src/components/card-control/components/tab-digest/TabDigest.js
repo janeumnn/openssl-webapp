@@ -15,7 +15,7 @@ function TabDigest({ runCommand }) {
     fileOutput: false,
   });
   const [dgst, setDgst] = useState({
-    algorithm: state.availableDigests[0],
+    algorithm: '',
     out: false,
     outFile: '',
     text: true,
@@ -34,6 +34,15 @@ function TabDigest({ runCommand }) {
       };
     });
   }, [state.files]);
+
+  useEffect(() => {
+    setDgst((prev) => {
+      return {
+        ...prev,
+        algorithm: state.availableDigests[0],
+      };
+    });
+  }, [state.availableDigests]);
 
   const set = (key) => (event) => {
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;

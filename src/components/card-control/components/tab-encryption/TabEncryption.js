@@ -28,7 +28,7 @@ function TabEncryption({ runCommand }) {
   const [enc, setEnc] = useState({
     e: true,
     d: false,
-    cipher: state.availableCiphers[0],
+    cipher: '',
     in: false,
     inFile: '',
     out: false,
@@ -58,6 +58,15 @@ function TabEncryption({ runCommand }) {
       };
     });
   }, [state.files]);
+
+  useEffect(() => {
+    setEnc((prev) => {
+      return {
+        ...prev,
+        cipher: state.availableCiphers[0],
+      };
+    });
+  }, [state.availableCiphers]);
 
   const set = (key) => (event) => {
     const value =
